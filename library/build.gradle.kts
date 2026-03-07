@@ -8,6 +8,8 @@ plugins {
     // alias(libs.plugins.dokka.jetbrains)
 }
 
+val isJitPack = System.getenv("JITPACK") == "true"
+
 mavenPublishing {
     coordinates("io.github.bodenberg", "appdimens-sdps", "3.0.0")
 
@@ -19,20 +21,17 @@ mavenPublishing {
     )
 
     pom {
-        name.set("AppDimens SDP, HDP, WDP: Scalable Width and Height Dimensions")
-        description.set(
-            "An extension of AppDimens that implements the SDP (Scaled Density Pixels) standard for widths and heights. It automatically generates pre-calculated @dimen resources, ensuring that layout dimensions (Dp) scale consistently across different screen sizes. Perfect for direct use in traditional XML layouts and Composables. " +
-                    "android, kotlin, java, jetpack-compose, xml, dp, sdp, dimensions, responsive, layout, design-system, adaptive, view-system"
-        )
+        name.set("AppDimens SDP, HDP, WDP")
+        description.set("Scalable width and height dimensions for Android layouts")
         url.set("https://github.com/bodenberg/appdimens-sdps")
-        inceptionYear.set("2025")
+
         licenses {
             license {
-                name.set("The Apache License, Version 2.0")
-                url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
-                distribution.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                name.set("Apache License 2.0")
+                url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
             }
         }
+
         developers {
             developer {
                 id.set("bodenberg")
@@ -40,37 +39,17 @@ mavenPublishing {
                 email.set("jean.bodenberg2@outlook.com")
             }
         }
+
         scm {
             connection.set("scm:git:github.com/bodenberg/appdimens-sdps.git")
             developerConnection.set("scm:git:ssh://github.com/bodenberg/appdimens-sdps.git")
             url.set("https://github.com/bodenberg/appdimens-sdps")
         }
     }
-    val isJitPack = System.getenv("JITPACK") != null || System.getenv("CI") == "true"
-    if (!isJitPack && (project.findProperty("signing.keyId") != null || project.findProperty("signing.secretKey") != null)) {
-        signAllPublications()
-        publishToMavenCentral()
-    }
-}
 
-publishing {
-    repositories {
-        maven {
-            name = "SonaType"
-            url = uri("https://ossrh-staging-api.central.sonatype.com/service/local/")
-            credentials {
-                username = project.findProperty("mavenCentralUsername") as String?
-                password = project.findProperty("mavenCentralPassword") as String?
-            }
-        }
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/bodenberg/appdimens-sdps")
-            credentials {
-                username = project.findProperty("gpr.user") as String?
-                password = project.findProperty("gpr.key") as String?
-            }
-        }
+    if (!isJitPack) {
+        publishToMavenCentral()
+        signAllPublications()
     }
 }
 
