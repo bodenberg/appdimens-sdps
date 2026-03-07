@@ -2,59 +2,59 @@
 
 ![AppDimens Banner](IMAGES/banner_top.png)
 
-Bem-vindo à documentação oficial da biblioteca **AppDimens**. 
+Welcome to the official documentation of the **AppDimens** library. 
 
-## 📖 O que é a biblioteca?
+## 📖 What is the library?
 
-A **AppDimens SDP, HDP, WDP** é um sistema moderno de gerenciamento de dimensões para Android. Ela expande o padrão clássico do SDP (Scaled Density Pixels) introduzindo também o dimensionamento por Altura (HDP) e Largura (WDP). A biblioteca automatiza o processo de ajuste de Dp, Sp e Px, assegurando que o layout permaneça perfeitamente escalado e responsivo em qualquer formato de dispositivo de maneira matematicamente precisa.
+**AppDimens SDP, HDP, WDP** is a modern dimension management system for Android. It expands the classic SDP (Scaled Density Pixels) standard by also introducing scaling by Height (HDP) and Width (WDP). The library automates the process of adjusting Dp, Sp, and Px, ensuring the layout remains perfectly scaled and responsive on any device format in a mathematically precise way.
 
-## ⚙️ O que ela faz?
+## ⚙️ What does it do?
 
-Ela fornece milhares de recursos `@dimen` pré-calculados (de `-300` a `600`) prontos para usar, poupando ao desenvolvedor o trabalho de calcular tamanhos para cada variante de tela de Android.
+It provides thousands of pre-calculated `@dimen` resources (from `-300` to `600`) ready to use, saving the developer the work of calculating sizes for every Android screen variant.
 
-* **SDP (Smallest Width DP):** Escala a dimensão com base na menor largura (Smallest Width) disponível do dispositivo. Perfeito para manter a proporção da tela na maioria dos cenários (ex: `@dimen/_16sdp` ou `16.sdp`).
-* **WDP (Width DP):** Escala especificamente fundamentada na largura horizontal exata do dispositivo na orientação atual (ex: `@dimen/_16wdp` ou `16.wdp`).
-* **HDP (Height DP):** Escala especificamente fundamentada na altura vertical exata do dispositivo (ex: `@dimen/_16hdp` ou `16.hdp`).
-* **Condicionais Dinâmicas (Compose):** Facilita a adaptação da dimensão baseada no tipo de dispositivo (Carro, TV, Relógio) através da instrução `.scaledDp()`.
+* **SDP (Smallest Width DP):** Scales the dimension based on the smallest width available on the device. Perfect for maintaining the screen proportion in most scenarios (e.g., `@dimen/_16sdp` or `16.sdp`).
+* **WDP (Width DP):** Scales specifically based on the exact horizontal width of the device in the current orientation (e.g., `@dimen/_16wdp` or `16.wdp`).
+* **HDP (Height DP):** Scales specifically based on the exact vertical height of the device (e.g., `@dimen/_16hdp` or `16.hdp`).
+* **Dynamic Conditionals (Compose):** Makes it easy to adapt the dimension based on the device type (Car, TV, Watch) using the `.scaledDp()` instruction.
 
 <br/>
 <p align="center">
-  <img src="IMAGES/screenshot.png" alt="Exemplo do layout" width="25%" />
+  <img src="IMAGES/screenshot.png" alt="Layout example" width="25%" />
 </p>
 <br/>
 
-### 📏 Unidades Físicas (DimenPhysicalUnits)
+### 📏 Physical Units (DimenPhysicalUnits)
 
-Além do dimensionamento relativo de tela, a biblioteca provê suporte direto para a conversão de unidades de medidas físicas reais (Milímetros, Centímetros e Polegadas) para uso no layout, garantindo tamanho absoluto independentemente da densidade do aparelho.
+Besides relative screen scaling, the library provides direct support for converting real physical measurement units (Millimeters, Centimeters, and Inches) for layout use, ensuring absolute size regardless of device density.
 
-* **Extensões nativas no Compose:** Utilize `.mm`, `.cm` e `.inch` diretamente em `Float` ou `Int` para obter o valor equivalente em `Dp` ou `Px`.
-  * *Exemplo:* `10.mm`, `2.5f.cm`, `1.inch`.
-* **Utilitários de Raio e Diâmetro:** Funções convenientes como `.radius()` facilitam o desenho de componentes circulares com medidas físicas.
-* **Uso no código legado (XML/Java):** A classe utilitária `DimenPhysicalUnits` apresenta métodos acessíveis (ex: `toDpFromMm`, `toPxFromCm`) que necessitam do `Resources` atual para realizar conversões vitais baseadas no DPI do dispositivo (padrão Android).
+* **Native Compose Extensions:** Use `.mm`, `.cm`, and `.inch` directly on `Float` or `Int` to get the equivalent value in `Dp` or `Px`.
+  * *Example:* `10.mm`, `2.5f.cm`, `1.inch`.
+* **Radius and Diameter Utilities:** Convenient functions like `.radius()` make drawing circular components with physical measurements easy.
+* **Use in Legacy Code (XML/Java):** The utility class `DimenPhysicalUnits` provides accessible methods (e.g., `toDpFromMm`, `toPxFromCm`) that require the current `Resources` to perform vital conversions based on the device's DPI (Android standard).
 
-## 🚀 Vantagens
+## 🚀 Advantages
 
-1. **Desenvolvimento Acelerado:** Elimina a necessidade de criar arquivos `dimens.xml` manuais massivos para várias categorias de telas (como `values-sw320dp`, `values-sw600dp`, etc.). Tudo já vem unificado.
-2. **Integração Híbrida Direta:** Funciona incrivelmente bem tanto no tradicional **XML** (`View System`) quanto na era moderna do **Jetpack Compose**.
-3. **Layouts Mais Limpos:** Com a arquitetura fluente do Compose (ex: `16.sdp`), as margens ficam legíveis e concisas.
-4. **Precisão para TV, Wear OS e Auto:** Trata regras avançadas sem complexidade usando `UiModeType` combinados a qualificadores.
+1. **Accelerated Development:** Eliminates the need to create massive manual `dimens.xml` files for various screen categories (like `values-sw320dp`, `values-sw600dp`, etc.). Everything comes unified.
+2. **Direct Hybrid Integration:** Works incredibly well in both traditional **XML** (`View System`) and the modern **Jetpack Compose** era.
+3. **Cleaner Layouts:** With the fluent Compose architecture (e.g., `16.sdp`), margins become readable and concise.
+4. **Precision for TV, Wear OS, and Auto:** Handles advanced rules without complexity using `UiModeType` combined with qualifiers.
 
 ## ⚡ Performance
 
-A implementação garante um impacto zero ou virtualmente nulo na performance:
-* **No XML:** Todas as tags como `@dimen/_16sdp` são processadas estaticamente no build time e resolvidas de forma nativa e paralela aos recursos do Android Framework.
-* **No Compose:** O acesso a `.sdp`, `.hdp` e `.wdp` usa funções otimizadas que extraem as dimensões via context caching nativo (`LocalConfiguration` e IDs injetados). Evitando o processamento desnecessário, ela respeita as etapas convencionais da UI sem forçar recomposições inúteis.
+The implementation ensures zero or virtually zero performance impact:
+* **In XML:** All tags like `@dimen/_16sdp` are processed statically at build time and resolved natively in parallel with Android Framework resources.
+* **In Compose:** Accessing `.sdp`, `.hdp`, and `.wdp` uses optimized functions that extract dimensions via native context caching (`LocalConfiguration` and injected IDs). Avoiding unnecessary processing, it respects conventional UI steps without forcing useless recompositions.
 
-## 🛠️ Suporte e Instalação
+## 🛠️ Support and Installation
 
-A biblioteca tem amplo suporte no ecossistema Android e é atualizada para os paradigmas mais recém-lançados.
+The library has broad support in the Android ecosystem and is updated for the most recently launched paradigms.
 
 * **Min SDK:** 24
 * **Compile SDK:** 36
-* **Linguagens:** Kotlin e Java.
-* **Paradigma:** XML e Jetpack Compose.
+* **Languages:** Kotlin and Java.
+* **Paradigm:** XML and Jetpack Compose.
 
-Para instalar, basta adicionar no seu `build.gradle` (dependência):
+To install, simply add it to your `build.gradle` (dependency):
 
 ```kotlin
 dependencies {
@@ -62,24 +62,24 @@ dependencies {
 }
 ```
 
-### Exemplo Rápido no Compose:
+### Quick Example in Compose:
 ```kotlin
 Box(
     modifier = Modifier
-        .width(100.wdp) // Escala conforme a largura
-        .height(100.hdp) // Escala conforme a altura
-        .padding(16.sdp) // Escala baseada no Smallest Width
+        .width(100.wdp) // Scales by width
+        .height(100.hdp) // Scales by height
+        .padding(16.sdp) // Scales based on Smallest Width
 )
 ```
 
-### Exemplo Condicional Avançado:
+### Advanced Conditional Example:
 ```kotlin
 val dynamicPadding = 16.dp.scaledDp()
     .screen(UiModeType.TELEVISION, customValue = 32.sdp)
-    .sdp // Resultado: 32.sdp on TV, 16.sdp nos demais
+    .sdp // Result: 32.sdp on TV, 16.sdp on others
 ```
 
-![Demonstração extra](IMAGES/image.png)
+![Extra demonstration](IMAGES/image.png)
 
 ---
-*Criado com as melhores práticas de layout responsivo para o ecossistema Android.*
+*Created with the best responsive layout practices for the Android ecosystem.*
