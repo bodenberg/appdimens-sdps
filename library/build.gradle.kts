@@ -22,7 +22,7 @@ mavenPublishing {
         name.set("AppDimens SDP, HDP, WDP: Scalable Width and Height Dimensions")
         description.set(
             "An extension of AppDimens that implements the SDP (Scaled Density Pixels) standard for widths and heights. It automatically generates pre-calculated @dimen resources, ensuring that layout dimensions (Dp) scale consistently across different screen sizes. Perfect for direct use in traditional XML layouts and Composables. " +
-                    "android, kotlin, java, jetpack-compose, xml, swift, swiftui, ios, dp, sp, sdp, ssp, dimensions, responsive, layout, design-system, adaptive, dynamic, fixed, view-system"
+                    "android, kotlin, java, jetpack-compose, xml, dp, sdp, dimensions, responsive, layout, design-system, adaptive, view-system"
         )
         url.set("https://github.com/bodenberg/appdimens-sdps")
         inceptionYear.set("2025")
