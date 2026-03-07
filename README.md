@@ -1,0 +1,2 @@
+# appdimens-sdps
+ A AppDimens SDP, HDP, WDP é um sistema moderno de gerenciamento de dimensões para Android. Ela expande o padrão clássico do SDP (Scaled Density Pixels) introduzindo também o dimensionamento por Altura (HDP) e Largura (WDP). A biblioteca automatiza o processo de ajuste de Dp, Sp e Px, assegurando que o layout permaneça perfeitamente escalado e responsivo em qualquer formato de dispositivo de maneira matematicamente precisa.
