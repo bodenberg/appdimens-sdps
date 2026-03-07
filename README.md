@@ -17,9 +17,11 @@ Ela fornece milhares de recursos `@dimen` pré-calculados (de `-300` a `600`) pr
 * **HDP (Height DP):** Escala especificamente fundamentada na altura vertical exata do dispositivo (ex: `@dimen/_16hdp` ou `16.hdp`).
 * **Condicionais Dinâmicas (Compose):** Facilita a adaptação da dimensão baseada no tipo de dispositivo (Carro, TV, Relógio) através da instrução `.scaledDp()`.
 
+<br/>
 <p align="center">
-  <img src="IMAGES/screenshot.png" alt="Exemplo do layout" width="50%" />
+  <img src="IMAGES/screenshot.png" alt="Exemplo do layout" width="25%" />
 </p>
+<br/>
 
 ### 📏 Unidades Físicas (DimenPhysicalUnits)
 
