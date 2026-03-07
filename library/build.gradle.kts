@@ -1,16 +1,11 @@
 import com.vanniktech.maven.publish.AndroidSingleVariantLibrary
-import org.gradle.kotlin.dsl.withType
-import org.jetbrains.dokka.gradle.engine.parameters.VisibilityModifier
-import org.jetbrains.dokka.gradle.tasks.DokkaGenerateTask
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import java.net.URI
-import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.vanniktech.maven.publish)
-    alias(libs.plugins.dokka.jetbrains)
+    // alias(libs.plugins.dokka.jetbrains)
 }
 
 mavenPublishing {
@@ -79,7 +74,7 @@ publishing {
     }
 }
 
-dokka {
+/* dokka {
     dokkaPublications.html {
         moduleName.set("AppDimens SDP, HDP, WDP: Scalable Width and Height Dimensions")
         outputDirectory.set(layout.projectDirectory.dir("${rootDir}\\DOCUMENTATION"))
@@ -150,7 +145,7 @@ tasks.withType<DokkaGenerateTask>().configureEach {
     doFirst {
         System.setProperty("java.awt.headless", "true")
     }
-}
+} */
 
 android {
     namespace = "com.appdimens.sdps"
@@ -203,7 +198,7 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.runtime)
-    dokkaPlugin(libs.android.documentation.plugin)
+    //dokkaPlugin(libs.android.documentation.plugin)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

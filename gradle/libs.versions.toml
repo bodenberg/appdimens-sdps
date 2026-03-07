@@ -14,10 +14,10 @@ composeBom = "2026.02.01"
 lifecycleViewmodelCompose = "2.10.0"
 appcompat = "1.7.1"
 material = "1.13.0"
-dokka = "2.1.0"
+#dokka = "2.1.0"
 
 [libraries]
-android-documentation-plugin = { module = "org.jetbrains.dokka:android-documentation-plugin", version.ref = "dokka" }
+#android-documentation-plugin = { module = "org.jetbrains.dokka:android-documentation-plugin", version.ref = "dokka" }
 androidx-compose-runtime = { module = "androidx.compose.runtime:runtime" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
@@ -46,4 +46,4 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 vanniktech-maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "vanniktech" }
-dokka-jetbrains = { id = "org.jetbrains.dokka", version.ref = "dokka" }
+#dokka-jetbrains = { id = "org.jetbrains.dokka", version.ref = "dokka" }
