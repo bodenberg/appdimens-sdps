@@ -86,23 +86,6 @@ private fun getQualifierValue(qualifier: DpQualifier, configuration: Configurati
     }
 }
 
-/**
- * EN
- * Maps the uiMode value from the configuration to the library's UiModeType enum.
- *
- * PT
- * Mapeia o valor de uiMode da configuração para o enum UiModeType da biblioteca.
- */
-fun fromConfiguration(uiMode: Int): UiModeType {
-    // EN Uses a bitwise mask to isolate the UI mode type.
-    // PT Usa uma máscara bitwise para isolar o tipo de modo de UI.
-    return when (uiMode and Configuration.UI_MODE_TYPE_MASK) {
-        Configuration.UI_MODE_TYPE_CAR -> UiModeType.CAR
-        Configuration.UI_MODE_TYPE_TELEVISION -> UiModeType.TELEVISION
-        Configuration.UI_MODE_TYPE_WATCH -> UiModeType.WATCH
-        else -> UiModeType.NORMAL
-    }
-}
 
 // EN Composable extensions for quick dynamic scaling.
 // PT Extensões Composable para dimensionamento dinâmico rápido.
@@ -479,8 +462,9 @@ class Scaled private constructor(
     @SuppressLint("ConfigurationScreenWidthHeight") // EN The annotation is necessary as we access screen metrics. / PT A anotação é necessária, pois acessamos métricas da tela.
     @Composable
     private fun resolve(qualifier: DpQualifier): Dp {
+        val context = LocalContext.current
         val configuration = LocalConfiguration.current
-        val currentUiModeType = fromConfiguration(configuration.uiMode)
+        val currentUiModeType = UiModeType.fromConfiguration(context)
 
         val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
         val isPortrait = configuration.orientation == Configuration.ORIENTATION_PORTRAIT

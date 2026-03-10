@@ -211,7 +211,8 @@ fun ScaledExampleCard() {
     val dynamicDp = 100.scaledDp()
         // EN 2. Override for UI mode: If it's a TV, use 200dp.
         // PT 2. Substituição para o modo de IU: Se for uma TV, use 200dp.
-        .screen(UiModeType.TELEVISION, 200)
+        .screen(UiModeType.TELEVISION, 500)
+        .screen(UiModeType.FOLD_OPEN, 200)
         // EN 3. Override for Dp qualifier: If the smallest width is >= 600dp, use 150dp.
         // PT 3. Substituição para o qualificador de Dp: Se a menor largura for >= 600dp, use 150dp.
         .screen(DpQualifier.SMALL_WIDTH, 600, 150)
@@ -226,7 +227,7 @@ fun ScaledExampleCard() {
     Card(
         shape = RoundedCornerShape(20.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFE3F2FD)), // EN Card background color
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFFF00FD)), // EN Card background color
                                                                               // PT Cor de fundo do cartão
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -251,7 +252,7 @@ fun ScaledExampleCard() {
                     // EN The Box uses the dynamically resolved value.
                     // PT A Caixa usa o valor resolvido dinamicamente.
                     .size(dynamicDp)
-                    .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(12.dp))
+                    .background(MaterialTheme.colorScheme.inversePrimary, RoundedCornerShape(12.dp))
                     .align(Alignment.CenterHorizontally),
                 contentAlignment = Alignment.Center
             ) {
@@ -273,7 +274,7 @@ fun ScaledExampleCard() {
  * 
  * PT Uma visualização para a tela de exemplo do AppDimens SDP.
  */
-@Preview(showBackground = true)
+@Preview(showBackground = true, device = "id:tv_4k", showSystemUi = false)
 @Composable
 fun PreviewAppDimensSdpExample() {
     MaterialTheme(colorScheme = lightColorScheme()) {

@@ -24,9 +24,12 @@
  */
 package com.appdimens.sdps.common
 
+import android.content.Context
 import android.content.res.Configuration
+import android.hardware.SensorManager
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.window.layout.WindowMetricsCalculator
 
 /**
  * EN Defines the Android UI Mode Types for dimension customization,
@@ -91,18 +94,75 @@ enum class UiModeType(val configValue: Int) {
      *
      * PT Qualquer modo de UI não especificado/outros.
      */
-    UNDEFINED(Configuration.UI_MODE_TYPE_UNDEFINED);
+    UNDEFINED(Configuration.UI_MODE_TYPE_UNDEFINED),
+
+    /**
+     * EN Foldable Device (Open state).
+     * PT Dispositivo Dobrável tipo Fold (Estado aberto).
+     */
+    FOLD_OPEN(-101),
+
+    /**
+     * EN Foldable Device (Closed state).
+     * PT Dispositivo Dobrável tipo Fold (Estado fechado).
+     */
+    FOLD_CLOSED(-102),
+
+    /**
+     * EN Flip Device (Open state).
+     * PT Dispositivo Dobrável tipo Flip (Estado aberto).
+     */
+    FLIP_OPEN(-103),
+
+    /**
+     * EN Flip Device (Closed state).
+     * PT Dispositivo Dobrável tipo Flip (Estado fechado).
+     */
+    FLIP_CLOSED(-104);
 
     companion object {
         /**
-         * EN Returns the UiModeType corresponding to the Configuration.uiMode value.
+         * EN Returns the UiModeType corresponding to the Configuration.uiMode value,
+         * taking into account physical foldable features using Jetpack WindowManager.
          *
-         * PT Retorna o UiModeType correspondente ao valor de Configuration.uiMode.
+         * PT Retorna o UiModeType correspondente ao valor de Configuration.uiMode,
+         * levando em conta características físicas de dispositivos dobráveis usando Jetpack WindowManager.
          */
-        fun fromConfiguration(uiMode: Int): UiModeType {
+        fun fromConfiguration(context: Context): UiModeType {
+            val config = context.resources.configuration
+
+            // EN 1. Check for hinge sensor to identify foldable
+            // PT 1. Verifica sensor de dobradiça para identificar dispositivo dobrável
+            val sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as? SensorManager
+            // Sensor.TYPE_HINGE_ANGLE is 36
+            val hingeSensor = sensorManager?.getDefaultSensor(36)
+            val isFoldable = hingeSensor != null
+
+            if (isFoldable) {
+                // EN We use Jetpack WindowManager to get the device's maximum window size
+                // PT Usamos Jetpack WindowManager para obter o tamanho máximo da janela do dispositivo
+                val maxMetrics = WindowMetricsCalculator.getOrCreate().computeMaximumWindowMetrics(context)
+                val maxBounds = maxMetrics.bounds
+                val density = context.resources.displayMetrics.density
+                
+                val maxSwPx = kotlin.math.min(maxBounds.width(), maxBounds.height())
+                val maxSwDp = maxSwPx / density
+
+                val isFold = maxSwDp >= 600f
+                val currentSwDp = config.smallestScreenWidthDp
+                
+                return if (isFold) {
+                    if (currentSwDp >= 600) FOLD_OPEN else FOLD_CLOSED
+                } else {
+                    // EN Flips when open have normal sizes, but when closed they are tiny
+                    // PT Flips quando abertos têm tamanhos normais, mas quando fechados são minúsculos
+                    if (currentSwDp < 400 && config.screenHeightDp < 400) FLIP_CLOSED else FLIP_OPEN
+                }
+            }
+
             // EN The mask is used to extract only the UI Mode TYPE, ignoring night/other flags.
             // PT A máscara é usada para extrair apenas o TIPO do UI Mode, ignorando flags noturnas/outras.
-            val type = uiMode and Configuration.UI_MODE_TYPE_MASK
+            val type = config.uiMode and Configuration.UI_MODE_TYPE_MASK
             return entries.firstOrNull { it.configValue == type } ?: NORMAL // Returns NORMAL as default
         }
     }

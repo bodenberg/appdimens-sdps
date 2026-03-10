@@ -336,21 +336,7 @@ object DimenSdp {
     @JvmStatic
     fun scaled(initialBaseValue: Int): Scaled = Scaled(initialBaseValue)
 
-    /**
-     * EN
-     * Maps the uiMode value from the configuration to the library's UiModeType enum.
-     *
-     * PT
-     * Mapeia o valor de uiMode da configuração para o enum UiModeType da biblioteca.
-     */
-    internal fun fromConfiguration(uiMode: Int): UiModeType {
-        return when (uiMode and Configuration.UI_MODE_TYPE_MASK) {
-            Configuration.UI_MODE_TYPE_CAR -> UiModeType.CAR
-            Configuration.UI_MODE_TYPE_TELEVISION -> UiModeType.TELEVISION
-            Configuration.UI_MODE_TYPE_WATCH -> UiModeType.WATCH
-            else -> UiModeType.NORMAL
-        }
-    }
+
 }
 
 /**
@@ -503,7 +489,7 @@ class Scaled internal constructor(
 
     private fun findMatchingEntry(context: Context): CustomSdpEntry? {
         val configuration = context.resources.configuration
-        val currentUiModeType = DimenSdp.fromConfiguration(configuration.uiMode)
+        val currentUiModeType = UiModeType.fromConfiguration(context)
 
         val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
         val isPortrait = configuration.orientation == Configuration.ORIENTATION_PORTRAIT
