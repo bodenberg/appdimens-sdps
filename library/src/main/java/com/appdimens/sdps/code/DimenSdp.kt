@@ -480,6 +480,27 @@ class Scaled internal constructor(
         return Scaled(initialBaseValue, reorderEntries(entry))
     }
 
+    /**
+     * EN Priority 4: Orientation.
+     * PT Prioridade 4: Orientação.
+     */
+    @JvmOverloads
+    fun screen(
+        orientation: Orientation = Orientation.DEFAULT,
+        customValue: Int,
+        finalQualifierResolver: DpQualifier? = null,
+        inverter: Inverter = Inverter.DEFAULT
+    ): Scaled {
+        val entry = CustomSdpEntry(
+            orientation = orientation,
+            customValue = customValue,
+            finalQualifierResolver = finalQualifierResolver,
+            priority = 4,
+            inverter = inverter
+        )
+        return Scaled(initialBaseValue, reorderEntries(entry))
+    }
+
     private fun findMatchingEntry(context: Context): CustomSdpEntry? {
         val configuration = context.resources.configuration
         val currentUiModeType = DimenSdp.fromConfiguration(configuration.uiMode)
@@ -510,7 +531,15 @@ class Scaled internal constructor(
 
                 return@firstOrNull false
             } else {
-                return@firstOrNull entry.priority == 2 && uiModeMatch && orientationMatch
+                // EN Priority 2: Must match only uiModeMatch AND orientationMatch (without Dp qualifier).
+                // PT Prioridade 2: Deve casar apenas uiModeMatch E orientationMatch (sem qualificador de Dp).
+                if (entry.priority == 2 && uiModeMatch && orientationMatch) return@firstOrNull true
+
+                // EN Priority 4: Must match only orientationMatch (without Dp qualifier).
+                // PT Prioridade 4: Deve casar apenas orientationMatch (sem qualificador de Dp).
+                if (entry.priority == 4 && orientationMatch) return@firstOrNull true
+
+                return@firstOrNull false
             }
         }
     }

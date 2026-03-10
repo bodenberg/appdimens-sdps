@@ -514,13 +514,17 @@ class Scaled private constructor(
                 // PT Prioridade 3: Deve casar apenas qualifierMatch E orientationMatch.
                 if (entry.priority == 3 && qualifierMatch && orientationMatch) return@firstOrNull true
 
-                if (entry.priority == 4 && orientationMatch) return@firstOrNull true
-
                 return@firstOrNull false // EN Did not match P1 or P3. / PT Não casou com P1 ou P3.
             } else {
                 // EN Priority 2: Must match only uiModeMatch AND orientationMatch (without Dp qualifier).
                 // PT Prioridade 2: Deve casar apenas uiModeMatch E orientationMatch (sem qualificador de Dp).
-                return@firstOrNull entry.priority == 2 && uiModeMatch && orientationMatch
+                if (entry.priority == 2 && uiModeMatch && orientationMatch) return@firstOrNull true
+
+                // EN Priority 4: Must match only orientationMatch (without Dp qualifier).
+                // PT Prioridade 4: Deve casar apenas orientationMatch (sem qualificador de Dp).
+                if (entry.priority == 4 && orientationMatch) return@firstOrNull true
+
+                return@firstOrNull false // EN Did not match P2 or P4.
             }
         }
 
