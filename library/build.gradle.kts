@@ -14,7 +14,7 @@ val isJitPack = System.getenv("JITPACK") == "true"
         || System.getenv("ci") == "true"
 
 mavenPublishing {
-    coordinates("io.github.bodenberg", "appdimens-sdps", "3.0.4")
+    coordinates("io.github.bodenberg", "appdimens-sdps", "3.0.5")
 
     configure(
         AndroidSingleVariantLibrary(

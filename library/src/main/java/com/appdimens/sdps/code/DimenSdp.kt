@@ -487,9 +487,9 @@ class Scaled internal constructor(
         return Scaled(initialBaseValue, reorderEntries(entry))
     }
 
-    private fun findMatchingEntry(context: Context): CustomSdpEntry? {
+    private fun findMatchingEntry(context: Context, foldingFeature: androidx.window.layout.FoldingFeature? = null): CustomSdpEntry? {
         val configuration = context.resources.configuration
-        val currentUiModeType = UiModeType.fromConfiguration(context)
+        val currentUiModeType = UiModeType.fromConfiguration(context, foldingFeature)
 
         val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
         val isPortrait = configuration.orientation == Configuration.ORIENTATION_PORTRAIT
@@ -530,15 +530,15 @@ class Scaled internal constructor(
         }
     }
 
-    private fun resolve(context: Context, qualifier: DpQualifier): Float {
-        val foundEntry = findMatchingEntry(context)
+    private fun resolve(context: Context, qualifier: DpQualifier, foldingFeature: androidx.window.layout.FoldingFeature?): Float {
+        val foundEntry = findMatchingEntry(context, foldingFeature)
         val valueToUse = foundEntry?.customValue ?: initialBaseValue
         val actualQualifier = foundEntry?.finalQualifierResolver ?: qualifier
         return DimenSdp.getDimensionInPx(context, actualQualifier, valueToUse, foundEntry?.inverter ?: Inverter.DEFAULT)
     }
 
-    private fun resolveRes(context: Context, qualifier: DpQualifier): Int {
-        val foundEntry = findMatchingEntry(context)
+    private fun resolveRes(context: Context, qualifier: DpQualifier, foldingFeature: androidx.window.layout.FoldingFeature?): Int {
+        val foundEntry = findMatchingEntry(context, foldingFeature)
         val valueToUse = foundEntry?.customValue ?: initialBaseValue
         val actualQualifier = foundEntry?.finalQualifierResolver ?: qualifier
         return DimenSdp.getResourceId(context, actualQualifier, valueToUse, foundEntry?.inverter ?: Inverter.DEFAULT)
@@ -547,36 +547,60 @@ class Scaled internal constructor(
     /**
      * EN Final dimension value resolved in pixels.
      * PT Valor da dimensão final resolvida em pixels.
+     *
+     * @param context Application context
+     * @param foldingFeature Optional Jetpack WindowManager FoldingFeature to accurately detect foldable states.
      */
-    fun sdp(context: Context): Float = resolve(context, DpQualifier.SMALL_WIDTH)
+    @JvmOverloads
+    fun sdp(context: Context, foldingFeature: androidx.window.layout.FoldingFeature? = null): Float = resolve(context, DpQualifier.SMALL_WIDTH, foldingFeature)
     
     /**
      * EN Final dimension value resolved in pixels.
      * PT Valor da dimensão final resolvida em pixels.
+     *
+     * @param context Application context
+     * @param foldingFeature Optional Jetpack WindowManager FoldingFeature to accurately detect foldable states.
      */
-    fun hdp(context: Context): Float = resolve(context, DpQualifier.HEIGHT)
+    @JvmOverloads
+    fun hdp(context: Context, foldingFeature: androidx.window.layout.FoldingFeature? = null): Float = resolve(context, DpQualifier.HEIGHT, foldingFeature)
     
     /**
      * EN Final dimension value resolved in pixels.
      * PT Valor da dimensão final resolvida em pixels.
+     *
+     * @param context Application context
+     * @param foldingFeature Optional Jetpack WindowManager FoldingFeature to accurately detect foldable states.
      */
-    fun wdp(context: Context): Float = resolve(context, DpQualifier.WIDTH)
+    @JvmOverloads
+    fun wdp(context: Context, foldingFeature: androidx.window.layout.FoldingFeature? = null): Float = resolve(context, DpQualifier.WIDTH, foldingFeature)
     
     /**
      * EN Final dimension value resolved as resource ID.
      * PT Valor da dimensão final resolvida como ID do recurso.
+     *
+     * @param context Application context
+     * @param foldingFeature Optional Jetpack WindowManager FoldingFeature to accurately detect foldable states.
      */
-    fun sdpRes(context: Context): Int = resolveRes(context, DpQualifier.SMALL_WIDTH)
+    @JvmOverloads
+    fun sdpRes(context: Context, foldingFeature: androidx.window.layout.FoldingFeature? = null): Int = resolveRes(context, DpQualifier.SMALL_WIDTH, foldingFeature)
     
     /**
      * EN Final dimension value resolved as resource ID.
      * PT Valor da dimensão final resolvida como ID do recurso.
+     *
+     * @param context Application context
+     * @param foldingFeature Optional Jetpack WindowManager FoldingFeature to accurately detect foldable states.
      */
-    fun hdpRes(context: Context): Int = resolveRes(context, DpQualifier.HEIGHT)
+    @JvmOverloads
+    fun hdpRes(context: Context, foldingFeature: androidx.window.layout.FoldingFeature? = null): Int = resolveRes(context, DpQualifier.HEIGHT, foldingFeature)
     
     /**
      * EN Final dimension value resolved as resource ID.
      * PT Valor da dimensão final resolvida como ID do recurso.
+     *
+     * @param context Application context
+     * @param foldingFeature Optional Jetpack WindowManager FoldingFeature to accurately detect foldable states.
      */
-    fun wdpRes(context: Context): Int = resolveRes(context, DpQualifier.WIDTH)
+    @JvmOverloads
+    fun wdpRes(context: Context, foldingFeature: androidx.window.layout.FoldingFeature? = null): Int = resolveRes(context, DpQualifier.WIDTH, foldingFeature)
 }

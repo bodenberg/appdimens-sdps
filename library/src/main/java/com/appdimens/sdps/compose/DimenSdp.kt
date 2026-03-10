@@ -33,6 +33,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import android.app.Activity
+import android.content.ContextWrapper
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
+import androidx.window.layout.FoldingFeature
+import androidx.window.layout.WindowInfoTracker
 import com.appdimens.sdps.common.DpQualifierEntry
 import com.appdimens.sdps.common.UiModeType
 import com.appdimens.sdps.common.DpQualifier
@@ -208,6 +214,14 @@ fun Dp.scaledDp(): Scaled = Scaled(this@scaledDp)
  */
 @Composable
 fun Int.scaledDp(): Scaled = this.dp.scaledDp()
+
+// EN Helps extract the activity from context wrapper
+// PT Ajuda a extrair a activity de um context wrapper
+private tailrec fun android.content.Context.findActivity(): Activity? = when (this) {
+    is Activity -> this
+    is ContextWrapper -> baseContext.findActivity()
+    else -> null
+}
 
 // EN Main class for conditional scaling.
 // PT Classe principal de dimensionamento condicional.
@@ -464,7 +478,21 @@ class Scaled private constructor(
     private fun resolve(qualifier: DpQualifier): Dp {
         val context = LocalContext.current
         val configuration = LocalConfiguration.current
-        val currentUiModeType = UiModeType.fromConfiguration(context)
+
+        // EN Extract FoldingFeature dynamically if context is an Activity
+        // PT Extrai o FoldingFeature dinamicamente se o contexto for uma Activity
+        val activity = context.findActivity()
+        val windowLayoutInfo = remember(activity) {
+            activity?.let {
+                WindowInfoTracker.getOrCreate(it).windowLayoutInfo(it)
+            }
+        }?.collectAsState(initial = null)
+        
+        val foldingFeature = windowLayoutInfo?.value?.displayFeatures
+            ?.filterIsInstance<FoldingFeature>()
+            ?.firstOrNull()
+
+        val currentUiModeType = UiModeType.fromConfiguration(context, foldingFeature)
 
         val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
         val isPortrait = configuration.orientation == Configuration.ORIENTATION_PORTRAIT

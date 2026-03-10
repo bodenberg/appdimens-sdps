@@ -118,7 +118,19 @@ enum class UiModeType(val configValue: Int) {
      * EN Flip Device (Closed state).
      * PT Dispositivo Dobrável tipo Flip (Estado fechado).
      */
-    FLIP_CLOSED(-104);
+    FLIP_CLOSED(-104),
+
+    /**
+     * EN Foldable Device (Half-opened state).
+     * PT Dispositivo Dobrável tipo Fold (Estado semiaberto).
+     */
+    FOLD_HALF_OPENED(-105),
+
+    /**
+     * EN Flip Device (Half-opened state).
+     * PT Dispositivo Dobrável tipo Flip (Estado semiaberto).
+     */
+    FLIP_HALF_OPENED(-106);
 
     companion object {
         /**
@@ -127,12 +139,39 @@ enum class UiModeType(val configValue: Int) {
          *
          * PT Retorna o UiModeType correspondente ao valor de Configuration.uiMode,
          * levando em conta características físicas de dispositivos dobráveis usando Jetpack WindowManager.
+         *
+         * @param context Application context.
+         * @param foldingFeature Optional FoldingFeature obtained from WindowInfoTracker to dynamically adapt.
          */
-        fun fromConfiguration(context: Context): UiModeType {
+        fun fromConfiguration(context: Context, foldingFeature: androidx.window.layout.FoldingFeature? = null): UiModeType {
             val config = context.resources.configuration
 
-            // EN 1. Check for hinge sensor to identify foldable
-            // PT 1. Verifica sensor de dobradiça para identificar dispositivo dobrável
+            // EN 1. Try to use Jetpack WindowManager FoldingFeature if provided
+            // PT 1. Tenta usar o FoldingFeature do Jetpack WindowManager se fornecido
+            if (foldingFeature != null) {
+                // If it's a folding feature, we decide if it's Fold or Flip based on orientation,
+                // and if it's open, closed or half_opened based on state.
+                
+                val isFold = foldingFeature.orientation == androidx.window.layout.FoldingFeature.Orientation.VERTICAL
+                
+                return if (isFold) {
+                    when {
+                        foldingFeature.state == androidx.window.layout.FoldingFeature.State.FLAT -> FOLD_OPEN
+                        foldingFeature.state == androidx.window.layout.FoldingFeature.State.HALF_OPENED -> FOLD_HALF_OPENED
+                        else -> FOLD_CLOSED
+                    }
+                } else {
+                    // Usually horizontal fold is a Flip device.
+                    when {
+                        foldingFeature.state == androidx.window.layout.FoldingFeature.State.FLAT -> FLIP_OPEN
+                        foldingFeature.state == androidx.window.layout.FoldingFeature.State.HALF_OPENED -> FLIP_HALF_OPENED
+                        else -> FLIP_CLOSED
+                    }
+                }
+            }
+
+            // EN 2. Fallback: Check for hinge sensor to identify foldable
+            // PT 2. Fallback: Verifica sensor de dobradiça para identificar dispositivo dobrável
             val sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as? SensorManager
             // Sensor.TYPE_HINGE_ANGLE is 36
             val hingeSensor = sensorManager?.getDefaultSensor(36)
