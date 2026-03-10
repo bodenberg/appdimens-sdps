@@ -202,6 +202,12 @@ enum class UiModeType(val configValue: Int) {
             // EN The mask is used to extract only the UI Mode TYPE, ignoring night/other flags.
             // PT A máscara é usada para extrair apenas o TIPO do UI Mode, ignorando flags noturnas/outras.
             val type = config.uiMode and Configuration.UI_MODE_TYPE_MASK
+
+            if (type == Configuration.UI_MODE_TYPE_TELEVISION || 
+                context.packageManager.hasSystemFeature(android.content.pm.PackageManager.FEATURE_LEANBACK)) {
+                return TELEVISION
+            }
+
             return entries.firstOrNull { it.configValue == type } ?: NORMAL // Returns NORMAL as default
         }
     }
