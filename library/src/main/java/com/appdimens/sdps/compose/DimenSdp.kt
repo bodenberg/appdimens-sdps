@@ -36,6 +36,8 @@ import androidx.compose.ui.unit.dp
 import com.appdimens.sdps.common.DpQualifierEntry
 import com.appdimens.sdps.common.UiModeType
 import com.appdimens.sdps.common.DpQualifier
+import com.appdimens.sdps.common.Inverter
+import com.appdimens.sdps.common.Orientation
 import kotlin.math.abs
 
 /**
@@ -49,14 +51,20 @@ import kotlin.math.abs
  *
  * @param uiModeType The UI mode (CAR, TELEVISION, WATCH, NORMAL). Null for any mode.
  * @param dpQualifierEntry The Dp qualifier entry (type and value, e.g., SMALL_WIDTH > 600). Null if only UI mode is used.
+ * @param orientation The screen orientation (LANDSCAPE, PORTRAIT, DEFAULT).
  * @param customValue The Dp value to be used if the condition is met.
+ * @param finalQualifierResolver Optional dimension qualifier (e.g., HEIGHT) to be applied at resolution time.
  * @param priority The resolution priority. 1 is more specific (UI + Qualifier), 3 is less specific (Qualifier only).
+ * @param inverter The inverter type to adapt scaling width/height on rotation changes (default is Inverter.DEFAULT).
  */
 data class CustomDpEntry(
     val uiModeType: UiModeType? = null,
     val dpQualifierEntry: DpQualifierEntry? = null,
+    val orientation: Orientation? = Orientation.DEFAULT,
     val customValue: Dp,
-    val priority: Int
+    val finalQualifierResolver: DpQualifier? = null,
+    val priority: Int,
+    val inverter: Inverter? = Inverter.DEFAULT
 )
 
 /**
@@ -125,6 +133,34 @@ val Int.hdp: Dp get() = this.toDynamicScaledDp(DpQualifier.HEIGHT)
 
 /**
  * EN
+ * Extension for Dp with dynamic scaling based on the **Screen Height (hDP)**, but
+ * in landscape orientation it acts as **Screen Width (wDP)**.
+ * Usage example: `32.hdp_lw`.
+ *
+ * PT
+ * Extensão para Dp com dimensionamento dinâmico baseado na **Altura da Tela (hDP)**, mas
+ * na orientação paisagem atua como **Largura da Tela (wDP)**.
+ * Exemplo de uso: `32.hdp_lw`.
+ */
+@get:Composable
+val Int.hdp_lw: Dp get() = this.toDynamicScaledDp(DpQualifier.HEIGHT, Inverter.PH_TO_LW)
+
+/**
+ * EN
+ * Extension for Dp with dynamic scaling based on the **Screen Height (hDP)**, but
+ * in portrait orientation it acts as **Screen Width (wDP)**.
+ * Usage example: `32.hdp_pw`.
+ *
+ * PT
+ * Extensão para Dp com dimensionamento dinâmico baseado na **Altura da Tela (hDP)**, mas
+ * na orientação retrato atua como **Largura da Tela (wDP)**.
+ * Exemplo de uso: `32.hdp_pw`.
+ */
+@get:Composable
+val Int.hdp_pw: Dp get() = this.toDynamicScaledDp(DpQualifier.HEIGHT, Inverter.LH_TO_PW)
+
+/**
+ * EN
  * Extension for Dp with dynamic scaling based on the **Screen Width (wDP)**.
  * Usage example: `100.wdp`.
  *
@@ -134,6 +170,34 @@ val Int.hdp: Dp get() = this.toDynamicScaledDp(DpQualifier.HEIGHT)
  */
 @get:Composable
 val Int.wdp: Dp get() = this.toDynamicScaledDp(DpQualifier.WIDTH)
+
+/**
+ * EN
+ * Extension for Dp with dynamic scaling based on the **Screen Width (wDP)**, but
+ * in landscape orientation it acts as **Screen Height (hDP)**.
+ * Usage example: `100.wdp_lh`.
+ *
+ * PT
+ * Extensão para Dp com dimensionamento dinâmico baseado na **Largura da Tela (wDP)**, mas
+ * na orientação paisagem atua como **Altura da Tela (hDP)**.
+ * Exemplo de uso: `100.wdp_lh`.
+ */
+@get:Composable
+val Int.wdp_lh: Dp get() = this.toDynamicScaledDp(DpQualifier.WIDTH, Inverter.PW_TO_LH)
+
+/**
+ * EN
+ * Extension for Dp with dynamic scaling based on the **Screen Width (wDP)**, but
+ * in portrait orientation it acts as **Screen Height (hDP)**.
+ * Usage example: `100.wdp_ph`.
+ *
+ * PT
+ * Extensão para Dp com dimensionamento dinâmico baseado na **Largura da Tela (wDP)**, mas
+ * na orientação retrato atua como **Altura da Tela (hDP)**.
+ * Exemplo de uso: `100.wdp_ph`.
+ */
+@get:Composable
+val Int.wdp_ph: Dp get() = this.toDynamicScaledDp(DpQualifier.WIDTH, Inverter.LW_TO_PH)
 
 // EN Methods for creating the Scaled class.
 // PT Métodos de criação da classe Scaled.
@@ -226,13 +290,19 @@ class Scaled private constructor(
         uiModeType: UiModeType,
         qualifierType: DpQualifier,
         qualifierValue: Int,
-        customValue: Dp
+        orientation: Orientation? = Orientation.DEFAULT,
+        customValue: Dp,
+        finalQualifierResolver: DpQualifier? = null,
+        inverter: Inverter? = Inverter.DEFAULT
     ): Scaled {
         val entry = CustomDpEntry(
             uiModeType = uiModeType,
             dpQualifierEntry = DpQualifierEntry(qualifierType, qualifierValue),
+            orientation = orientation,
             customValue = customValue,
-            priority = 1
+            finalQualifierResolver = finalQualifierResolver,
+            priority = 1,
+            inverter = inverter
         )
         return Scaled(initialBaseDp, reorderEntries(entry))
     }
@@ -250,13 +320,19 @@ class Scaled private constructor(
         uiModeType: UiModeType,
         qualifierType: DpQualifier,
         qualifierValue: Int,
-        customValue: Int
+        customValue: Int,
+        finalQualifierResolver: DpQualifier? = null,
+        orientation: Orientation? = Orientation.DEFAULT,
+        inverter: Inverter? = Inverter.DEFAULT
     ): Scaled {
         val entry = CustomDpEntry(
             uiModeType = uiModeType,
             dpQualifierEntry = DpQualifierEntry(qualifierType, qualifierValue),
+            orientation = orientation,
             customValue = customValue.dp,
-            priority = 1
+            finalQualifierResolver = finalQualifierResolver,
+            priority = 1,
+            inverter = inverter
         )
         return Scaled(initialBaseDp, reorderEntries(entry))
     }
@@ -268,11 +344,19 @@ class Scaled private constructor(
      * PT
      * Prioridade 2: Qualificador de UiModeType (e.g., TELEVISION, WATCH).
      */
-    fun screen(type: UiModeType, customValue: Dp): Scaled {
+    fun screen(type: UiModeType,
+               customValue: Dp,
+               finalQualifierResolver: DpQualifier? = null,
+               orientation: Orientation? = Orientation.DEFAULT,
+               inverter: Inverter? = Inverter.DEFAULT
+    ): Scaled {
         val entry = CustomDpEntry(
             uiModeType = type,
+            orientation = orientation,
             customValue = customValue,
-            priority = 2
+            finalQualifierResolver = finalQualifierResolver,
+            priority = 2,
+            inverter = inverter
         )
         return Scaled(initialBaseDp, reorderEntries(entry))
     }
@@ -286,11 +370,19 @@ class Scaled private constructor(
      * Prioridade 2: Qualificador de UiModeType (e.g., TELEVISION, WATCH).
      * Esta é uma sobrecarga que aceita um Int para `customValue`.
      */
-    fun screen(type: UiModeType, customValue: Int): Scaled {
+    fun screen(type: UiModeType,
+               customValue: Int,
+               finalQualifierResolver: DpQualifier? = null,
+               orientation: Orientation? = Orientation.DEFAULT,
+               inverter: Inverter? = Inverter.DEFAULT
+    ): Scaled {
         val entry = CustomDpEntry(
             uiModeType = type,
+            orientation = orientation,
             customValue = customValue.dp,
-            priority = 2
+            finalQualifierResolver = finalQualifierResolver,
+            priority = 2,
+            inverter = inverter
         )
         return Scaled(initialBaseDp, reorderEntries(entry))
     }
@@ -302,11 +394,20 @@ class Scaled private constructor(
      * PT
      * Prioridade 3: Qualificador de Dp (sw, h, w) sem restrição de UiModeType.
      */
-    fun screen(type: DpQualifier, value: Int, customValue: Dp): Scaled {
+    fun screen(type: DpQualifier,
+               value: Int,
+               customValue: Dp,
+               finalQualifierResolver: DpQualifier? = null,
+               orientation: Orientation? = Orientation.DEFAULT,
+               inverter: Inverter? = Inverter.DEFAULT
+    ): Scaled {
         val entry = CustomDpEntry(
             dpQualifierEntry = DpQualifierEntry(type, value),
+            orientation = orientation,
             customValue = customValue,
-            priority = 3
+            finalQualifierResolver = finalQualifierResolver,
+            priority = 3,
+            inverter = inverter
         )
         return Scaled(initialBaseDp, reorderEntries(entry))
     }
@@ -320,11 +421,42 @@ class Scaled private constructor(
      * Prioridade 3: Qualificador de Dp (sw, h, w) sem restrição de UiModeType.
      * Esta é uma sobrecarga que aceita um Int para `customValue`.
      */
-    fun screen(type: DpQualifier, value: Int, customValue: Int): Scaled {
+    fun screen(type: DpQualifier,
+               value: Int,
+               customValue: Int,
+               finalQualifierResolver: DpQualifier? = null,
+               orientation: Orientation? = Orientation.DEFAULT,
+               inverter: Inverter? = Inverter.DEFAULT): Scaled {
         val entry = CustomDpEntry(
             dpQualifierEntry = DpQualifierEntry(type, value),
+            orientation = orientation,
             customValue = customValue.dp,
-            priority = 3
+            finalQualifierResolver = finalQualifierResolver,
+            priority = 3,
+            inverter = inverter
+        )
+        return Scaled(initialBaseDp, reorderEntries(entry))
+    }
+
+    /**
+     * EN
+     * Priority 4: Orientation.
+     * This is an overload that accepts an Int for `customValue`.
+     *
+     * PT
+     * Prioridade 4: Orientation.
+     * Esta é uma sobrecarga que aceita um Int para `customValue`.
+     */
+    fun screen(orientation: Orientation = Orientation.DEFAULT,
+               customValue: Int,
+               finalQualifierResolver: DpQualifier? = null,
+               inverter: Inverter? = Inverter.DEFAULT): Scaled {
+        val entry = CustomDpEntry(
+            orientation = orientation,
+            customValue = customValue.dp,
+            finalQualifierResolver = finalQualifierResolver,
+            priority = 4,
+            inverter = inverter
         )
         return Scaled(initialBaseDp, reorderEntries(entry))
     }
@@ -350,6 +482,9 @@ class Scaled private constructor(
         val configuration = LocalConfiguration.current
         val currentUiModeType = fromConfiguration(configuration.uiMode)
 
+        val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        val isPortrait = configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+
         // EN Tries to find the first custom entry that qualifies.
         // The list is checked in the priority order defined in reorderEntries.
         // PT Tenta encontrar a primeira entrada customizada que se qualifica.
@@ -357,25 +492,35 @@ class Scaled private constructor(
         val foundEntry = sortedCustomEntries.firstOrNull { entry ->
             val qualifierEntry = entry.dpQualifierEntry
             val uiModeMatch = entry.uiModeType == null || entry.uiModeType == currentUiModeType
+            
+            // EN Checks if the entry orientation matches the actual screen orientation
+            // PT Verifica se a orientação da entrada bate com a orientação atual da tela
+            val orientationMatch = when (entry.orientation) {
+                Orientation.LANDSCAPE -> isLandscape
+                Orientation.PORTRAIT -> isPortrait
+                else -> true
+            }
 
             if (qualifierEntry != null) {
                 // EN Checks if the screen value is GREATER THAN OR EQUAL to the qualifier value.
                 // PT Verifica se o valor da tela é MAIOR OU IGUAL ao valor do qualificador.
                 val qualifierMatch = getQualifierValue(qualifierEntry.type, configuration) >= qualifierEntry.value
 
-                // EN Priority 1: Must match uiModeMatch AND qualifierMatch.
-                // PT Prioridade 1: Deve casar uiModeMatch E qualifierMatch.
-                if (entry.priority == 1 && uiModeMatch && qualifierMatch) return@firstOrNull true
+                // EN Priority 1: Must match uiModeMatch AND qualifierMatch AND orientationMatch.
+                // PT Prioridade 1: Deve casar uiModeMatch E qualifierMatch E orientationMatch.
+                if (entry.priority == 1 && uiModeMatch && qualifierMatch && orientationMatch) return@firstOrNull true
 
-                // EN Priority 3: Must match only qualifierMatch.
-                // PT Prioridade 3: Deve casar apenas qualifierMatch.
-                if (entry.priority == 3 && qualifierMatch) return@firstOrNull true
+                // EN Priority 3: Must match only qualifierMatch AND orientationMatch.
+                // PT Prioridade 3: Deve casar apenas qualifierMatch E orientationMatch.
+                if (entry.priority == 3 && qualifierMatch && orientationMatch) return@firstOrNull true
+
+                if (entry.priority == 4 && orientationMatch) return@firstOrNull true
 
                 return@firstOrNull false // EN Did not match P1 or P3. / PT Não casou com P1 ou P3.
             } else {
-                // EN Priority 2: Must match only uiModeMatch (without Dp qualifier).
-                // PT Prioridade 2: Deve casar apenas uiModeMatch (sem qualificador de Dp).
-                return@firstOrNull entry.priority == 2 && uiModeMatch
+                // EN Priority 2: Must match only uiModeMatch AND orientationMatch (without Dp qualifier).
+                // PT Prioridade 2: Deve casar apenas uiModeMatch E orientationMatch (sem qualificador de Dp).
+                return@firstOrNull entry.priority == 2 && uiModeMatch && orientationMatch
             }
         }
 
@@ -384,11 +529,16 @@ class Scaled private constructor(
         val dpToUse: Dp = foundEntry?.customValue ?: initialBaseDp
 
         // EN Applies dynamic scaling to the base/custom value,
-        // using the 'qualifier' passed explicitly by the access property.
+        // using the 'qualifier' passed explicitly by the access property
+        // or the specific 'finalQualifierResolver' from the custom entry if defined.
         // PT Aplica o dimensionamento dinâmico ao valor base/customizado,
-        // usando o 'qualifier' passado explicitamente pela propriedade de acesso.
+        // usando o 'qualifier' passado explicitamente pela propriedade de acesso
+        // ou o 'finalQualifierResolver' específico da entrada customizada, se definido.
+        val finalQualifier = foundEntry?.finalQualifierResolver ?: qualifier
+
         val baseIntDp = dpToUse.value.toInt()
-        return baseIntDp.toDynamicScaledDp(qualifier)
+        return baseIntDp.toDynamicScaledDp(finalQualifier, foundEntry?.inverter ?: Inverter.DEFAULT)
+        //return dpToUse.toDynamicScaledDp(qualifier, foundEntry?.inverter)
     }
 
     /**
@@ -396,7 +546,7 @@ class Scaled private constructor(
      * The final Dp value that is resolved in Compose.
      *
      * PT
-     * O valor final Dp que é resolvida no Compose.
+     * O valor final Dp que é resolvido no Compose.
      */
     @get:Composable
     val sdp: Dp get() = resolve(DpQualifier.SMALL_WIDTH)
@@ -405,7 +555,7 @@ class Scaled private constructor(
      * The final Dp value that is resolved in Compose.
      *
      * PT
-     * O valor final Dp que é resolvida no Compose.
+     * O valor final Dp que é resolvido no Compose.
      */
     @get:Composable
     val hdp: Dp get() = resolve(DpQualifier.HEIGHT)
@@ -414,7 +564,7 @@ class Scaled private constructor(
      * The final Dp value that is resolved in Compose.
      *
      * PT
-     * O valor final Dp que é resolvida no Compose.
+     * O valor final Dp que é resolvido no Compose.
      */
     @get:Composable
     val wdp: Dp get() = resolve(DpQualifier.WIDTH)
@@ -469,15 +619,28 @@ private fun findResourceIdByName(resourceName: String): Int {
  * @return The Dp value loaded from the resource or the base Dp value.
  */
 @Composable
-fun Int.toDynamicScaledDp(qualifier: DpQualifier): Dp {
+fun Int.toDynamicScaledDp(qualifier: DpQualifier, inverter: Inverter = Inverter.DEFAULT): Dp {
     // EN Validation requirement (limits usage to avoid creating thousands of dimens files).
     // PT Requisito de validação (limita o uso para evitar a criação de milhares de arquivos dimens).
-    require(this in -300..600)
-    "Value must be between -300 and 600 to use the dynamic scaling dimension logic. Current value:: $this"
+    require(this in -300..600) { "Value must be between -300 and 600 to use the dynamic scaling dimension logic. Current value:: $this" }
+
+    val configuration = LocalConfiguration.current
+    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+    val isPortrait = configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+
+    var actualQualifier = qualifier
+
+    when (inverter) {
+        Inverter.PH_TO_LW -> if (isLandscape && qualifier == DpQualifier.HEIGHT) actualQualifier = DpQualifier.WIDTH
+        Inverter.PW_TO_LH -> if (isLandscape && qualifier == DpQualifier.WIDTH) actualQualifier = DpQualifier.HEIGHT
+        Inverter.LH_TO_PW -> if (isPortrait && qualifier == DpQualifier.HEIGHT) actualQualifier = DpQualifier.WIDTH
+        Inverter.LW_TO_PH -> if (isPortrait && qualifier == DpQualifier.WIDTH) actualQualifier = DpQualifier.HEIGHT
+        Inverter.DEFAULT -> {}
+    }
 
     // EN Determines the qualifier prefix: s (Smallest Width), h (Height), w (Width).
     // PT Determina o prefixo do qualificador: s (Smallest Width), h (Height), w (Width).
-    val attrName = when (qualifier) {
+    val attrName = when (actualQualifier) {
         DpQualifier.HEIGHT -> "h"
         DpQualifier.WIDTH -> "w"
         else -> "s"

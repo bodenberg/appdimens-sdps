@@ -4,7 +4,7 @@ BASE_DIR = "generated_values_dp"
 
 # Range automático
 MIN_DP = 30
-MAX_DP = 4320
+MAX_DP = 5120
 STEP = 15
 
 # Dispositivos reais

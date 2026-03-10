@@ -14,7 +14,7 @@ val isJitPack = System.getenv("JITPACK") == "true"
         || System.getenv("ci") == "true"
 
 mavenPublishing {
-    coordinates("io.github.bodenberg", "appdimens-sdps", "3.0.0")
+    coordinates("io.github.bodenberg", "appdimens-sdps", "3.0.1")
 
     configure(
         AndroidSingleVariantLibrary(
@@ -25,7 +25,7 @@ mavenPublishing {
 
     pom {
         name.set("AppDimens SDP, HDP, WDP")
-        description.set("Scalable width and height dimensions for Android layouts")
+        description.set("Scalable width and height dimensions for Android layouts (8k supported)")
         url.set("https://github.com/bodenberg/appdimens-sdps")
 
         licenses {
