@@ -64,7 +64,7 @@ To install, simply add it to your `build.gradle` (dependency):
 
 ```kotlin
 dependencies {
-    implementation("io.github.bodenberg:appdimens-sdps:3.0.1")
+    implementation("io.github.bodenberg:appdimens-sdps:3.0.2")
 }
 ```
 
