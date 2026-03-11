@@ -445,6 +445,29 @@ class Scaled private constructor(
      * Esta é uma sobrecarga que aceita um Int para `customValue`.
      */
     fun screen(orientation: Orientation = Orientation.DEFAULT,
+               customValue: Dp,
+               finalQualifierResolver: DpQualifier? = null,
+               inverter: Inverter? = Inverter.DEFAULT): Scaled {
+        val entry = CustomDpEntry(
+            orientation = orientation,
+            customValue = customValue,
+            finalQualifierResolver = finalQualifierResolver,
+            priority = 4,
+            inverter = inverter
+        )
+        return Scaled(initialBaseDp, reorderEntries(entry))
+    }
+
+    /**
+     * EN
+     * Priority 4: Orientation.
+     * This is an overload that accepts an Int for `customValue`.
+     *
+     * PT
+     * Prioridade 4: Orientation.
+     * Esta é uma sobrecarga que aceita um Int para `customValue`.
+     */
+    fun screen(orientation: Orientation = Orientation.DEFAULT,
                customValue: Int,
                finalQualifierResolver: DpQualifier? = null,
                inverter: Inverter? = Inverter.DEFAULT): Scaled {
