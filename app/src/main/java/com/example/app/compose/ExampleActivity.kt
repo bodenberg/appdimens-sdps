@@ -23,10 +23,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.appdimens.sdps.common.DpQualifier
+import com.appdimens.sdps.common.Orientation
 import com.appdimens.sdps.common.UiModeType
 import com.appdimens.sdps.compose.hdp
 import com.appdimens.sdps.compose.scaledDp
 import com.appdimens.sdps.compose.sdp
+import com.appdimens.sdps.compose.sdpRotate
 import com.appdimens.sdps.compose.wdp
 
 // PT Importa extensões sdp, hdp, wdp, scaledDp
@@ -77,7 +79,7 @@ fun SdpDemoScreen() {
                     .verticalScroll(rememberScrollState())
                     // EN 16.sdp padding: adapts padding based on the smallest width.
                     // PT Preenchimento de 16.sdp: adapta o preenchimento com base na menor largura.
-                    .padding(16.sdp),
+                    .padding(16.sdpRotate(10)),
                 // EN Spacing between items of 20.sdp.
                 // PT Espaçamento entre itens de 20.sdp.
                 verticalArrangement = Arrangement.spacedBy(20.sdp),

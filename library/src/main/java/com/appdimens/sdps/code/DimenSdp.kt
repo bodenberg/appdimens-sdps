@@ -101,6 +101,10 @@ object DimenSdp {
             Inverter.PW_TO_LH -> if (isLandscape && dpQualifier == DpQualifier.WIDTH) actualQualifier = DpQualifier.HEIGHT
             Inverter.LH_TO_PW -> if (isPortrait && dpQualifier == DpQualifier.HEIGHT) actualQualifier = DpQualifier.WIDTH
             Inverter.LW_TO_PH -> if (isPortrait && dpQualifier == DpQualifier.WIDTH) actualQualifier = DpQualifier.HEIGHT
+            Inverter.SW_TO_LH -> if (isLandscape && dpQualifier == DpQualifier.SMALL_WIDTH) actualQualifier = DpQualifier.HEIGHT
+            Inverter.SW_TO_LW -> if (isLandscape && dpQualifier == DpQualifier.SMALL_WIDTH) actualQualifier = DpQualifier.WIDTH
+            Inverter.SW_TO_PH -> if (isPortrait && dpQualifier == DpQualifier.SMALL_WIDTH) actualQualifier = DpQualifier.HEIGHT
+            Inverter.SW_TO_PW -> if (isPortrait && dpQualifier == DpQualifier.SMALL_WIDTH) actualQualifier = DpQualifier.WIDTH
             Inverter.DEFAULT -> {}
         }
 
@@ -132,6 +136,62 @@ object DimenSdp {
 
     /**
      * EN
+     * Quick resolution for Smallest Width (sdp), but
+     * in portrait orientation it acts as Screen Height (hdp).
+     * Usage example: `DimenSdp.sdpPh(context, 32)`.
+     *
+     * PT
+     * Resolução rápida para Smallest Width (sdp), mas
+     * na orientação retrato atua como Altura da Tela (hdp).
+     * Exemplo de uso: `DimenSdp.sdpPh(context, 32)`.
+     */
+    @JvmStatic
+    fun sdpPh(context: Context, value: Int): Float = getDimensionInPx(context, DpQualifier.SMALL_WIDTH, value, Inverter.SW_TO_PH)
+
+    /**
+     * EN
+     * Quick resolution for Smallest Width (sdp), but
+     * in landscape orientation it acts as Screen Height (hdp).
+     * Usage example: `DimenSdp.sdpLh(context, 32)`.
+     *
+     * PT
+     * Resolução rápida para Smallest Width (sdp), mas
+     * na orientação paisagem atua como Altura da Tela (hdp).
+     * Exemplo de uso: `DimenSdp.sdpLh(context, 32)`.
+     */
+    @JvmStatic
+    fun sdpLh(context: Context, value: Int): Float = getDimensionInPx(context, DpQualifier.SMALL_WIDTH, value, Inverter.SW_TO_LH)
+
+    /**
+     * EN
+     * Quick resolution for Smallest Width (sdp), but
+     * in portrait orientation it acts as Screen Width (wdp).
+     * Usage example: `DimenSdp.sdpPw(context, 32)`.
+     *
+     * PT
+     * Resolução rápida para Smallest Width (sdp), mas
+     * na orientação retrato atua como Largura da Tela (wdp).
+     * Exemplo de uso: `DimenSdp.sdpPw(context, 32)`.
+     */
+    @JvmStatic
+    fun sdpPw(context: Context, value: Int): Float = getDimensionInPx(context, DpQualifier.SMALL_WIDTH, value, Inverter.SW_TO_PW)
+
+    /**
+     * EN
+     * Quick resolution for Smallest Width (sdp), but
+     * in landscape orientation it acts as Screen Width (wdp).
+     * Usage example: `DimenSdp.sdpLw(context, 32)`.
+     *
+     * PT
+     * Resolução rápida para Smallest Width (sdp), mas
+     * na orientação paisagem atua como Largura da Tela (wdp).
+     * Exemplo de uso: `DimenSdp.sdpLw(context, 32)`.
+     */
+    @JvmStatic
+    fun sdpLw(context: Context, value: Int): Float = getDimensionInPx(context, DpQualifier.SMALL_WIDTH, value, Inverter.SW_TO_LW)
+
+    /**
+     * EN
      * Quick resolution for Screen Height (hdp).
      * Usage example: `DimenSdp.hdp(context, 32)`.
      *
@@ -146,29 +206,29 @@ object DimenSdp {
      * EN
      * Quick resolution for Screen Height (hdp), but
      * in landscape orientation it acts as Screen Width (wdp).
-     * Usage example: `DimenSdp.hdp_lw(context, 32)`.
+     * Usage example: `DimenSdp.hdpLw(context, 32)`.
      *
      * PT
      * Resolução rápida para Altura da Tela (hdp), mas
      * na orientação paisagem atua como Largura da Tela (wdp).
-     * Exemplo de uso: `DimenSdp.hdp_lw(context, 32)`.
+     * Exemplo de uso: `DimenSdp.hdpLw(context, 32)`.
      */
     @JvmStatic
-    fun hdp_lw(context: Context, value: Int): Float = getDimensionInPx(context, DpQualifier.HEIGHT, value, Inverter.PH_TO_LW)
+    fun hdpLw(context: Context, value: Int): Float = getDimensionInPx(context, DpQualifier.HEIGHT, value, Inverter.PH_TO_LW)
 
     /**
      * EN
      * Quick resolution for Screen Height (hdp), but
      * in portrait orientation it acts as Screen Width (wdp).
-     * Usage example: `DimenSdp.hdp_pw(context, 32)`.
+     * Usage example: `DimenSdp.hdpPw(context, 32)`.
      *
      * PT
      * Resolução rápida para Altura da Tela (hdp), mas
      * na orientação retrato atua como Largura da Tela (wdp).
-     * Exemplo de uso: `DimenSdp.hdp_pw(context, 32)`.
+     * Exemplo de uso: `DimenSdp.hdpPw(context, 32)`.
      */
     @JvmStatic
-    fun hdp_pw(context: Context, value: Int): Float = getDimensionInPx(context, DpQualifier.HEIGHT, value, Inverter.LH_TO_PW)
+    fun hdpPw(context: Context, value: Int): Float = getDimensionInPx(context, DpQualifier.HEIGHT, value, Inverter.LH_TO_PW)
 
     /**
      * EN
@@ -186,29 +246,29 @@ object DimenSdp {
      * EN
      * Quick resolution for Screen Width (wdp), but
      * in landscape orientation it acts as Screen Height (hdp).
-     * Usage example: `DimenSdp.wdp_lh(context, 100)`.
+     * Usage example: `DimenSdp.wdpLh(context, 100)`.
      *
      * PT
      * Resolução rápida para Largura da Tela (wdp), mas
      * na orientação paisagem atua como Altura da Tela (hdp).
-     * Exemplo de uso: `DimenSdp.wdp_lh(context, 100)`.
+     * Exemplo de uso: `DimenSdp.wdpLh(context, 100)`.
      */
     @JvmStatic
-    fun wdp_lh(context: Context, value: Int): Float = getDimensionInPx(context, DpQualifier.WIDTH, value, Inverter.PW_TO_LH)
+    fun wdpLh(context: Context, value: Int): Float = getDimensionInPx(context, DpQualifier.WIDTH, value, Inverter.PW_TO_LH)
 
     /**
      * EN
      * Quick resolution for Screen Width (wdp), but
      * in portrait orientation it acts as Screen Height (hdp).
-     * Usage example: `DimenSdp.wdp_ph(context, 100)`.
+     * Usage example: `DimenSdp.wdpPh(context, 100)`.
      *
      * PT
      * Resolução rápida para Largura da Tela (wdp), mas
      * na orientação retrato atua como Altura da Tela (hdp).
-     * Exemplo de uso: `DimenSdp.wdp_ph(context, 100)`.
+     * Exemplo de uso: `DimenSdp.wdpPh(context, 100)`.
      */
     @JvmStatic
-    fun wdp_ph(context: Context, value: Int): Float = getDimensionInPx(context, DpQualifier.WIDTH, value, Inverter.LW_TO_PH)
+    fun wdpPh(context: Context, value: Int): Float = getDimensionInPx(context, DpQualifier.WIDTH, value, Inverter.LW_TO_PH)
 
     // EN Resource ID variants of the above extensions.
     // PT Variantes que retornam o ID de recurso das extensões acima.
@@ -227,6 +287,62 @@ object DimenSdp {
 
     /**
      * EN
+     * Quick resolution for Smallest Width resource ID (sdpRes), but
+     * in portrait orientation it acts as Screen Height resource ID (hdpRes).
+     * Usage example: `DimenSdp.sdpPhRes(context, 32)`.
+     *
+     * PT
+     * Resolução rápida para ID de recurso Smallest Width (sdpRes), mas
+     * na orientação retrato atua como Altura da Tela (hdpRes).
+     * Exemplo de uso: `DimenSdp.sdpPhRes(context, 32)`.
+     */
+    @JvmStatic
+    fun sdpPhRes(context: Context, value: Int): Int = getResourceId(context, DpQualifier.SMALL_WIDTH, value, Inverter.SW_TO_PH)
+
+    /**
+     * EN
+     * Quick resolution for Smallest Width resource ID (sdpRes), but
+     * in landscape orientation it acts as Screen Height resource ID (hdpRes).
+     * Usage example: `DimenSdp.sdpLhRes(context, 32)`.
+     *
+     * PT
+     * Resolução rápida para ID de recurso Smallest Width (sdpRes), mas
+     * na orientação paisagem atua como Altura da Tela (hdpRes).
+     * Exemplo de uso: `DimenSdp.sdpLhRes(context, 32)`.
+     */
+    @JvmStatic
+    fun sdpLhRes(context: Context, value: Int): Int = getResourceId(context, DpQualifier.SMALL_WIDTH, value, Inverter.SW_TO_LH)
+
+    /**
+     * EN
+     * Quick resolution for Smallest Width resource ID (sdpRes), but
+     * in portrait orientation it acts as Screen Width resource ID (wdpRes).
+     * Usage example: `DimenSdp.sdpPwRes(context, 32)`.
+     *
+     * PT
+     * Resolução rápida para ID de recurso Smallest Width (sdpRes), mas
+     * na orientação retrato atua como Largura da Tela (wdpRes).
+     * Exemplo de uso: `DimenSdp.sdpPwRes(context, 32)`.
+     */
+    @JvmStatic
+    fun sdpPwRes(context: Context, value: Int): Int = getResourceId(context, DpQualifier.SMALL_WIDTH, value, Inverter.SW_TO_PW)
+
+    /**
+     * EN
+     * Quick resolution for Smallest Width resource ID (sdpRes), but
+     * in landscape orientation it acts as Screen Width resource ID (wdpRes).
+     * Usage example: `DimenSdp.sdpLwRes(context, 32)`.
+     *
+     * PT
+     * Resolução rápida para ID de recurso Smallest Width (sdpRes), mas
+     * na orientação paisagem atua como Largura da Tela (wdpRes).
+     * Exemplo de uso: `DimenSdp.sdpLwRes(context, 32)`.
+     */
+    @JvmStatic
+    fun sdpLwRes(context: Context, value: Int): Int = getResourceId(context, DpQualifier.SMALL_WIDTH, value, Inverter.SW_TO_LW)
+
+    /**
+     * EN
      * Quick resolution for Screen Height resource ID (hdpRes).
      * Usage example: `DimenSdp.hdpRes(context, 32)`.
      *
@@ -241,29 +357,29 @@ object DimenSdp {
      * EN
      * Quick resolution for Screen Height resource ID (hdpRes), but
      * in landscape orientation it acts as Screen Width resource ID (wdpRes).
-     * Usage example: `DimenSdp.hdp_lwRes(context, 32)`.
+     * Usage example: `DimenSdp.hdpLwRes(context, 32)`.
      *
      * PT
      * Resolução rápida para ID de recurso Altura da Tela (hdpRes), mas
      * na orientação paisagem atua como Largura da Tela (wdpRes).
-     * Exemplo de uso: `DimenSdp.hdp_lwRes(context, 32)`.
+     * Exemplo de uso: `DimenSdp.hdpLwRes(context, 32)`.
      */
     @JvmStatic
-    fun hdp_lwRes(context: Context, value: Int): Int = getResourceId(context, DpQualifier.HEIGHT, value, Inverter.PH_TO_LW)
+    fun hdpLwRes(context: Context, value: Int): Int = getResourceId(context, DpQualifier.HEIGHT, value, Inverter.PH_TO_LW)
 
     /**
      * EN
      * Quick resolution for Screen Height resource ID (hdpRes), but
      * in portrait orientation it acts as Screen Width resource ID (wdpRes).
-     * Usage example: `DimenSdp.hdp_pwRes(context, 32)`.
+     * Usage example: `DimenSdp.hdpPwRes(context, 32)`.
      *
      * PT
      * Resolução rápida para ID de recurso Altura da Tela (hdpRes), mas
      * na orientação retrato atua como Largura da Tela (wdpRes).
-     * Exemplo de uso: `DimenSdp.hdp_pwRes(context, 32)`.
+     * Exemplo de uso: `DimenSdp.hdpPwRes(context, 32)`.
      */
     @JvmStatic
-    fun hdp_pwRes(context: Context, value: Int): Int = getResourceId(context, DpQualifier.HEIGHT, value, Inverter.LH_TO_PW)
+    fun hdpPwRes(context: Context, value: Int): Int = getResourceId(context, DpQualifier.HEIGHT, value, Inverter.LH_TO_PW)
 
     /**
      * EN
@@ -281,29 +397,29 @@ object DimenSdp {
      * EN
      * Quick resolution for Screen Width resource ID (wdpRes), but
      * in landscape orientation it acts as Screen Height resource ID (hdpRes).
-     * Usage example: `DimenSdp.wdp_lhRes(context, 100)`.
+     * Usage example: `DimenSdp.wdpLhRes(context, 100)`.
      *
      * PT
      * Resolução rápida para ID de recurso Largura da Tela (wdpRes), mas
      * na orientação paisagem atua como Altura da Tela (hdpRes).
-     * Exemplo de uso: `DimenSdp.wdp_lhRes(context, 100)`.
+     * Exemplo de uso: `DimenSdp.wdpLhRes(context, 100)`.
      */
     @JvmStatic
-    fun wdp_lhRes(context: Context, value: Int): Int = getResourceId(context, DpQualifier.WIDTH, value, Inverter.PW_TO_LH)
+    fun wdpLhRes(context: Context, value: Int): Int = getResourceId(context, DpQualifier.WIDTH, value, Inverter.PW_TO_LH)
 
     /**
      * EN
      * Quick resolution for Screen Width resource ID (wdpRes), but
      * in portrait orientation it acts as Screen Height resource ID (hdpRes).
-     * Usage example: `DimenSdp.wdp_phRes(context, 100)`.
+     * Usage example: `DimenSdp.wdpPhRes(context, 100)`.
      *
      * PT
      * Resolução rápida para ID de recurso Largura da Tela (wdpRes), mas
      * na orientação retrato atua como Altura da Tela (hdpRes).
-     * Exemplo de uso: `DimenSdp.wdp_phRes(context, 100)`.
+     * Exemplo de uso: `DimenSdp.wdpPhRes(context, 100)`.
      */
     @JvmStatic
-    fun wdp_phRes(context: Context, value: Int): Int = getResourceId(context, DpQualifier.WIDTH, value, Inverter.LW_TO_PH)
+    fun wdpPhRes(context: Context, value: Int): Int = getResourceId(context, DpQualifier.WIDTH, value, Inverter.LW_TO_PH)
 
     /**
      * EN
@@ -336,6 +452,263 @@ object DimenSdp {
     @JvmStatic
     fun scaled(initialBaseValue: Int): Scaled = Scaled(initialBaseValue)
 
+    // EN Rotation facilitator functions for code.
+    // PT Funções facilitadoras de rotação para código.
+
+    /**
+     * EN
+     * Facilitator for Smallest Width (sdp) with rotation override.
+     * Uses the base value by default, but when the device is in the specified [orientation],
+     * it uses [rotationValue] scaled with the given [finalQualifierResolver].
+     * Usage example: `DimenSdp.sdpRotate(context, 30, 45, DpQualifier.SMALL_WIDTH, Orientation.LANDSCAPE)`.
+     *
+     * PT
+     * Facilitador para Smallest Width (sdp) com substituição por rotação.
+     * Usa o valor base por padrão, mas quando o dispositivo está na [orientation] especificada,
+     * usa [rotationValue] escalado com o [finalQualifierResolver] dado.
+     * Exemplo de uso: `DimenSdp.sdpRotate(context, 30, 45, DpQualifier.SMALL_WIDTH, Orientation.LANDSCAPE)`.
+     */
+    @JvmStatic
+    @JvmOverloads
+    fun sdpRotate(context: Context, value: Int, rotationValue: Int, finalQualifierResolver: DpQualifier = DpQualifier.SMALL_WIDTH, orientation: Orientation = Orientation.LANDSCAPE): Float {
+        val configuration = context.resources.configuration
+        val isTarget = when (orientation) {
+            Orientation.LANDSCAPE -> configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+            Orientation.PORTRAIT -> configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+            else -> false
+        }
+        return if (isTarget) getDimensionInPx(context, finalQualifierResolver, rotationValue)
+        else getDimensionInPx(context, DpQualifier.SMALL_WIDTH, value)
+    }
+
+    /**
+     * EN
+     * Facilitator for Screen Height (hdp) with rotation override.
+     *
+     * PT
+     * Facilitador para Altura da Tela (hdp) com substituição por rotação.
+     */
+    @JvmStatic
+    @JvmOverloads
+    fun hdpRotate(context: Context, value: Int, rotationValue: Int, finalQualifierResolver: DpQualifier = DpQualifier.HEIGHT, orientation: Orientation = Orientation.LANDSCAPE): Float {
+        val configuration = context.resources.configuration
+        val isTarget = when (orientation) {
+            Orientation.LANDSCAPE -> configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+            Orientation.PORTRAIT -> configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+            else -> false
+        }
+        return if (isTarget) getDimensionInPx(context, finalQualifierResolver, rotationValue)
+        else getDimensionInPx(context, DpQualifier.HEIGHT, value)
+    }
+
+    /**
+     * EN
+     * Facilitator for Screen Width (wdp) with rotation override.
+     *
+     * PT
+     * Facilitador para Largura da Tela (wdp) com substituição por rotação.
+     */
+    @JvmStatic
+    @JvmOverloads
+    fun wdpRotate(context: Context, value: Int, rotationValue: Int, finalQualifierResolver: DpQualifier = DpQualifier.WIDTH, orientation: Orientation = Orientation.LANDSCAPE): Float {
+        val configuration = context.resources.configuration
+        val isTarget = when (orientation) {
+            Orientation.LANDSCAPE -> configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+            Orientation.PORTRAIT -> configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+            else -> false
+        }
+        return if (isTarget) getDimensionInPx(context, finalQualifierResolver, rotationValue)
+        else getDimensionInPx(context, DpQualifier.WIDTH, value)
+    }
+
+    // EN UiModeType facilitator functions for code.
+    // PT Funções facilitadoras de UiModeType para código.
+
+    /**
+     * EN
+     * Facilitator for Smallest Width (sdp) with UiModeType override.
+     * Usage example: `DimenSdp.sdpMode(context, 30, 50, UiModeType.TELEVISION)`.
+     *
+     * PT
+     * Facilitador para Smallest Width (sdp) com substituição por UiModeType.
+     * Exemplo de uso: `DimenSdp.sdpMode(context, 30, 50, UiModeType.TELEVISION)`.
+     */
+    @JvmStatic
+    @JvmOverloads
+    fun sdpMode(context: Context, value: Int, modeValue: Int, uiModeType: UiModeType, foldingFeature: androidx.window.layout.FoldingFeature? = null, finalQualifierResolver: DpQualifier? = null): Float {
+        val currentUiModeType = UiModeType.fromConfiguration(context, foldingFeature)
+        return if (currentUiModeType == uiModeType) getDimensionInPx(context, finalQualifierResolver ?: DpQualifier.SMALL_WIDTH, modeValue)
+        else getDimensionInPx(context, DpQualifier.SMALL_WIDTH, value)
+    }
+
+    /**
+     * EN
+     * Facilitator for Screen Height (hdp) with UiModeType override.
+     *
+     * PT
+     * Facilitador para Altura da Tela (hdp) com substituição por UiModeType.
+     */
+    @JvmStatic
+    @JvmOverloads
+    fun hdpMode(context: Context, value: Int, modeValue: Int, uiModeType: UiModeType, foldingFeature: androidx.window.layout.FoldingFeature? = null, finalQualifierResolver: DpQualifier? = null): Float {
+        val currentUiModeType = UiModeType.fromConfiguration(context, foldingFeature)
+        return if (currentUiModeType == uiModeType) getDimensionInPx(context, finalQualifierResolver ?: DpQualifier.HEIGHT, modeValue)
+        else getDimensionInPx(context, DpQualifier.HEIGHT, value)
+    }
+
+    /**
+     * EN
+     * Facilitator for Screen Width (wdp) with UiModeType override.
+     *
+     * PT
+     * Facilitador para Largura da Tela (wdp) com substituição por UiModeType.
+     */
+    @JvmStatic
+    @JvmOverloads
+    fun wdpMode(context: Context, value: Int, modeValue: Int, uiModeType: UiModeType, foldingFeature: androidx.window.layout.FoldingFeature? = null, finalQualifierResolver: DpQualifier? = null): Float {
+        val currentUiModeType = UiModeType.fromConfiguration(context, foldingFeature)
+        return if (currentUiModeType == uiModeType) getDimensionInPx(context, finalQualifierResolver ?: DpQualifier.WIDTH, modeValue)
+        else getDimensionInPx(context, DpQualifier.WIDTH, value)
+    }
+
+    // EN DpQualifier facilitator functions for code.
+    // PT Funções facilitadoras de DpQualifier para código.
+
+    /**
+     * EN
+     * Facilitator for Smallest Width (sdp) with DpQualifier override.
+     * Usage example: `DimenSdp.sdpQualifier(context, 30, 50, DpQualifier.SMALL_WIDTH, 600)`.
+     *
+     * PT
+     * Facilitador para Smallest Width (sdp) com substituição por DpQualifier.
+     * Exemplo de uso: `DimenSdp.sdpQualifier(context, 30, 50, DpQualifier.SMALL_WIDTH, 600)`.
+     */
+    @JvmStatic
+    @JvmOverloads
+    @SuppressLint("ConfigurationScreenWidthHeight")
+    fun sdpQualifier(context: Context, value: Int, qualifiedValue: Int, qualifierType: DpQualifier, qualifierValue: Int, finalQualifierResolver: DpQualifier? = null): Float {
+        val configuration = context.resources.configuration
+        val screenValue = when (qualifierType) {
+            DpQualifier.SMALL_WIDTH -> configuration.smallestScreenWidthDp.toFloat()
+            DpQualifier.HEIGHT -> configuration.screenHeightDp.toFloat()
+            DpQualifier.WIDTH -> configuration.screenWidthDp.toFloat()
+        }
+        return if (screenValue >= qualifierValue) getDimensionInPx(context, finalQualifierResolver ?: DpQualifier.SMALL_WIDTH, qualifiedValue)
+        else getDimensionInPx(context, DpQualifier.SMALL_WIDTH, value)
+    }
+
+    /**
+     * EN
+     * Facilitator for Screen Height (hdp) with DpQualifier override.
+     *
+     * PT
+     * Facilitador para Altura da Tela (hdp) com substituição por DpQualifier.
+     */
+    @JvmStatic
+    @JvmOverloads
+    @SuppressLint("ConfigurationScreenWidthHeight")
+    fun hdpQualifier(context: Context, value: Int, qualifiedValue: Int, qualifierType: DpQualifier, qualifierValue: Int, finalQualifierResolver: DpQualifier? = null): Float {
+        val configuration = context.resources.configuration
+        val screenValue = when (qualifierType) {
+            DpQualifier.SMALL_WIDTH -> configuration.smallestScreenWidthDp.toFloat()
+            DpQualifier.HEIGHT -> configuration.screenHeightDp.toFloat()
+            DpQualifier.WIDTH -> configuration.screenWidthDp.toFloat()
+        }
+        return if (screenValue >= qualifierValue) getDimensionInPx(context, finalQualifierResolver ?: DpQualifier.HEIGHT, qualifiedValue)
+        else getDimensionInPx(context, DpQualifier.HEIGHT, value)
+    }
+
+    /**
+     * EN
+     * Facilitator for Screen Width (wdp) with DpQualifier override.
+     *
+     * PT
+     * Facilitador para Largura da Tela (wdp) com substituição por DpQualifier.
+     */
+    @JvmStatic
+    @JvmOverloads
+    @SuppressLint("ConfigurationScreenWidthHeight")
+    fun wdpQualifier(context: Context, value: Int, qualifiedValue: Int, qualifierType: DpQualifier, qualifierValue: Int, finalQualifierResolver: DpQualifier? = null): Float {
+        val configuration = context.resources.configuration
+        val screenValue = when (qualifierType) {
+            DpQualifier.SMALL_WIDTH -> configuration.smallestScreenWidthDp.toFloat()
+            DpQualifier.HEIGHT -> configuration.screenHeightDp.toFloat()
+            DpQualifier.WIDTH -> configuration.screenWidthDp.toFloat()
+        }
+        return if (screenValue >= qualifierValue) getDimensionInPx(context, finalQualifierResolver ?: DpQualifier.WIDTH, qualifiedValue)
+        else getDimensionInPx(context, DpQualifier.WIDTH, value)
+    }
+
+    // EN UiModeType + DpQualifier combined facilitator functions for code.
+    // PT Funções facilitadoras combinadas UiModeType + DpQualifier para código.
+
+    /**
+     * EN
+     * Facilitator for Smallest Width (sdp) with combined UiModeType + DpQualifier override.
+     * Usage example: `DimenSdp.sdpScreen(context, 30, 50, UiModeType.TELEVISION, DpQualifier.SMALL_WIDTH, 600)`.
+     *
+     * PT
+     * Facilitador para Smallest Width (sdp) com substituição combinada UiModeType + DpQualifier.
+     * Exemplo de uso: `DimenSdp.sdpScreen(context, 30, 50, UiModeType.TELEVISION, DpQualifier.SMALL_WIDTH, 600)`.
+     */
+    @JvmStatic
+    @JvmOverloads
+    @SuppressLint("ConfigurationScreenWidthHeight")
+    fun sdpScreen(context: Context, value: Int, screenValue: Int, uiModeType: UiModeType, qualifierType: DpQualifier, qualifierValue: Int, foldingFeature: androidx.window.layout.FoldingFeature? = null, finalQualifierResolver: DpQualifier? = null): Float {
+        val configuration = context.resources.configuration
+        val currentUiModeType = UiModeType.fromConfiguration(context, foldingFeature)
+        val qualifierScreenValue = when (qualifierType) {
+            DpQualifier.SMALL_WIDTH -> configuration.smallestScreenWidthDp.toFloat()
+            DpQualifier.HEIGHT -> configuration.screenHeightDp.toFloat()
+            DpQualifier.WIDTH -> configuration.screenWidthDp.toFloat()
+        }
+        return if (currentUiModeType == uiModeType && qualifierScreenValue >= qualifierValue) getDimensionInPx(context, finalQualifierResolver ?: DpQualifier.SMALL_WIDTH, screenValue)
+        else getDimensionInPx(context, DpQualifier.SMALL_WIDTH, value)
+    }
+
+    /**
+     * EN
+     * Facilitator for Screen Height (hdp) with combined UiModeType + DpQualifier override.
+     *
+     * PT
+     * Facilitador para Altura da Tela (hdp) com substituição combinada UiModeType + DpQualifier.
+     */
+    @JvmStatic
+    @JvmOverloads
+    @SuppressLint("ConfigurationScreenWidthHeight")
+    fun hdpScreen(context: Context, value: Int, screenValue: Int, uiModeType: UiModeType, qualifierType: DpQualifier, qualifierValue: Int, foldingFeature: androidx.window.layout.FoldingFeature? = null, finalQualifierResolver: DpQualifier? = null): Float {
+        val configuration = context.resources.configuration
+        val currentUiModeType = UiModeType.fromConfiguration(context, foldingFeature)
+        val qualifierScreenValue = when (qualifierType) {
+            DpQualifier.SMALL_WIDTH -> configuration.smallestScreenWidthDp.toFloat()
+            DpQualifier.HEIGHT -> configuration.screenHeightDp.toFloat()
+            DpQualifier.WIDTH -> configuration.screenWidthDp.toFloat()
+        }
+        return if (currentUiModeType == uiModeType && qualifierScreenValue >= qualifierValue) getDimensionInPx(context, finalQualifierResolver ?: DpQualifier.HEIGHT, screenValue)
+        else getDimensionInPx(context, DpQualifier.HEIGHT, value)
+    }
+
+    /**
+     * EN
+     * Facilitator for Screen Width (wdp) with combined UiModeType + DpQualifier override.
+     *
+     * PT
+     * Facilitador para Largura da Tela (wdp) com substituição combinada UiModeType + DpQualifier.
+     */
+    @JvmStatic
+    @JvmOverloads
+    @SuppressLint("ConfigurationScreenWidthHeight")
+    fun wdpScreen(context: Context, value: Int, screenValue: Int, uiModeType: UiModeType, qualifierType: DpQualifier, qualifierValue: Int, foldingFeature: androidx.window.layout.FoldingFeature? = null, finalQualifierResolver: DpQualifier? = null): Float {
+        val configuration = context.resources.configuration
+        val currentUiModeType = UiModeType.fromConfiguration(context, foldingFeature)
+        val qualifierScreenValue = when (qualifierType) {
+            DpQualifier.SMALL_WIDTH -> configuration.smallestScreenWidthDp.toFloat()
+            DpQualifier.HEIGHT -> configuration.screenHeightDp.toFloat()
+            DpQualifier.WIDTH -> configuration.screenWidthDp.toFloat()
+        }
+        return if (currentUiModeType == uiModeType && qualifierScreenValue >= qualifierValue) getDimensionInPx(context, finalQualifierResolver ?: DpQualifier.WIDTH, screenValue)
+        else getDimensionInPx(context, DpQualifier.WIDTH, value)
+    }
 
 }
 
