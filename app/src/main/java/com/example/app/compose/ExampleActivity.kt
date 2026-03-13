@@ -1,6 +1,9 @@
 /**
  * @author Bodenberg
  * GIT: https://github.com/bodenberg/appdimens-sdps.git
+ *
+ * EN Compose ExampleActivity — Comprehensive demo of all AppDimens SDP features.
+ * PT Compose ExampleActivity — Demonstração completa de todos os recursos do AppDimens SDP.
  */
 package com.example.app.compose
 
@@ -25,63 +28,60 @@ import androidx.compose.ui.unit.dp
 import com.appdimens.sdps.common.DpQualifier
 import com.appdimens.sdps.common.Orientation
 import com.appdimens.sdps.common.UiModeType
-import com.appdimens.sdps.compose.hdp
-import com.appdimens.sdps.compose.scaledDp
+
+// EN Core extensions: .sdp, .hdp, .wdp (based on smallest width, height, width)
+// PT Extensões principais: .sdp, .hdp, .wdp (baseadas em menor largura, altura, largura)
 import com.appdimens.sdps.compose.sdp
-import com.appdimens.sdps.compose.sdpRotate
+import com.appdimens.sdps.compose.hdp
 import com.appdimens.sdps.compose.wdp
 
-// PT Importa extensões sdp, hdp, wdp, scaledDp
+// EN Inverter shortcuts: orientation-aware dimension switching
+// PT Atalhos inversores: troca de dimensão com base na orientação
+import com.appdimens.sdps.compose.sdpPh
+import com.appdimens.sdps.compose.sdpLw
+import com.appdimens.sdps.compose.hdpLw
+import com.appdimens.sdps.compose.wdpLh
+
+// EN Facilitator extensions: conditional dimension resolution
+// PT Extensões facilitadoras: resolução condicional de dimensão
+import com.appdimens.sdps.compose.sdpRotate
+import com.appdimens.sdps.compose.sdpMode
+import com.appdimens.sdps.compose.sdpQualifier
+import com.appdimens.sdps.compose.sdpScreen
+
+// EN DimenScaled builder for complex conditional dimensions
+// PT Builder DimenScaled para dimensões condicionais complexas
+import com.appdimens.sdps.compose.scaledDp
 
 /**
- * EN An activity that demonstrates the use of scaled SDPs with AppDimens in Jetpack Compose.
- * 
- * PT Uma atividade que demonstra o uso de SDPs escalados com AppDimens no Jetpack Compose.
+ * EN An activity that demonstrates all AppDimens SDP features in Jetpack Compose.
+ * PT Uma atividade que demonstra todos os recursos do AppDimens SDP no Jetpack Compose.
  */
 class ExampleActivity : ComponentActivity() {
-    /**
-     * EN Called when the activity is first created.
-     * 
-     * PT Chamado quando a atividade é criada pela primeira vez.
-     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            SdpDemoScreen()
-        }
+        setContent { SdpDemoScreen() }
     }
 }
 
-/**
- * EN Defines the main layout for the demo application.
- * It uses `MaterialTheme` and `Surface` to set up the theme and background.
- * 
- * PT Define o layout principal para o aplicativo de demonstração.
- * Usa `MaterialTheme` e `Surface` para configurar o tema e o plano de fundo.
- */
+// ╔══════════════════════════════════════════════════════════════════════╗
+// ║                        MAIN SCREEN                                ║
+// ╚══════════════════════════════════════════════════════════════════════╝
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SdpDemoScreen() {
-    // EN Applies a Material 3 theme (light color scheme by default).
-    // PT Aplica um tema do Material 3 (esquema de cores claro por padrão).
     MaterialTheme(colorScheme = lightColorScheme()) {
         Surface(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
         ) {
-            // EN Organizes components vertically.
-            // PT Organiza os componentes verticalmente.
-            Column(// EN Allows vertical scrolling.
-                   // PT Permite a rolagem vertical.
+            Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
-                    // EN 16.sdp padding: adapts padding based on the smallest width.
-                    // PT Preenchimento de 16.sdp: adapta o preenchimento com base na menor largura.
-                    .padding(16.sdpRotate(10)),
-                // EN Spacing between items of 20.sdp.
-                // PT Espaçamento entre itens de 20.sdp.
+                    .padding(16.sdp),
                 verticalArrangement = Arrangement.spacedBy(20.sdp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -96,100 +96,214 @@ fun SdpDemoScreen() {
                     textAlign = TextAlign.Center
                 )
 
-                // EN Descriptive subtitle
-                // PT Subtítulo descritivo
                 Text(
-                    "Demonstration of using the .sdp, .hdp, .wdp, and scaledDp() extensions",
+                    "Comprehensive examples of .sdp, .hdp, .wdp, inverters, facilitators, and DimenScaled",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center
                 )
 
-                // EN --- Adaptive Dimension Examples ---
-                // PT --- Exemplos de Dimensão Adaptável ---
+                // ── 1. CORE EXTENSIONS (sdp / hdp / wdp) ───────────────────
+                SectionTitle("1. Core Extensions")
 
-                // EN .sdp Example (Smallest Width)
-                // PT Exemplo de .sdp (Menor Largura)
+                // EN .sdp — scales based on smallest width (swDP)
+                // PT .sdp — escala baseada na menor largura (swDP)
                 ExampleCard(
-                    title = ".sdp Example (Smallest Width)",
-                    description = "16.sdp adjusts proportionally to the screen's smallest width. The box is 60.sdp.",
-                    boxSize = 60.sdp // EN The box size adapts to the 'smallest width'.
-                                     // PT O tamanho da caixa se adapta à 'menor largura'.
+                    title = ".sdp (Smallest Width)",
+                    description = "60.sdp → adapts proportionally to the screen's smallest width qualifier.",
+                    boxSize = 60.sdp,
+                    boxColor = Color(0xFF42A5F5)
                 )
 
-                // EN .hdp Example (Height)
-                // PT Exemplo de .hdp (Altura)
+                // EN .hdp — scales based on screen height (hDP)
+                // PT .hdp — escala baseada na altura da tela (hDP)
                 ExampleCard(
-                    title = ".hdp Example (Height)",
-                    description = "80.hdp adapts according to the screen height. Change orientation to see the difference.",
-                    boxSize = 80.hdp // EN The box size adapts to the total screen height.
-                                     // PT O tamanho da caixa se adapta à altura total da tela.
+                    title = ".hdp (Screen Height)",
+                    description = "80.hdp → adapts according to the screen height. Rotate to see the effect.",
+                    boxSize = 80.hdp,
+                    boxColor = Color(0xFFEF5350)
                 )
 
-                // EN .wdp Example (Width)
-                // PT Exemplo de .wdp (Largura)
+                // EN .wdp — scales based on screen width (wDP)
+                // PT .wdp — escala baseada na largura da tela (wDP)
                 ExampleCard(
-                    title = ".wdp Example (Width)",
-                    description = "120.wdp depends on the device's total width. The box is 120.wdp.",
-                    boxSize = 120.wdp // EN The box size adapts to the total screen width.
-                                      // PT O tamanho da caixa se adapta à largura total da tela.
+                    title = ".wdp (Screen Width)",
+                    description = "100.wdp → adapts according to the screen width.",
+                    boxSize = 100.wdp,
+                    boxColor = Color(0xFF66BB6A)
                 )
 
-                // EN Scaled Dimension Example (Scaled Dp)
-                // PT Exemplo de Dimensão Escalada (Dp Escalado)
-                ScaledExampleCard()
+                // ── 2. INVERTER SHORTCUTS ───────────────────────────────────
+                SectionTitle("2. Inverter Shortcuts")
+
+                // EN .sdpPh — uses swDP normally, but in PORTRAIT acts as hDP
+                // PT .sdpPh — usa swDP normalmente, mas em RETRATO atua como hDP
+                ExampleCard(
+                    title = ".sdpPh (SW → Portrait Height)",
+                    description = "70.sdpPh → smallest width by default, but in portrait it resolves as height (hDP).",
+                    boxSize = 70.sdpPh,
+                    boxColor = Color(0xFFAB47BC)
+                )
+
+                // EN .sdpLw — uses swDP normally, but in LANDSCAPE acts as wDP
+                // PT .sdpLw — usa swDP normalmente, mas em PAISAGEM atua como wDP
+                ExampleCard(
+                    title = ".sdpLw (SW → Landscape Width)",
+                    description = "70.sdpLw → smallest width by default, but in landscape it resolves as width (wDP).",
+                    boxSize = 70.sdpLw,
+                    boxColor = Color(0xFF7E57C2)
+                )
+
+                // EN .hdpLw — uses hDP normally, but in LANDSCAPE acts as wDP
+                // PT .hdpLw — usa hDP normalmente, mas em PAISAGEM atua como wDP
+                ExampleCard(
+                    title = ".hdpLw (Height → Landscape Width)",
+                    description = "80.hdpLw → height by default, but in landscape it resolves as width (wDP).",
+                    boxSize = 80.hdpLw,
+                    boxColor = Color(0xFF5C6BC0)
+                )
+
+                // EN .wdpLh — uses wDP normally, but in LANDSCAPE acts as hDP
+                // PT .wdpLh — usa wDP normalmente, mas em PAISAGEM atua como hDP
+                ExampleCard(
+                    title = ".wdpLh (Width → Landscape Height)",
+                    description = "90.wdpLh → width by default, but in landscape it resolves as height (hDP).",
+                    boxSize = 90.wdpLh,
+                    boxColor = Color(0xFF26A69A)
+                )
+
+                // ── 3. FACILITATOR EXTENSIONS ──────────────────────────────
+                SectionTitle("3. Facilitator Extensions")
+
+                // EN sdpRotate — use a different value when in landscape
+                // PT sdpRotate — usa um valor diferente quando em paisagem
+                ExampleCard(
+                    title = "sdpRotate (Rotation Override)",
+                    description = "80.sdpRotate(50) → 80.sdp in portrait, but 50.sdp in landscape.",
+                    boxSize = 80.sdpRotate(50),
+                    boxColor = Color(0xFFFF7043)
+                )
+
+                // EN sdpRotate with custom qualifier and orientation
+                // PT sdpRotate com qualificador e orientação customizados
+                ExampleCard(
+                    title = "sdpRotate (Custom Qualifier)",
+                    description = "60.sdpRotate(40, DpQualifier.HEIGHT, Orientation.PORTRAIT) → 60.sdp default, 40.hdp in portrait.",
+                    boxSize = 60.sdpRotate(
+                        rotationValue = 40,
+                        finalQualifierResolver = DpQualifier.HEIGHT,
+                        orientation = Orientation.PORTRAIT
+                    ),
+                    boxColor = Color(0xFFFF8A65)
+                )
+
+                // EN sdpMode — change value for specific UI modes (TV, Watch, etc.)
+                // PT sdpMode — altera o valor para modos de UI específicos (TV, Watch, etc.)
+                ExampleCard(
+                    title = "sdpMode (UiModeType Override)",
+                    description = "80.sdpMode(200, UiModeType.TELEVISION) → 80.sdp by default, 200.sdp on TV.",
+                    boxSize = 80.sdpMode(200, UiModeType.TELEVISION),
+                    boxColor = Color(0xFFEC407A)
+                )
+
+                // EN sdpQualifier — change value when screen metric meets a threshold
+                // PT sdpQualifier — altera o valor quando a métrica da tela atinge um limite
+                ExampleCard(
+                    title = "sdpQualifier (Dp Qualifier Override)",
+                    description = "60.sdpQualifier(120, DpQualifier.SMALL_WIDTH, 600) → 60.sdp default, 120.sdp when sw ≥ 600.",
+                    boxSize = 60.sdpQualifier(
+                        qualifiedValue = 120,
+                        qualifierType = DpQualifier.SMALL_WIDTH,
+                        qualifierValue = 600
+                    ),
+                    boxColor = Color(0xFF26C6DA)
+                )
+
+                // EN sdpScreen — combined UiModeType + DpQualifier condition
+                // PT sdpScreen — condição combinada UiModeType + DpQualifier
+                ExampleCard(
+                    title = "sdpScreen (Combined Override)",
+                    description = "70.sdpScreen(150, UiModeType.TELEVISION, DpQualifier.SMALL_WIDTH, 600) → 70.sdp default, 150.sdp on TV with sw ≥ 600.",
+                    boxSize = 70.sdpScreen(
+                        screenValue = 150,
+                        uiModeType = UiModeType.TELEVISION,
+                        qualifierType = DpQualifier.SMALL_WIDTH,
+                        qualifierValue = 600
+                    ),
+                    boxColor = Color(0xFF78909C)
+                )
+
+                // ── 4. DimenScaled BUILDER (Complex Conditions) ────────────
+                SectionTitle("4. DimenScaled Builder")
+
+                DimenScaledExampleCard()
             }
         }
     }
 }
 
+// ╔══════════════════════════════════════════════════════════════════════╗
+// ║                       COMPOSABLE COMPONENTS                       ║
+// ╚══════════════════════════════════════════════════════════════════════╝
+
 /**
- * EN Generic `@Composable` component to display a dimension example.
- *
- * PT Componente `@Composable` genérico para exibir um exemplo de dimensão.
- * @param title EN The example title (e.g., ".sdp").
- *              PT O título do exemplo (por exemplo, ".sdp").
- * @param description EN The functionality description.
- *                    PT A descrição da funcionalidade.
- * @param boxSize EN The adaptive Dp value to be used for the Box size.
- *                PT O valor de Dp adaptável a ser usado para o tamanho da Caixa.
+ * EN Section divider title.
+ * PT Título divisor de seção.
  */
 @Composable
-fun ExampleCard(title: String, description: String, boxSize: Dp) {
+fun SectionTitle(title: String) {
+    HorizontalDivider(
+        modifier = Modifier.padding(vertical = 4.sdp),
+        color = MaterialTheme.colorScheme.outlineVariant
+    )
+    Text(
+        title,
+        style = MaterialTheme.typography.titleLarge.copy(
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.tertiary
+        ),
+        textAlign = TextAlign.Start,
+        modifier = Modifier.fillMaxWidth()
+    )
+}
+
+/**
+ * EN Generic card demonstrating a dimension example.
+ * PT Cartão genérico demonstrando um exemplo de dimensão.
+ *
+ * @param title EN The example title.   PT O título do exemplo.
+ * @param description EN The description.   PT A descrição.
+ * @param boxSize EN The adaptive Dp value.   PT O valor adaptável em Dp.
+ * @param boxColor EN The box background color.   PT A cor de fundo da caixa.
+ */
+@Composable
+fun ExampleCard(title: String, description: String, boxSize: Dp, boxColor: Color = MaterialTheme.colorScheme.primary) {
     Card(
-        shape = RoundedCornerShape(20.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFF7F7F7)), // EN Card background color
-                                                                              // PT Cor de fundo do cartão
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFF7F7F7)),
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(
-            // EN Internal card padding using 16.sdp for responsiveness.
-            // PT Preenchimento interno do cartão usando 16.sdp para responsividade.
             modifier = Modifier.padding(16.sdp),
-            verticalArrangement = Arrangement.spacedBy(12.sdp) // EN Responsive internal spacing.
-                                                               // PT Espaçamento interno responsivo.
+            verticalArrangement = Arrangement.spacedBy(10.sdp)
         ) {
-            Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-            Text(description, style = MaterialTheme.typography.bodyMedium)
+            Text(title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+            Text(description, style = MaterialTheme.typography.bodySmall, color = Color(0xFF616161))
 
-            // EN Demonstration Box
-            // PT Caixa de Demonstração
+            // EN Demonstration Box showing the resolved dimension
+            // PT Caixa de demonstração mostrando a dimensão resolvida
             Box(
                 modifier = Modifier
-                    // EN Sets the size (width and height) of the box using the adaptive value.
-                    // PT Define o tamanho (largura e altura) da caixa usando o valor adaptável.
                     .size(boxSize)
-                    .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(12.dp))
+                    .background(boxColor, RoundedCornerShape(12.dp))
                     .align(Alignment.CenterHorizontally),
                 contentAlignment = Alignment.Center
             ) {
-                // EN Displays the resolved Dp value (for debug/visualization purposes)
-                // PT Exibe o valor de Dp resolvido (para fins de depuração/visualização)
                 Text(
                     text = "${boxSize.value.toInt()}dp",
                     color = Color.White,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.bodySmall,
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -198,68 +312,75 @@ fun ExampleCard(title: String, description: String, boxSize: Dp) {
 }
 
 /**
- * EN `@Composable` component to demonstrate the use of the `scaledDp()` function.
- * This function allows defining a base value and specific overrides for different
- * screen qualifiers (e.g., TV, smallest width sw600dp).
- * 
- * PT Componente `@Composable` para demonstrar o uso da função `scaledDp()`.
- * Esta função permite definir um valor base e substituições específicas para diferentes
- * qualificadores de tela (por exemplo, TV, menor largura sw600dp).
+ * EN Demonstrates the `scaledDp()` DimenScaled builder pattern.
+ * This allows defining a base dimension value and multiple overrides
+ * for different screen conditions (UI mode, qualifiers, orientation).
+ *
+ * PT Demonstra o padrão builder `scaledDp()` DimenScaled.
+ * Permite definir um valor base de dimensão e múltiplas substituições
+ * para diferentes condições de tela (modo UI, qualificadores, orientação).
  */
 @Composable
-fun ScaledExampleCard() {
-    // EN 1. Defines the base value (100) and starts the configuration chain.
-    // PT 1. Define o valor base (100) e inicia a cadeia de configuração.
+fun DimenScaledExampleCard() {
+    // EN The DimenScaled builder: define base value + conditional overrides.
+    // PT O builder DimenScaled: define valor base + substituições condicionais.
     val dynamicDp = 100.scaledDp()
-        // EN 2. Override for UI mode: If it's a TV, use 200dp.
-        // PT 2. Substituição para o modo de IU: Se for uma TV, use 200dp.
+        // EN Priority 1: TV with smallest width >= 600 → use 250dp
+        // PT Prioridade 1: TV com menor largura >= 600 → usar 250dp
+        .screen(UiModeType.TELEVISION, DpQualifier.SMALL_WIDTH, 600, 250)
+        // EN Priority 2: Any TV → use 500dp
+        // PT Prioridade 2: Qualquer TV → usar 500dp
         .screen(UiModeType.TELEVISION, 500)
+        // EN Priority 2: Foldable open → use 200dp
+        // PT Prioridade 2: Dobrável aberto → usar 200dp
         .screen(UiModeType.FOLD_OPEN, 200)
-        // EN 3. Override for Dp qualifier: If the smallest width is >= 600dp, use 150dp.
-        // PT 3. Substituição para o qualificador de Dp: Se a menor largura for >= 600dp, use 150dp.
+        // EN Priority 3: Any device with smallest width >= 600 → use 150dp
+        // PT Prioridade 3: Qualquer dispositivo com menor largura >= 600 → usar 150dp
         .screen(DpQualifier.SMALL_WIDTH, 600, 150)
-        // EN 4. Override for UI mode (NORMAL is the default, but good for clarity): uses 100dp.
-        // PT 4. Substituição para o modo de IU (NORMAL é o padrão, mas bom para clareza): usa 100dp.
-        .screen(UiModeType.NORMAL, 100)
-        // EN 5. Finalizes the chain and resolves the Dp, adapting it based on the .sdp qualifier.
-        // PT 5. Finaliza a cadeia e resolve o Dp, adaptando-o com base no qualificador .sdp.
-        .sdp // EN Uses the 'smallest width' adaptation on the final value.
-             // PT Usa a adaptação de 'menor largura' no valor final.
+        // EN Priority 4: Landscape orientation → use 120dp
+        // PT Prioridade 4: Orientação paisagem → usar 120dp
+        .screen(Orientation.LANDSCAPE, 120)
+        // EN Resolve using .sdp (smallest width) adaptation
+        // PT Resolve usando adaptação .sdp (menor largura)
+        .sdp
 
     Card(
-        shape = RoundedCornerShape(20.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFFF00FD)), // EN Card background color
-                                                                              // PT Cor de fundo do cartão
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFFFF3E0)),
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(
             modifier = Modifier.padding(16.sdp),
-            verticalArrangement = Arrangement.spacedBy(12.sdp)
+            verticalArrangement = Arrangement.spacedBy(10.sdp)
         ) {
             Text(
-                "scaledDp() Usage Example",
-                style = MaterialTheme.typography.titleMedium,
+                "DimenScaled Builder",
+                style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold
             )
             Text(
-                "The size changes dynamically based on the device type and smallest width. Current value: ${dynamicDp.value.toInt()}dp",
-                style = MaterialTheme.typography.bodyMedium
+                buildString {
+                    appendLine("100.scaledDp()")
+                    appendLine("  .screen(TV + sw>=600 → 250)")
+                    appendLine("  .screen(TV → 500)")
+                    appendLine("  .screen(FOLD_OPEN → 200)")
+                    appendLine("  .screen(sw>=600 → 150)")
+                    appendLine("  .screen(LANDSCAPE → 120)")
+                    appendLine("  .sdp")
+                    append("Current: ${dynamicDp.value.toInt()}dp")
+                },
+                style = MaterialTheme.typography.bodySmall,
+                color = Color(0xFF616161)
             )
 
-            // EN Demonstration Box
-            // PT Caixa de Demonstração
             Box(
                 modifier = Modifier
-                    // EN The Box uses the dynamically resolved value.
-                    // PT A Caixa usa o valor resolvido dinamicamente.
                     .size(dynamicDp)
-                    .background(MaterialTheme.colorScheme.inversePrimary, RoundedCornerShape(12.dp))
+                    .background(Color(0xFFFF9800), RoundedCornerShape(12.dp))
                     .align(Alignment.CenterHorizontally),
                 contentAlignment = Alignment.Center
             ) {
-                // EN Displays the resolved Dp value.
-                // PT Exibe o valor de Dp resolvido.
                 Text(
                     text = "${dynamicDp.value.toInt()}dp",
                     color = Color.White,
@@ -271,17 +392,18 @@ fun ScaledExampleCard() {
     }
 }
 
-/**
- * EN A preview for the AppDimens SDP example screen.
- * 
- * PT Uma visualização para a tela de exemplo do AppDimens SDP.
- */
-@Preview(showBackground = true, device = "id:tv_4k", showSystemUi = false)
+// ╔══════════════════════════════════════════════════════════════════════╗
+// ║                           PREVIEW                                 ║
+// ╚══════════════════════════════════════════════════════════════════════╝
+
+@Preview(showBackground = true, device = "id:pixel_5", showSystemUi = true)
 @Composable
-fun PreviewAppDimensSdpExample() {
-    MaterialTheme(colorScheme = lightColorScheme()) {
-        Surface {
-            SdpDemoScreen()
-        }
-    }
+fun PreviewSdpDemoPhone() {
+    SdpDemoScreen()
+}
+
+@Preview(showBackground = true, device = "id:pixel_tablet", showSystemUi = true)
+@Composable
+fun PreviewSdpDemoTablet() {
+    SdpDemoScreen()
 }

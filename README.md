@@ -2,137 +2,119 @@
 
 ![AppDimens Banner](IMAGES/banner_top.png)
 
-Welcome to the official documentation of the **AppDimens** library. 
+**AppDimens** is the most complete responsive dimension library for Android. It provides thousands of pre-calculated `@dimen` resources ready to use — plus dynamic Compose extensions, code-level APIs, conditional builders, orientation-aware inverters, and physical unit converters — all in a single, zero-configuration dependency.
 
-## 📖 What is the library?
+---
 
-**AppDimens SDP, HDP, WDP** is a modern dimension management system for Android. It expands the classic SDP (Scaled Density Pixels) standard by also introducing scaling by Height (HDP) and Width (WDP). The library automates the process of adjusting Dp, Sp, and Px, ensuring the layout remains perfectly scaled and responsive on any device format in a mathematically precise way.
-
-## ⚙️ What does it do?
-
-It provides thousands of pre-calculated `@dimen` resources (from `-300` to `600`) ready to use, saving the developer the work of calculating sizes for every Android screen variant.
-
-* **SDP (Smallest Width DP):** Scales the dimension based on the smallest width available on the device. Perfect for maintaining the screen proportion in most scenarios (e.g., `@dimen/_16sdp` or `16.sdp`).
-* **WDP (Width DP):** Scales specifically based on the exact horizontal width of the device in the current orientation (e.g., `@dimen/_16wdp` or `16.wdp`).
-* **HDP (Height DP):** Scales specifically based on the exact vertical height of the device (e.g., `@dimen/_16hdp` or `16.hdp`).
-* **Dynamic Conditionals (Compose):** Makes it easy to adapt the dimension based on the device type (Car, TV, Watch) using the `.scaledDp()` instruction.
-
-<br/>
-<p align="center">
-  <img src="IMAGES/screenshot.png" alt="Layout example" width="25%" />
-</p>
-<br/>
-
-### 📏 Physical Units (DimenPhysicalUnits)
-
-Besides relative screen scaling, the library provides direct support for converting real physical measurement units (Millimeters, Centimeters, and Inches) for layout use, ensuring absolute size regardless of device density.
-
-* **Native Compose Extensions:** Use `.mm`, `.cm`, and `.inch` directly on `Float` or `Int` to get the equivalent value in `Dp` or `Px`.
-  * *Example:* `10.mm`, `2.5f.cm`, `1.inch`.
-* **Radius and Diameter Utilities:** Convenient functions like `.radius()` make drawing circular components with physical measurements easy.
-* **Use in Legacy Code (XML/Java):** The utility class `DimenPhysicalUnits` provides accessible methods (e.g., `toDpFromMm`, `toPxFromCm`) that require the current `Resources` to perform vital conversions based on the device's DPI (Android standard).
-
-## ✨ What's New in Version 3.0.0
-
-* **Code Extensibility (Java & Kotlin):** Full support for AppDimens outside of XML and Compose! You can now resolve dimensions dynamically in your backend UI logic using the `DimenSdp` class (e.g., `DimenSdp.sdp(context, 16)`).
-* **Optional Orientation:** The `orientation` parameter is now optional in conditional `screen()` functions, defaulting to `Orientation.DEFAULT`.
-* **Dynamic Inverters:** Added scaling logic that can automatically swap `HEIGHT` and `WIDTH` when the screen rotates to inverted positions (e.g., using `hdp_lw`, `wdp_lh`, or the `Inverter` enum) ensuring precise responsive layouts on orientation changes!
-
-## 🚀 Advantages
-
-1. **Accelerated Development:** Eliminates the need to create massive manual `dimens.xml` files for various screen categories (like `values-sw320dp`, `values-sw600dp`, etc.). Everything comes unified.
-2. **Direct Hybrid Integration:** Works incredibly well in both traditional **XML** (`View System`) and the modern **Jetpack Compose** era.
-3. **Cleaner Layouts:** With the fluent Compose architecture (e.g., `16.sdp`), margins become readable and concise.
-4. **Precision for TV, Wear OS, and Auto:** Handles advanced rules without complexity using `UiModeType` combined with qualifiers.
-
-## ⚡ Performance
-
-The implementation ensures zero or virtually zero performance impact:
-* **In XML:** All tags like `@dimen/_16sdp` are processed statically at build time and resolved natively in parallel with Android Framework resources.
-* **In Compose:** Accessing `.sdp`, `.hdp`, and `.wdp` uses optimized functions that extract dimensions via native context caching (`LocalConfiguration` and injected IDs). Avoiding unnecessary processing, it respects conventional UI steps without forcing useless recompositions.
-
-## 🛠️ Support and Installation
-
-The library has broad support in the Android ecosystem and is updated for the most recently launched paradigms.
-
-* **Min SDK:** 24
-* **Compile SDK:** 36
-* **Languages:** Kotlin and Java.
-* **Paradigm:** XML and Jetpack Compose.
-
-To install, simply add it to your `build.gradle` (dependency):
+## 🛠️ Installation
 
 ```kotlin
 dependencies {
-    implementation("io.github.bodenberg:appdimens-sdps:3.0.6")
+    implementation("io.github.bodenberg:appdimens-sdps:3.0.7")
 }
 ```
+
+**Requirements:** Min SDK 24 · Compile SDK 36 · Kotlin & Java · XML & Jetpack Compose
+
+---
 
 ## 💻 Usage Examples
 
 ### 1. Jetpack Compose
 
-**Basic Usage (Auto-Scaling Layouts):**
-The simplest way to use AppDimens. Values automatically scale based on the device's characteristics.
+**Basic — Auto-Scaling Extensions:**
 ```kotlin
+import com.appdimens.sdps.compose.sdp
+import com.appdimens.sdps.compose.hdp
+import com.appdimens.sdps.compose.wdp
+
 Box(
     modifier = Modifier
-        // .wdp scales relative to the device's width
-        .width(100.wdp) 
-        // .hdp scales relative to the device's height
-        .height(100.hdp) 
-        // .sdp scales relative to the smallest width (like standard sdps)
-        .padding(16.sdp) 
+        .width(100.wdp)    // Scales relative to the device's width
+        .height(100.hdp)   // Scales relative to the device's height
+        .padding(16.sdp)   // Scales relative to the smallest width
 ) {
-    Text("Hello World", fontSize = 14.sdp.value.sp) // You can also scale Text Sp like this
+    Text("Hello World", fontSize = 14.sdp.value.sp)
 }
 ```
 
-**Advanced Conditional Scaling (UiModeType & Orientation):**
-Sometimes you need completely different sizes or rules for specific form factors. You can chain `.screen()` conditions starting from a base dimension using `.scaledDp()`.
+**Inverter Shortcuts — Orientation-Aware Scaling:**
 ```kotlin
-val dynamicPadding = 16.scaledDp() // 16.sdp is the default 
-    // 1. If running on a TV, use 32
-    .screen(
-        type = UiModeType.TELEVISION, 
-        customValue = 32 
-    )
-    // 2. If running on a Watch, use 8
-    .screen(
-        type = UiModeType.WATCH, 
-        customValue = 8
-    )
-    // 3. If in Landscape orientation, use 20
-    .screen(
-        orientation = Orientation.LANDSCAPE, 
-        customValue = 20
-    )
-    .sdp // Finally, resolve the value!
+import com.appdimens.sdps.compose.sdpPh
+import com.appdimens.sdps.compose.sdpLw
+import com.appdimens.sdps.compose.hdpLw
+import com.appdimens.sdps.compose.wdpLh
+
+// .sdpPh → uses Smallest Width by default; in Portrait → switches to Height
+val adaptiveVert = 32.sdpPh
+
+// .sdpLw → uses Smallest Width by default; in Landscape → switches to Width
+val adaptiveHorz = 32.sdpLw
+
+// .hdpLw → uses Height by default; in Landscape → switches to Width
+val heightToWidth = 50.hdpLw
+
+// .wdpLh → uses Width by default; in Landscape → switches to Height
+val widthToHeight = 50.wdpLh
 ```
 
-**Dynamic Inverters (Handling Screen Rotation):**
-If you have a component that is 600.wdp (very wide), rotating the device to portrait will probably break your layout because the width is now much smaller. You can use the `inverter` feature to automatically swap your WDP/HDP metrics upon rotation!
+**Facilitators — Quick Conditional Overrides:**
 ```kotlin
-val adaptiveBoxWidth = 300.scaledDp()
+import com.appdimens.sdps.compose.sdpRotate
+import com.appdimens.sdps.compose.sdpMode
+import com.appdimens.sdps.compose.sdpQualifier
+import com.appdimens.sdps.compose.sdpScreen
+
+// Rotate: 80.sdp default, 50.sdp in Landscape
+val rotVal = 80.sdpRotate(50)
+
+// Mode: 30.sdp default, 200.sdp on TV
+val modeVal = 30.sdpMode(200, UiModeType.TELEVISION)
+
+// Qualifier: 60.sdp default, 120.sdp when sw ≥ 600dp
+val qualVal = 60.sdpQualifier(120, DpQualifier.SMALL_WIDTH, 600)
+
+// Screen: 70.sdp default, 150.sdp on TV with sw ≥ 600dp
+val scrVal = 70.sdpScreen(150, UiModeType.TELEVISION, DpQualifier.SMALL_WIDTH, 600)
+```
+
+**DimenScaled Builder — Complex Multi-Condition Chains:**
+```kotlin
+import com.appdimens.sdps.compose.scaledDp
+
+val dynamicPadding = 16.scaledDp()
+    // Priority 1: TV + sw ≥ 600 → 40
+    .screen(UiModeType.TELEVISION, DpQualifier.SMALL_WIDTH, 600, 40)
+    // Priority 2: Any TV → 32
+    .screen(UiModeType.TELEVISION, 32)
+    // Priority 2: Watch → 8
+    .screen(UiModeType.WATCH, 8)
+    // Priority 2: Foldable open → 24
+    .screen(UiModeType.FOLD_OPEN, 24)
+    // Priority 3: Any device with sw ≥ 600 → 20
+    .screen(DpQualifier.SMALL_WIDTH, 600, 20)
+    // Priority 4: Landscape → 12
+    .screen(Orientation.LANDSCAPE, 12)
+    .sdp // Resolve with Smallest Width adaptation
+
+Box(modifier = Modifier.padding(dynamicPadding))
+```
+
+**Dynamic Inverters in DimenScaled:**
+```kotlin
+val adaptiveWidth = 300.scaledDp()
     .screen(
-        // When device is > 600 Width (tablets) in Landscape...
-        type = DpQualifier.WIDTH, 
-        value = 600, 
-        orientation = Orientation.LANDSCAPE, 
-        
-        // ...use 400.wdp...
-        customValue = 400.sdp,
-        
-        // ...but if we rotate to PORTRAIT, this 400 'Width' 
-        // automatically acts as 400 'Height', preserving proportions!
-        inverter = Inverter.PW_TO_LH 
+        type = DpQualifier.WIDTH, value = 600,
+        orientation = Orientation.LANDSCAPE,
+        customValue = 400.dp,
+        inverter = Inverter.PW_TO_LH  // Width → Height on rotation
     )
     .wdp
 ```
 
 ### 2. XML Layouts
 
-You can use the exact same dimensions straight in your XML layout files!
+Use dimension resources directly — all values from `-300` to `600` are pre-generated:
 
 ```xml
 <LinearLayout
@@ -140,72 +122,309 @@ You can use the exact same dimensions straight in your XML layout files!
     android:layout_height="wrap_content"
     android:padding="@dimen/_16sdp">
 
-    <!-- Scales seamlessly based on smallest width -->
+    <!-- SDP: Scales based on smallest width -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/_14sdp" 
-        android:layout_marginBottom="@dimen/_8wdp" />
-        
-    <!-- Scales based on explicit height -->
+        android:textSize="@dimen/_14sdp"
+        android:layout_marginBottom="@dimen/_8sdp" />
+
+    <!-- WDP: Scales based on screen width -->
     <View
-        android:layout_width="@dimen/_50wdp"
-        android:layout_height="@dimen/_50hdp" />
+        android:layout_width="@dimen/_200wdp"
+        android:layout_height="@dimen/_50wdp" />
+
+    <!-- HDP: Scales based on screen height -->
+    <View
+        android:layout_width="@dimen/_100hdp"
+        android:layout_height="@dimen/_100hdp" />
+
+    <!-- SSP: Scalable SP for fonts (respects user font size preference) -->
+    <TextView
+        android:textSize="@dimen/_16ssp" />
 </LinearLayout>
 ```
 
-### 3. Java & Kotlin (Code Level)
+### 3. Kotlin (Code Level)
 
-Need to calculate layout parameters programmatically outside of Compose or XML? Use the new `com.appdimens.sdps.code.DimenSdp` utility class!
-
-**Kotlin: Direct Value Resolution**
-When writing custom ViewGroups, View extensions, or WindowInsets:
 ```kotlin
-// Get dimension in exact pixels directly
-val paddingPx: Float = DimenSdp.sdp(context, 16)
-val widthPx: Float = DimenSdp.wdp(context, 100)
+// Core — Pixel values
+val paddingPx = DimenSdp.sdp(context, 16)     // Smallest Width
+val heightPx  = DimenSdp.hdp(context, 32)     // Height
+val widthPx   = DimenSdp.wdp(context, 100)    // Width
 
-// Quick Inverters in Code!
-// Gets 50.hdp (Height), but if the device is rotated to Landscape, 
-// it extracts 50.wdp (Width) automatically.
-val adaptivePx: Float = DimenSdp.hdp_lw(context, 50) 
+// Core — Resource IDs (for setTextSize, ViewGroup.LayoutParams, etc.)
+val resId = DimenSdp.sdpRes(context, 16)
+
+// Inverter shortcuts
+val adaptive = DimenSdp.hdpLw(context, 50)    // Height → Width in Landscape
+
+// Facilitators
+val rotated = DimenSdp.sdpRotate(context, 30, 45)
+val modeVal = DimenSdp.sdpMode(context, 30, 200, UiModeType.TELEVISION)
+val qualVal = DimenSdp.sdpQualifier(context, 30, 80, DpQualifier.SMALL_WIDTH, 600)
+
+// DimenScaled builder
+val dynamicPx = DimenSdp.scaled(16)
+    .screen(UiModeType.TELEVISION, 32)
+    .screen(DpQualifier.SMALL_WIDTH, 600, 24)
+    .screen(Orientation.LANDSCAPE, 12)
+    .sdp(context)
+
+// Physical units
+val dpFromCm = DimenPhysicalUnits.toDpFromCm(2.5f, resources)
 ```
 
-**Kotlin: Advanced Scalable Values in Code**
-You have access to the exact same `.screen()` scaling API in pure Kotlin as in Compose!
-```kotlin
-val finalDynamicPx: Float = DimenSdp.scaled(16) // Default is 16
-    // If running on Android TV, use 32px
-    .screen(type = UiModeType.TELEVISION, customValue = 32)
-    
-    // If smallest-width is > 600 (tablets), use 24px
-    .screen(type = DpQualifier.SMALL_WIDTH, value = 600, customValue = 24)
-    
-    // Resolve everything relative to Smallest Width (sdp) and convert to pixels
-    .sdp(context) 
-```
+### 4. Java (Code Level)
 
-**Java: Equivalents**
-The Java API uses traditional method overloads `@JvmOverloads` and `@JvmStatic`:
 ```java
-// 1. Direct Resolution
+// Core
 float paddingPx = DimenSdp.sdp(context, 16);
-float adaptivePx = DimenSdp.hdp_lw(context, 50);
+int resId = DimenSdp.sdpRes(context, 16);
 
-// 2. Resolve the raw resource ID instead of the pixel float
-int dimenResId = DimenSdp.sdpRes(context, 16);
-view.setPadding(context.getResources().getDimensionPixelSize(dimenResId), ...);
+// Inverter shortcuts
+float adaptive = DimenSdp.hdpLw(context, 50);
 
-// 3. Conditional Builder
-float dynamicPx = DimenSdp.scaled(16)
-    // Java requires positional arguments since named arguments don't exist
-    .screen(UiModeType.TELEVISION, 32) // uiModeType, customValue
-    // type, value, customValue, orientation, inverter
-    .screen(DpQualifier.SMALL_WIDTH, 600, 24, null, Orientation.DEFAULT, Inverter.DEFAULT)
-    .sdp(context);
+// DimenScaled builder (uses @JvmStatic + @JvmOverloads)
+DimenScaled scaled = DimenSdp.scaled(16)
+    .screen(UiModeType.TELEVISION, 32)
+    .screen(DpQualifier.SMALL_WIDTH, 600, 24)
+    .screen(Orientation.LANDSCAPE, 12);
+
+float result = scaled.sdp(context);
+int resResult = scaled.sdpRes(context);
 ```
+
+### 5. Physical Units
+
+```kotlin
+// Compose extensions
+val widthMm = 10.mm       // 10mm → Dp
+val widthCm = 2.5f.cm     // 2.5cm → Dp
+val widthIn = 1.inch       // 1 inch → Dp
+
+// Code level
+DimenPhysicalUnits.toDpFromMm(25f, resources)
+DimenPhysicalUnits.toDpFromCm(2.5f, resources)
+DimenPhysicalUnits.toDpFromInch(1f, resources)
+```
+
+<br/>
+<p align="center">
+  <img src="IMAGES/screenshot.png" alt="Layout example" width="25%" />
+</p>
+<br/>
+
+---
+
+## ✨ What's New in Version 3.x
+
+| Feature | Description |
+|---------|-------------|
+| **Code-Level API** | Full `DimenSdp` object for Java & Kotlin — resolve dimensions outside of XML and Compose |
+| **Inverter Shortcuts** | `.sdpPh`, `.sdpLw`, `.sdpLh`, `.sdpPw`, `.hdpLw`, `.hdpPw`, `.wdpLh`, `.wdpPh` — orientation-aware switching |
+| **Facilitators** | `sdpRotate`, `sdpMode`, `sdpQualifier`, `sdpScreen` (+ hdp/wdp variants) — quick conditional overrides |
+| **DimenScaled Builder** | Priority-based chain with `UiModeType`, `DpQualifier`, `Orientation`, and `Inverter` support |
+| **Foldable Detection** | `FoldingFeature` integration via Jetpack WindowManager — detects Fold/Flip open/half-open states |
+| **UiModeType** | `NORMAL`, `TELEVISION`, `CAR`, `WATCH`, `FOLD_OPEN`, `FOLD_HALF`, `FLIP_OPEN`, `FLIP_HALF` |
+| **Physical Units** | `DimenPhysicalUnits` — convert mm, cm, inches to Dp/Px |
+| **File Structure** | Modular files: `DimenSdp` (core), `DimenExtensions` (facilitators), `DimenScaled` (builder) |
+
+---
+
+## 🧮 Why Pre-Calculated Scales?
+
+Most responsive Android solutions use runtime calculations to convert dimensions — multiplying density, screen metrics, or ratios on every frame or measure pass. **AppDimens takes a fundamentally different approach:**
+
+### The Problem with Runtime Calculations
+
+```kotlin
+// ❌ Runtime calculation approach (common in other libraries)
+fun scaledDp(value: Int): Float {
+    val screenWidth = resources.displayMetrics.widthPixels
+    val baseWidth = 360f // arbitrary "design" base
+    return value * (screenWidth / baseWidth) // calculated EVERY call
+}
+```
+
+This has several issues:
+- **Calculated on every call** — no caching guarantee, wasted CPU cycles
+- **Arbitrary base width** — the "360dp design base" is a guess that doesn't match all devices
+- **Linear scaling only** — a simple ratio produces values that are either too large on tablets or too small on watches
+- **No qualifier awareness** — ignores Android's built-in resource qualifier system (`values-sw600dp`, `values-h800dp`, etc.)
+
+### The AppDimens Solution: Pre-Calculated + Qualifier-Aware
+
+AppDimens provides **thousands of `@dimen` resources** generated with **mathematically refined, non-linear scaling curves** tuned for each qualifier bucket:
+
+```
+res/
+├── values/           → Base values (phones ~320-360dp)
+├── values-sw330dp/   → Slightly larger phones
+├── values-sw360dp/   → Standard phones
+├── values-sw410dp/   → Large phones
+├── values-sw600dp/   → 7" tablets
+├── values-sw720dp/   → 10" tablets
+├── values-sw800dp/   → Large tablets / Chromebooks
+├── values-h600dp/    → Height-based qualifiers
+├── values-h800dp/    → Tall devices
+├── values-w600dp/    → Width-based qualifiers
+└── ...               → + qualifier directories
+```
+
+Each value is **pre-calculated with a refined mathematical formula** that produces dimensions tuned specifically for that screen category — not a simple linear ratio.
+
+### Why This Matters
+
+| Aspect | Runtime Calculation | AppDimens Pre-Calculated |
+|--------|-------------------|-------------------------|
+| **CPU Cost** | Calculated every call | Resolved at build time (zero runtime cost) |
+| **Scaling Quality** | Linear ratio (imprecise) | Non-linear curves tuned per screen category |
+| **Android Integration** | Bypasses the resource system | Uses native `@dimen` resources and qualifiers |
+| **Caching** | Depends on implementation | Natively cached by Android Framework |
+| **Orientation Handling** | Manual code required | Automatic via `-land`, `-port` qualifiers |
+| **Predictability** | Values vary continuously | Discrete, designer-friendly values |
+
+---
+
+## ⚡ Performance
+
+### XML: Zero Cost
+All `@dimen/_16sdp` resources are **resolved statically at build time** by the Android resource system. There is literally no runtime overhead — it's the same mechanism Android uses for all `dimens.xml` values.
+
+### Compose: Near-Zero Cost
+The `.sdp`, `.hdp`, `.wdp` extensions use:
+- `LocalConfiguration.current` — already observed by the Compose runtime
+- `LocalContext.current.resources.getIdentifier()` — a single native lookup
+- `dimensionResource()` — standard Compose resource resolution
+
+No extra state, no custom `remember{}` overhead, no unnecessary recompositions. The dimension is resolved in the same pass as any standard Compose resource read.
+
+### Code: Native Resolution
+`DimenSdp.sdp(context, value)` performs a single `context.resources.getIdentifier()` + `getDimension()` call — the exact same path Android uses internally for any resource lookup.
+
+---
+
+## 📖 How It Works
+
+### Three Scaling Axes
+
+| Qualifier | Extension | Resource | Based On |
+|-----------|-----------|----------|----------|
+| **SDP** | `.sdp` | `@dimen/_16sdp` | `smallestScreenWidthDp` — the smaller of width/height, independent of orientation |
+| **HDP** | `.hdp` | `@dimen/_16hdp` | `screenHeightDp` — the current screen height in dp |
+| **WDP** | `.wdp` | `@dimen/_16wdp` | `screenWidthDp` — the current screen width in dp |
+| **SSP** | `.ssp` | `@dimen/_16ssp` | Same as SDP but using `sp` units — respects user font size preference |
+
+### Resource Naming Convention
+
+```
+_[minus]{value}{qualifier}dp
+
+Examples:
+  _16sdp      →  16dp scaled by Smallest Width
+  _100wdp     →  100dp scaled by Width
+  _50hdp      →  50dp scaled by Height
+  _minus8sdp  →  -8dp (negative value)
+  _14ssp      →  14sp scaled by Smallest Width
+```
+
+Range: **-300 to 600** for all qualifiers.
+
+### Conditional Dimension Resolution
+
+The **DimenScaled** builder uses a priority system:
+
+| Priority | Condition | Example |
+|----------|-----------|---------|
+| **1** (most specific) | `UiModeType` + `DpQualifier` + `Orientation` | TV with sw≥600 in Landscape |
+| **2** | `UiModeType` + `Orientation` | Any TV device |
+| **3** | `DpQualifier` + `Orientation` | sw≥600 regardless of device type |
+| **4** (least specific) | `Orientation` only | Landscape orientation |
+
+Higher-priority rules are checked first. Within the same priority, larger qualifier values are checked before smaller ones (e.g., sw720 before sw600).
+
+### Inverter System
+
+Inverters solve the problem of dimension semantics changing with rotation:
+
+| Inverter | Behavior |
+|----------|----------|
+| `PH_TO_LW` | Portrait Height → Landscape Width |
+| `PW_TO_LH` | Portrait Width → Landscape Height |
+| `LH_TO_PW` | Landscape Height → Portrait Width |
+| `LW_TO_PH` | Landscape Width → Portrait Height |
+| `SW_TO_LH` | Smallest Width → Landscape Height |
+| `SW_TO_LW` | Smallest Width → Landscape Width |
+| `SW_TO_PH` | Smallest Width → Portrait Height |
+| `SW_TO_PW` | Smallest Width → Portrait Width |
+
+### UiModeType Detection
+
+AppDimens detects the device form factor using Android's `Configuration.uiMode` combined with Jetpack WindowManager's `FoldingFeature`:
+
+| Type | Detection |
+|------|-----------|
+| `NORMAL` | Standard phones and tablets |
+| `TELEVISION` | Android TV / Leanback devices |
+| `CAR` | Android Auto |
+| `WATCH` | Wear OS |
+| `FOLD_OPEN` | Foldable fully open (via `FoldingFeature.state == FLAT`) |
+| `FOLD_HALF` | Foldable half-opened (via `FoldingFeature.state == HALF_OPENED`, horizontal hinge) |
+| `FLIP_OPEN` | Flip phone fully open (via `FoldingFeature.state == FLAT`, vertical hinge) |
+| `FLIP_HALF` | Flip phone half-opened (via `FoldingFeature.state == HALF_OPENED`, vertical hinge) |
+
+---
+
+## 🏆 Why AppDimens is More Complete
+
+| Feature | AppDimens | intuit-sdp | sdp-android |
+|---------|-----------|------------|-------------|
+| SDP (Smallest Width) | ✅ | ✅ | ✅ |
+| HDP (Height) | ✅ | ❌ | ❌ |
+| WDP (Width) | ✅ | ❌ | ❌ |
+| SSP (Scalable SP) | ✅ | ✅ (separate lib) | ❌ |
+| Range | -300 to 600 | -60 to 600 | 1 to 600 |
+| Negative values | ✅ | ✅ | ❌ |
+| Compose extensions | ✅ `.sdp`, `.hdp`, `.wdp` | ❌ | ❌ |
+| Code-level API (Kotlin/Java) | ✅ `DimenSdp` object | ❌ | ❌ |
+| Orientation inverters | ✅ 8 inverter types | ❌ | ❌ |
+| Conditional builder | ✅ `DimenScaled` | ❌ | ❌ |
+| UiModeType detection | ✅ TV, Car, Watch, Foldable | ❌ | ❌ |
+| Foldable device support | ✅ Fold/Flip + Half-Open | ❌ | ❌ |
+| Physical units | ✅ mm, cm, inches | ❌ | ❌ |
+| Facilitator functions | ✅ rotate, mode, qualifier, screen | ❌ | ❌ |
+| Qualifier directories | 350+ | ~10 | ~10 |
+
+---
+
+## 🚀 Advantages
+
+1. **Zero Configuration** — Works out of the box. No setup, no initialization, no base resolution to configure.
+2. **Accelerated Development** — Eliminates the need to create massive manual `dimens.xml` files for every screen category.
+3. **Triple Axis Scaling** — SDP + HDP + WDP cover every layout scenario, unlike single-axis alternatives.
+4. **Hybrid Integration** — Works identically in XML, Jetpack Compose, and programmatic Kotlin/Java code.
+5. **Device-Aware** — Built-in detection for TV, Car, Watch, Foldable, and Flip devices with automatic dimension adaptation.
+6. **Pre-Calculated Precision** — Mathematically refined values tuned per screen category, not simple linear ratios.
+7. **Zero Performance Impact** — All values resolved at build time via Android's native resource system.
+8. **Full Range** — `-300` to `600` with negative value support for margins, offsets, and animations.
 
 ![Extra demonstration](IMAGES/image.png)
 
 ---
+
+## 📏 Physical Units (DimenPhysicalUnits)
+
+Beyond relative screen scaling, AppDimens provides direct conversion of **real physical measurement units** — ensuring absolute size regardless of device density.
+
+| Method | Input | Output | Usage |
+|--------|-------|--------|-------|
+| `toDpFromMm` | Millimeters | Dp | `DimenPhysicalUnits.toDpFromMm(25f, resources)` |
+| `toDpFromCm` | Centimeters | Dp | `DimenPhysicalUnits.toDpFromCm(2.5f, resources)` |
+| `toDpFromInch` | Inches | Dp | `DimenPhysicalUnits.toDpFromInch(1f, resources)` |
+
+Compose extensions: `10.mm`, `2.5f.cm`, `1.inch` → `Dp` values directly.
+
+---
+
 *Created with the best responsive layout practices for the Android ecosystem.*
