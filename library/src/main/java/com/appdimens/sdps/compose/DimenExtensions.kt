@@ -73,6 +73,11 @@ fun Int.sdpRotate(rotationValue: Int, finalQualifierResolver: DpQualifier = DpQu
     }
 }
 
+@Composable
+fun Dp.sdpRotate(rotationValue: Int, finalQualifierResolver: DpQualifier = DpQualifier.SMALL_WIDTH, orientation: Orientation = Orientation.LANDSCAPE): Dp {
+    return this.value.toInt().sdpRotate(rotationValue, finalQualifierResolver, orientation)
+}
+
 /**
  * EN
  * Extension for Dp with dynamic scaling based on **Screen Height (hDP)**.
@@ -103,6 +108,11 @@ fun Int.hdpRotate(rotationValue: Int, finalQualifierResolver: DpQualifier = DpQu
     }
 }
 
+@Composable
+fun Dp.hdpRotate(rotationValue: Int, finalQualifierResolver: DpQualifier = DpQualifier.HEIGHT, orientation: Orientation = Orientation.LANDSCAPE): Dp {
+    return this.value.toInt().hdpRotate(rotationValue, finalQualifierResolver, orientation)
+}
+
 /**
  * EN
  * Extension for Dp with dynamic scaling based on **Screen Width (wDP)**.
@@ -131,6 +141,11 @@ fun Int.wdpRotate(rotationValue: Int, finalQualifierResolver: DpQualifier = DpQu
     } else {
         this.toDynamicScaledDp(DpQualifier.WIDTH)
     }
+}
+
+@Composable
+fun Dp.wdpRotate(rotationValue: Int, finalQualifierResolver: DpQualifier = DpQualifier.WIDTH, orientation: Orientation = Orientation.LANDSCAPE): Dp {
+    return this.value.toInt().wdpRotate(rotationValue, finalQualifierResolver, orientation)
 }
 
 // EN Helps extract the activity from context wrapper
@@ -177,6 +192,11 @@ fun Int.sdpMode(modeValue: Int, uiModeType: UiModeType, finalQualifierResolver: 
     }
 }
 
+@Composable
+fun Dp.sdpMode(modeValue: Int, uiModeType: UiModeType, finalQualifierResolver: DpQualifier? = null): Dp {
+    return this.value.toInt().sdpMode(modeValue, uiModeType, finalQualifierResolver)
+}
+
 /**
  * EN
  * Extension for Dp with dynamic scaling based on **Screen Height (hDP)**.
@@ -208,6 +228,12 @@ fun Int.hdpMode(modeValue: Int, uiModeType: UiModeType, finalQualifierResolver: 
     } else {
         this.toDynamicScaledDp(DpQualifier.HEIGHT)
     }
+}
+
+@SuppressLint("ConfigurationScreenWidthHeight")
+@Composable
+fun Dp.hdpMode(modeValue: Int, uiModeType: UiModeType, finalQualifierResolver: DpQualifier? = null): Dp {
+    return this.value.toInt().hdpMode(modeValue, uiModeType, finalQualifierResolver)
 }
 
 /**
@@ -243,6 +269,12 @@ fun Int.wdpMode(modeValue: Int, uiModeType: UiModeType, finalQualifierResolver: 
     }
 }
 
+@SuppressLint("ConfigurationScreenWidthHeight")
+@Composable
+fun Dp.wdpMode(modeValue: Int, uiModeType: UiModeType, finalQualifierResolver: DpQualifier? = null): Dp {
+    return this.value.toInt().wdpMode(modeValue, uiModeType, finalQualifierResolver)
+}
+
 // EN DpQualifier facilitator extensions.
 // PT Extensões facilitadoras para DpQualifier.
 
@@ -273,6 +305,12 @@ fun Int.sdpQualifier(qualifiedValue: Int, qualifierType: DpQualifier, qualifierV
     }
 }
 
+@SuppressLint("ConfigurationScreenWidthHeight")
+@Composable
+fun Dp.sdpQualifier(qualifiedValue: Int, qualifierType: DpQualifier, qualifierValue: Int, finalQualifierResolver: DpQualifier? = null): Dp {
+    return this.value.toInt().sdpQualifier(qualifiedValue, qualifierType, qualifierValue, finalQualifierResolver)
+}
+
 /**
  * EN
  * Extension for Dp with dynamic scaling based on **Screen Height (hDP)**.
@@ -300,6 +338,12 @@ fun Int.hdpQualifier(qualifiedValue: Int, qualifierType: DpQualifier, qualifierV
     }
 }
 
+@SuppressLint("ConfigurationScreenWidthHeight")
+@Composable
+fun Dp.hdpQualifier(qualifiedValue: Int, qualifierType: DpQualifier, qualifierValue: Int, finalQualifierResolver: DpQualifier? = null): Dp {
+    return this.value.toInt().hdpQualifier(qualifiedValue, qualifierType, qualifierValue, finalQualifierResolver)
+}
+
 /**
  * EN
  * Extension for Dp with dynamic scaling based on **Screen Width (wDP)**.
@@ -325,6 +369,12 @@ fun Int.wdpQualifier(qualifiedValue: Int, qualifierType: DpQualifier, qualifierV
     } else {
         this.toDynamicScaledDp(DpQualifier.WIDTH)
     }
+}
+
+@SuppressLint("ConfigurationScreenWidthHeight")
+@Composable
+fun Dp.wdpQualifier(qualifiedValue: Int, qualifierType: DpQualifier, qualifierValue: Int, finalQualifierResolver: DpQualifier? = null): Dp {
+    return this.value.toInt().wdpQualifier(qualifiedValue, qualifierType, qualifierValue, finalQualifierResolver)
 }
 
 // EN UiModeType + DpQualifier combined facilitator extensions.
@@ -366,6 +416,12 @@ fun Int.sdpScreen(screenValue: Int, uiModeType: UiModeType, qualifierType: DpQua
     }
 }
 
+@SuppressLint("ConfigurationScreenWidthHeight")
+@Composable
+fun Dp.sdpScreen(screenValue: Int, uiModeType: UiModeType, qualifierType: DpQualifier, qualifierValue: Int, finalQualifierResolver: DpQualifier? = null): Dp {
+    return this.value.toInt().sdpScreen(screenValue, uiModeType, qualifierType, qualifierValue, finalQualifierResolver)
+}
+
 /**
  * EN
  * Extension for Dp with dynamic scaling based on **Screen Height (hDP)**.
@@ -402,6 +458,12 @@ fun Int.hdpScreen(screenValue: Int, uiModeType: UiModeType, qualifierType: DpQua
     }
 }
 
+@SuppressLint("ConfigurationScreenWidthHeight")
+@Composable
+fun Dp.hdpScreen(screenValue: Int, uiModeType: UiModeType, qualifierType: DpQualifier, qualifierValue: Int, finalQualifierResolver: DpQualifier? = null): Dp {
+    return this.value.toInt().hdpScreen(screenValue, uiModeType, qualifierType, qualifierValue, finalQualifierResolver)
+}
+
 /**
  * EN
  * Extension for Dp with dynamic scaling based on **Screen Width (wDP)**.
@@ -436,4 +498,10 @@ fun Int.wdpScreen(screenValue: Int, uiModeType: UiModeType, qualifierType: DpQua
     } else {
         this.toDynamicScaledDp(DpQualifier.WIDTH)
     }
+}
+
+@SuppressLint("ConfigurationScreenWidthHeight")
+@Composable
+fun Dp.wdpScreen(screenValue: Int, uiModeType: UiModeType, qualifierType: DpQualifier, qualifierValue: Int, finalQualifierResolver: DpQualifier? = null): Dp {
+    return this.value.toInt().wdpScreen(screenValue, uiModeType, qualifierType, qualifierValue, finalQualifierResolver)
 }
