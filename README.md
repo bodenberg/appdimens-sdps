@@ -314,7 +314,6 @@ No extra state, no custom `remember{}` overhead, no unnecessary recompositions. 
 | **SDP** | `.sdp` | `@dimen/_16sdp` | `smallestScreenWidthDp` — the smaller of width/height, independent of orientation |
 | **HDP** | `.hdp` | `@dimen/_16hdp` | `screenHeightDp` — the current screen height in dp |
 | **WDP** | `.wdp` | `@dimen/_16wdp` | `screenWidthDp` — the current screen width in dp |
-| **SSP** | `.ssp` | `@dimen/_16ssp` | Same as SDP but using `sp` units — respects user font size preference |
 
 ### Resource Naming Convention
 
