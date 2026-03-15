@@ -426,12 +426,13 @@ AppDimens detects the device form factor using Android's `Configuration.uiMode` 
 | SDP (Smallest Width) | ✅ | ✅ | ✅ |
 | HDP (Height) | ✅ | ❌ | ❌ |
 | WDP (Width) | ✅ | ❌ | ❌ |
+| SSP | ✅ | ❌ | ❌ |
 | Range | -300 to 600 | -60 to 600 | 1 to 600 |
 | Negative values | ✅ | ✅ | ❌ |
 | Compose extensions | ✅ `.sdp`, `.hdp`, `.wdp` | ❌ | ❌ |
-| Code-level API (Kotlin/Java) | ✅ `DimenSdp` object | ❌ | ❌ |
+| Code-level API (Kotlin/Java) | ✅ `DimenSdp/DimenSsp` object | ❌ | ❌ |
 | Orientation inverters | ✅ 8 inverter types | ❌ | ❌ |
-| Conditional builder | ✅ `DimenScaled` | ❌ | ❌ |
+| Conditional builder | ✅ `DimenScaled/DimenSspScaled` | ❌ | ❌ |
 | UiModeType detection | ✅ TV, Car, Watch, Foldable | ❌ | ❌ |
 | Foldable device support | ✅ Fold/Flip + Half-Open | ❌ | ❌ |
 | Physical units | ✅ mm, cm, inches | ❌ | ❌ |
