@@ -426,7 +426,6 @@ AppDimens detects the device form factor using Android's `Configuration.uiMode` 
 | SDP (Smallest Width) | ✅ | ✅ | ✅ |
 | HDP (Height) | ✅ | ❌ | ❌ |
 | WDP (Width) | ✅ | ❌ | ❌ |
-| SSP (Scalable SP) | ✅ | ✅ (separate lib) | ❌ |
 | Range | -300 to 600 | -60 to 600 | 1 to 600 |
 | Negative values | ✅ | ✅ | ❌ |
 | Compose extensions | ✅ `.sdp`, `.hdp`, `.wdp` | ❌ | ❌ |
