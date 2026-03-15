@@ -203,7 +203,7 @@ val resId = DimenSdp.sdpRes(context, 16)
 val adaptive = DimenSdp.hdpLw(context, 50)    // Height → Width in Landscape
 
 // Facilitators
-val rotated = DimenSdp.sdpRotate(context, 30, 45)
+val rotated = DimenSdp.sdpRotate(context, 30, Orientation.LANDSCAPE)
 val modeVal = DimenSdp.sdpMode(context, 30, 200, UiModeType.TELEVISION)
 val qualVal = DimenSdp.sdpQualifier(context, 30, 80, DpQualifier.SMALL_WIDTH, 600)
 
