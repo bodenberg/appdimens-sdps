@@ -78,6 +78,19 @@ fun Int.sspRotate(
     }
 }
 
+/**
+ * EN
+ * Extension for TextUnit (Sp) with dynamic scaling based on **Smallest Width (swDP)**.
+ * Returns the original value **auto-scaled** using the specified qualifier if the condition is not met.
+ * When the device is in the specified [orientation], it uses [rotationValue]
+ * scaled with the given [finalQualifierResolver].
+ *
+ * PT
+ * Extensão para TextUnit (Sp) com dimensionamento dinâmico baseado na **Smallest Width (swDP)**.
+ * Retorna o valor original **auto-escalonado** usando o qualificador especificado se a condição não for atendida.
+ * Quando o dispositivo está na [orientation] especificada, usa [rotationValue]
+ * escalado com o [finalQualifierResolver] dado.
+ */
 @Composable
 fun TextUnit.sspRotate(
     rotationValue: Int,
@@ -85,7 +98,50 @@ fun TextUnit.sspRotate(
     orientation: Orientation = Orientation.LANDSCAPE,
     fontScale: Boolean = true
 ): TextUnit {
-    return this.value.toInt().sspRotate(rotationValue, finalQualifierResolver, orientation, fontScale)
+    val configuration = LocalConfiguration.current
+    val isTargetOrientation = when (orientation) {
+        Orientation.LANDSCAPE -> configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        Orientation.PORTRAIT -> configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+        else -> false
+    }
+    return if (isTargetOrientation) {
+        rotationValue.toDynamicScaledSp(finalQualifierResolver, fontScale)
+    } else {
+        this.value.toInt().toDynamicScaledSp(finalQualifierResolver, fontScale)
+    }
+}
+
+/**
+ * EN
+ * Extension for TextUnit (Sp) with dynamic scaling based on **Smallest Width (swDP)**.
+ * Returns the original raw TextUnit value if the condition is not met.
+ * When the device is in the specified [orientation], it uses [rotationValue]
+ * scaled with the given [finalQualifierResolver].
+ *
+ * PT
+ * Extensão para TextUnit (Sp) com dimensionamento dinâmico baseado na **Smallest Width (swDP)**.
+ * Retorna o valor original de TextUnit bruto se a condição não for atendida.
+ * Quando o dispositivo está na [orientation] especificada, usa [rotationValue]
+ * escalado com o [finalQualifierResolver] dado.
+ */
+@Composable
+fun TextUnit.sspRotatePlain(
+    rotationValue: Int,
+    finalQualifierResolver: DpQualifier = DpQualifier.SMALL_WIDTH,
+    orientation: Orientation = Orientation.LANDSCAPE,
+    fontScale: Boolean = true
+): TextUnit {
+    val configuration = LocalConfiguration.current
+    val isTargetOrientation = when (orientation) {
+        Orientation.LANDSCAPE -> configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        Orientation.PORTRAIT -> configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+        else -> false
+    }
+    return if (isTargetOrientation) {
+        rotationValue.toDynamicScaledSp(finalQualifierResolver, fontScale)
+    } else {
+        this
+    }
 }
 
 /**
@@ -121,6 +177,19 @@ fun Int.hspRotate(
     }
 }
 
+/**
+ * EN
+ * Extension for TextUnit (Sp) with dynamic scaling based on **Screen Height (hDP)**.
+ * Returns the original value **auto-scaled** using the specified qualifier if the condition is not met.
+ * When the device is in the specified [orientation], it uses [rotationValue]
+ * scaled with the given [finalQualifierResolver].
+ *
+ * PT
+ * Extensão para TextUnit (Sp) com dimensionamento dinâmico baseado na **Altura da Tela (hDP)**.
+ * Retorna o valor original **auto-escalonado** usando o qualificador especificado se a condição não for atendida.
+ * Quando o dispositivo está na [orientation] especificada, usa [rotationValue]
+ * escalado com o [finalQualifierResolver] dado.
+ */
 @Composable
 fun TextUnit.hspRotate(
     rotationValue: Int,
@@ -128,7 +197,50 @@ fun TextUnit.hspRotate(
     orientation: Orientation = Orientation.LANDSCAPE,
     fontScale: Boolean = true
 ): TextUnit {
-    return this.value.toInt().hspRotate(rotationValue, finalQualifierResolver, orientation, fontScale)
+    val configuration = LocalConfiguration.current
+    val isTargetOrientation = when (orientation) {
+        Orientation.LANDSCAPE -> configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        Orientation.PORTRAIT -> configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+        else -> false
+    }
+    return if (isTargetOrientation) {
+        rotationValue.toDynamicScaledSp(finalQualifierResolver, fontScale)
+    } else {
+        this.value.toInt().toDynamicScaledSp(finalQualifierResolver, fontScale)
+    }
+}
+
+/**
+ * EN
+ * Extension for TextUnit (Sp) with dynamic scaling based on **Screen Height (hDP)**.
+ * Returns the original raw TextUnit value if the condition is not met.
+ * When the device is in the specified [orientation], it uses [rotationValue]
+ * scaled with the given [finalQualifierResolver].
+ *
+ * PT
+ * Extensão para TextUnit (Sp) com dimensionamento dinâmico baseado na **Altura da Tela (hDP)**.
+ * Retorna o valor original de TextUnit bruto se a condição não for atendida.
+ * Quando o dispositivo está na [orientation] especificada, usa [rotationValue]
+ * escalado com o [finalQualifierResolver] dado.
+ */
+@Composable
+fun TextUnit.hspRotatePlain(
+    rotationValue: Int,
+    finalQualifierResolver: DpQualifier = DpQualifier.HEIGHT,
+    orientation: Orientation = Orientation.LANDSCAPE,
+    fontScale: Boolean = true
+): TextUnit {
+    val configuration = LocalConfiguration.current
+    val isTargetOrientation = when (orientation) {
+        Orientation.LANDSCAPE -> configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        Orientation.PORTRAIT -> configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+        else -> false
+    }
+    return if (isTargetOrientation) {
+        rotationValue.toDynamicScaledSp(finalQualifierResolver, fontScale)
+    } else {
+        this
+    }
 }
 
 /**
@@ -164,6 +276,19 @@ fun Int.wspRotate(
     }
 }
 
+/**
+ * EN
+ * Extension for TextUnit (Sp) with dynamic scaling based on **Screen Width (wDP)**.
+ * Returns the original value **auto-scaled** using the specified qualifier if the condition is not met.
+ * When the device is in the specified [orientation], it uses [rotationValue]
+ * scaled with the given [finalQualifierResolver].
+ *
+ * PT
+ * Extensão para TextUnit (Sp) com dimensionamento dinâmico baseado na **Largura da Tela (wDP)**.
+ * Retorna o valor original **auto-escalonado** usando o qualificador especificado se a condição não for atendida.
+ * Quando o dispositivo está na [orientation] especificada, usa [rotationValue]
+ * escalado com o [finalQualifierResolver] dado.
+ */
 @Composable
 fun TextUnit.wspRotate(
     rotationValue: Int,
@@ -171,7 +296,50 @@ fun TextUnit.wspRotate(
     orientation: Orientation = Orientation.LANDSCAPE,
     fontScale: Boolean = true
 ): TextUnit {
-    return this.value.toInt().wspRotate(rotationValue, finalQualifierResolver, orientation, fontScale)
+    val configuration = LocalConfiguration.current
+    val isTargetOrientation = when (orientation) {
+        Orientation.LANDSCAPE -> configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        Orientation.PORTRAIT -> configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+        else -> false
+    }
+    return if (isTargetOrientation) {
+        rotationValue.toDynamicScaledSp(finalQualifierResolver, fontScale)
+    } else {
+        this.value.toInt().toDynamicScaledSp(finalQualifierResolver, fontScale)
+    }
+}
+
+/**
+ * EN
+ * Extension for TextUnit (Sp) with dynamic scaling based on **Screen Width (wDP)**.
+ * Returns the original raw TextUnit value if the condition is not met.
+ * When the device is in the specified [orientation], it uses [rotationValue]
+ * scaled with the given [finalQualifierResolver].
+ *
+ * PT
+ * Extensão para TextUnit (Sp) com dimensionamento dinâmico baseado na **Largura da Tela (wDP)**.
+ * Retorna o valor original de TextUnit bruto se a condição não for atendida.
+ * Quando o dispositivo está na [orientation] especificada, usa [rotationValue]
+ * escalado com o [finalQualifierResolver] dado.
+ */
+@Composable
+fun TextUnit.wspRotatePlain(
+    rotationValue: Int,
+    finalQualifierResolver: DpQualifier = DpQualifier.WIDTH,
+    orientation: Orientation = Orientation.LANDSCAPE,
+    fontScale: Boolean = true
+): TextUnit {
+    val configuration = LocalConfiguration.current
+    val isTargetOrientation = when (orientation) {
+        Orientation.LANDSCAPE -> configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        Orientation.PORTRAIT -> configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+        else -> false
+    }
+    return if (isTargetOrientation) {
+        rotationValue.toDynamicScaledSp(finalQualifierResolver, fontScale)
+    } else {
+        this
+    }
 }
 
 // EN Helps extract the activity from context wrapper (Sp version)
@@ -221,6 +389,17 @@ fun Int.sspMode(
     }
 }
 
+/**
+ * EN
+ * Extension for TextUnit (Sp) with dynamic scaling based on **Smallest Width (swDP)**.
+ * Returns the original value **auto-scaled** using the specified qualifier if the condition is not met.
+ * When the device matches the specified [uiModeType], it uses [modeValue] instead.
+ *
+ * PT
+ * Extensão para TextUnit (Sp) com dimensionamento dinâmico baseado na **Smallest Width (swDP)**.
+ * Retorna o valor original **auto-escalonado** usando o qualificador especificado se a condição não for atendida.
+ * Quando o dispositivo corresponde ao [uiModeType] especificado, usa [modeValue] no lugar.
+ */
 @Composable
 fun TextUnit.sspMode(
     modeValue: Int,
@@ -228,7 +407,52 @@ fun TextUnit.sspMode(
     finalQualifierResolver: DpQualifier? = null,
     fontScale: Boolean = true
 ): TextUnit {
-    return this.value.toInt().sspMode(modeValue, uiModeType, finalQualifierResolver, fontScale)
+    val context = LocalContext.current
+    val activity = context.findActivitySp()
+    val windowLayoutInfo = remember(activity) {
+        activity?.let { WindowInfoTracker.getOrCreate(it).windowLayoutInfo(it) }
+    }?.collectAsState(initial = null)
+    val foldingFeature = windowLayoutInfo?.value?.displayFeatures
+        ?.filterIsInstance<FoldingFeature>()?.firstOrNull()
+    val currentUiModeType = UiModeType.fromConfiguration(context, foldingFeature)
+    return if (currentUiModeType == uiModeType) {
+        modeValue.toDynamicScaledSp(finalQualifierResolver ?: DpQualifier.SMALL_WIDTH, fontScale)
+    } else {
+        this.value.toInt().toDynamicScaledSp(finalQualifierResolver ?: DpQualifier.SMALL_WIDTH, fontScale)
+    }
+}
+
+/**
+ * EN
+ * Extension for TextUnit (Sp) with dynamic scaling based on **Smallest Width (swDP)**.
+ * Returns the original raw TextUnit value if the condition is not met.
+ * When the device matches the specified [uiModeType], it uses [modeValue] instead.
+ *
+ * PT
+ * Extensão para TextUnit (Sp) com dimensionamento dinâmico baseado na **Smallest Width (swDP)**.
+ * Retorna o valor original de TextUnit bruto se a condição não for atendida.
+ * Quando o dispositivo corresponde ao [uiModeType] especificado, usa [modeValue] no lugar.
+ */
+@Composable
+fun TextUnit.sspModePlain(
+    modeValue: Int,
+    uiModeType: UiModeType,
+    finalQualifierResolver: DpQualifier? = null,
+    fontScale: Boolean = true
+): TextUnit {
+    val context = LocalContext.current
+    val activity = context.findActivitySp()
+    val windowLayoutInfo = remember(activity) {
+        activity?.let { WindowInfoTracker.getOrCreate(it).windowLayoutInfo(it) }
+    }?.collectAsState(initial = null)
+    val foldingFeature = windowLayoutInfo?.value?.displayFeatures
+        ?.filterIsInstance<FoldingFeature>()?.firstOrNull()
+    val currentUiModeType = UiModeType.fromConfiguration(context, foldingFeature)
+    return if (currentUiModeType == uiModeType) {
+        modeValue.toDynamicScaledSp(finalQualifierResolver ?: DpQualifier.SMALL_WIDTH, fontScale)
+    } else {
+        this
+    }
 }
 
 /**
@@ -267,6 +491,17 @@ fun Int.hspMode(
     }
 }
 
+/**
+ * EN
+ * Extension for TextUnit (Sp) with dynamic scaling based on **Screen Height (hDP)**.
+ * Returns the original value **auto-scaled** using the specified qualifier if the condition is not met.
+ * When the device matches the specified [uiModeType], it uses [modeValue] instead.
+ *
+ * PT
+ * Extensão para TextUnit (Sp) com dimensionamento dinâmico baseado na **Altura da Tela (hDP)**.
+ * Retorna o valor original **auto-escalonado** usando o qualificador especificado se a condição não for atendida.
+ * Quando o dispositivo corresponde ao [uiModeType] especificado, usa [modeValue] no lugar.
+ */
 @Composable
 fun TextUnit.hspMode(
     modeValue: Int,
@@ -274,7 +509,52 @@ fun TextUnit.hspMode(
     finalQualifierResolver: DpQualifier? = null,
     fontScale: Boolean = true
 ): TextUnit {
-    return this.value.toInt().hspMode(modeValue, uiModeType, finalQualifierResolver, fontScale)
+    val context = LocalContext.current
+    val activity = context.findActivitySp()
+    val windowLayoutInfo = remember(activity) {
+        activity?.let { WindowInfoTracker.getOrCreate(it).windowLayoutInfo(it) }
+    }?.collectAsState(initial = null)
+    val foldingFeature = windowLayoutInfo?.value?.displayFeatures
+        ?.filterIsInstance<FoldingFeature>()?.firstOrNull()
+    val currentUiModeType = UiModeType.fromConfiguration(context, foldingFeature)
+    return if (currentUiModeType == uiModeType) {
+        modeValue.toDynamicScaledSp(finalQualifierResolver ?: DpQualifier.HEIGHT, fontScale)
+    } else {
+        this.value.toInt().toDynamicScaledSp(finalQualifierResolver ?: DpQualifier.HEIGHT, fontScale)
+    }
+}
+
+/**
+ * EN
+ * Extension for TextUnit (Sp) with dynamic scaling based on **Screen Height (hDP)**.
+ * Returns the original raw TextUnit value if the condition is not met.
+ * When the device matches the specified [uiModeType], it uses [modeValue] instead.
+ *
+ * PT
+ * Extensão para TextUnit (Sp) com dimensionamento dinâmico baseado na **Altura da Tela (hDP)**.
+ * Retorna o valor original de TextUnit bruto se a condição não for atendida.
+ * Quando o dispositivo corresponde ao [uiModeType] especificado, usa [modeValue] no lugar.
+ */
+@Composable
+fun TextUnit.hspModePlain(
+    modeValue: Int,
+    uiModeType: UiModeType,
+    finalQualifierResolver: DpQualifier? = null,
+    fontScale: Boolean = true
+): TextUnit {
+    val context = LocalContext.current
+    val activity = context.findActivitySp()
+    val windowLayoutInfo = remember(activity) {
+        activity?.let { WindowInfoTracker.getOrCreate(it).windowLayoutInfo(it) }
+    }?.collectAsState(initial = null)
+    val foldingFeature = windowLayoutInfo?.value?.displayFeatures
+        ?.filterIsInstance<FoldingFeature>()?.firstOrNull()
+    val currentUiModeType = UiModeType.fromConfiguration(context, foldingFeature)
+    return if (currentUiModeType == uiModeType) {
+        modeValue.toDynamicScaledSp(finalQualifierResolver ?: DpQualifier.HEIGHT, fontScale)
+    } else {
+        this
+    }
 }
 
 /**
@@ -313,6 +593,17 @@ fun Int.wspMode(
     }
 }
 
+/**
+ * EN
+ * Extension for TextUnit (Sp) with dynamic scaling based on **Screen Width (wDP)**.
+ * Returns the original value **auto-scaled** using the specified qualifier if the condition is not met.
+ * When the device matches the specified [uiModeType], it uses [modeValue] instead.
+ *
+ * PT
+ * Extensão para TextUnit (Sp) com dimensionamento dinâmico baseado na **Largura da Tela (wDP)**.
+ * Retorna o valor original **auto-escalonado** usando o qualificador especificado se a condição não for atendida.
+ * Quando o dispositivo corresponde ao [uiModeType] especificado, usa [modeValue] no lugar.
+ */
 @Composable
 fun TextUnit.wspMode(
     modeValue: Int,
@@ -320,7 +611,52 @@ fun TextUnit.wspMode(
     finalQualifierResolver: DpQualifier? = null,
     fontScale: Boolean = true
 ): TextUnit {
-    return this.value.toInt().wspMode(modeValue, uiModeType, finalQualifierResolver, fontScale)
+    val context = LocalContext.current
+    val activity = context.findActivitySp()
+    val windowLayoutInfo = remember(activity) {
+        activity?.let { WindowInfoTracker.getOrCreate(it).windowLayoutInfo(it) }
+    }?.collectAsState(initial = null)
+    val foldingFeature = windowLayoutInfo?.value?.displayFeatures
+        ?.filterIsInstance<FoldingFeature>()?.firstOrNull()
+    val currentUiModeType = UiModeType.fromConfiguration(context, foldingFeature)
+    return if (currentUiModeType == uiModeType) {
+        modeValue.toDynamicScaledSp(finalQualifierResolver ?: DpQualifier.WIDTH, fontScale)
+    } else {
+        this.value.toInt().toDynamicScaledSp(finalQualifierResolver ?: DpQualifier.WIDTH, fontScale)
+    }
+}
+
+/**
+ * EN
+ * Extension for TextUnit (Sp) with dynamic scaling based on **Screen Width (wDP)**.
+ * Returns the original raw TextUnit value if the condition is not met.
+ * When the device matches the specified [uiModeType], it uses [modeValue] instead.
+ *
+ * PT
+ * Extensão para TextUnit (Sp) com dimensionamento dinâmico baseado na **Largura da Tela (wDP)**.
+ * Retorna o valor original de TextUnit bruto se a condição não for atendida.
+ * Quando o dispositivo corresponde ao [uiModeType] especificado, usa [modeValue] no lugar.
+ */
+@Composable
+fun TextUnit.wspModePlain(
+    modeValue: Int,
+    uiModeType: UiModeType,
+    finalQualifierResolver: DpQualifier? = null,
+    fontScale: Boolean = true
+): TextUnit {
+    val context = LocalContext.current
+    val activity = context.findActivitySp()
+    val windowLayoutInfo = remember(activity) {
+        activity?.let { WindowInfoTracker.getOrCreate(it).windowLayoutInfo(it) }
+    }?.collectAsState(initial = null)
+    val foldingFeature = windowLayoutInfo?.value?.displayFeatures
+        ?.filterIsInstance<FoldingFeature>()?.firstOrNull()
+    val currentUiModeType = UiModeType.fromConfiguration(context, foldingFeature)
+    return if (currentUiModeType == uiModeType) {
+        modeValue.toDynamicScaledSp(finalQualifierResolver ?: DpQualifier.WIDTH, fontScale)
+    } else {
+        this
+    }
 }
 
 // EN DpQualifier facilitator extensions for Sp.
@@ -357,6 +693,17 @@ fun Int.sspQualifier(
     }
 }
 
+/**
+ * EN
+ * Extension for TextUnit (Sp) with dynamic scaling based on **Smallest Width (swDP)**.
+ * Returns the original value **auto-scaled** using the specified qualifier if the condition is not met.
+ * When the screen metric for [qualifierType] is >= [qualifierValue], it uses [qualifiedValue] instead.
+ *
+ * PT
+ * Extensão para TextUnit (Sp) com dimensionamento dinâmico baseado na **Smallest Width (swDP)**.
+ * Retorna o valor original **auto-escalonado** usando o qualificador especificado se a condição não for atendida.
+ * Quando a métrica de tela para [qualifierType] é >= [qualifierValue], usa [qualifiedValue] no lugar.
+ */
 @Composable
 fun TextUnit.sspQualifier(
     qualifiedValue: Int,
@@ -365,7 +712,41 @@ fun TextUnit.sspQualifier(
     finalQualifierResolver: DpQualifier? = null,
     fontScale: Boolean = true
 ): TextUnit {
-    return this.value.toInt().sspQualifier(qualifiedValue, qualifierType, qualifierValue, finalQualifierResolver, fontScale)
+    val configuration = LocalConfiguration.current
+    val qualifierMatch = getQualifierValue(qualifierType, configuration) >= qualifierValue
+    return if (qualifierMatch) {
+        qualifiedValue.toDynamicScaledSp(finalQualifierResolver ?: DpQualifier.SMALL_WIDTH, fontScale)
+    } else {
+        this.value.toInt().toDynamicScaledSp(finalQualifierResolver ?: DpQualifier.SMALL_WIDTH, fontScale)
+    }
+}
+
+/**
+ * EN
+ * Extension for TextUnit (Sp) with dynamic scaling based on **Smallest Width (swDP)**.
+ * Returns the original raw TextUnit value if the condition is not met.
+ * When the screen metric for [qualifierType] is >= [qualifierValue], it uses [qualifiedValue] instead.
+ *
+ * PT
+ * Extensão para TextUnit (Sp) com dimensionamento dinâmico baseado na **Smallest Width (swDP)**.
+ * Retorna o valor original de TextUnit bruto se a condição não for atendida.
+ * Quando a métrica de tela para [qualifierType] é >= [qualifierValue], usa [qualifiedValue] no lugar.
+ */
+@Composable
+fun TextUnit.sspQualifierPlain(
+    qualifiedValue: Int,
+    qualifierType: DpQualifier,
+    qualifierValue: Int,
+    finalQualifierResolver: DpQualifier? = null,
+    fontScale: Boolean = true
+): TextUnit {
+    val configuration = LocalConfiguration.current
+    val qualifierMatch = getQualifierValue(qualifierType, configuration) >= qualifierValue
+    return if (qualifierMatch) {
+        qualifiedValue.toDynamicScaledSp(finalQualifierResolver ?: DpQualifier.SMALL_WIDTH, fontScale)
+    } else {
+        this
+    }
 }
 
 /**
@@ -397,6 +778,17 @@ fun Int.hspQualifier(
     }
 }
 
+/**
+ * EN
+ * Extension for TextUnit (Sp) with dynamic scaling based on **Screen Height (hDP)**.
+ * Returns the original value **auto-scaled** using the specified qualifier if the condition is not met.
+ * When the screen metric for [qualifierType] is >= [qualifierValue], it uses [qualifiedValue] instead.
+ *
+ * PT
+ * Extensão para TextUnit (Sp) com dimensionamento dinâmico baseado na **Altura da Tela (hDP)**.
+ * Retorna o valor original **auto-escalonado** usando o qualificador especificado se a condição não for atendida.
+ * Quando a métrica de tela para [qualifierType] é >= [qualifierValue], usa [qualifiedValue] no lugar.
+ */
 @Composable
 fun TextUnit.hspQualifier(
     qualifiedValue: Int,
@@ -405,7 +797,41 @@ fun TextUnit.hspQualifier(
     finalQualifierResolver: DpQualifier? = null,
     fontScale: Boolean = true
 ): TextUnit {
-    return this.value.toInt().hspQualifier(qualifiedValue, qualifierType, qualifierValue, finalQualifierResolver, fontScale)
+    val configuration = LocalConfiguration.current
+    val qualifierMatch = getQualifierValue(qualifierType, configuration) >= qualifierValue
+    return if (qualifierMatch) {
+        qualifiedValue.toDynamicScaledSp(finalQualifierResolver ?: DpQualifier.HEIGHT, fontScale)
+    } else {
+        this.value.toInt().toDynamicScaledSp(finalQualifierResolver ?: DpQualifier.HEIGHT, fontScale)
+    }
+}
+
+/**
+ * EN
+ * Extension for TextUnit (Sp) with dynamic scaling based on **Screen Height (hDP)**.
+ * Returns the original raw TextUnit value if the condition is not met.
+ * When the screen metric for [qualifierType] is >= [qualifierValue], it uses [qualifiedValue] instead.
+ *
+ * PT
+ * Extensão para TextUnit (Sp) com dimensionamento dinâmico baseado na **Altura da Tela (hDP)**.
+ * Retorna o valor original de TextUnit bruto se a condição não for atendida.
+ * Quando a métrica de tela para [qualifierType] é >= [qualifierValue], usa [qualifiedValue] no lugar.
+ */
+@Composable
+fun TextUnit.hspQualifierPlain(
+    qualifiedValue: Int,
+    qualifierType: DpQualifier,
+    qualifierValue: Int,
+    finalQualifierResolver: DpQualifier? = null,
+    fontScale: Boolean = true
+): TextUnit {
+    val configuration = LocalConfiguration.current
+    val qualifierMatch = getQualifierValue(qualifierType, configuration) >= qualifierValue
+    return if (qualifierMatch) {
+        qualifiedValue.toDynamicScaledSp(finalQualifierResolver ?: DpQualifier.HEIGHT, fontScale)
+    } else {
+        this
+    }
 }
 
 /**
@@ -437,6 +863,17 @@ fun Int.wspQualifier(
     }
 }
 
+/**
+ * EN
+ * Extension for TextUnit (Sp) with dynamic scaling based on **Screen Width (wDP)**.
+ * Returns the original value **auto-scaled** using the specified qualifier if the condition is not met.
+ * When the screen metric for [qualifierType] is >= [qualifierValue], it uses [qualifiedValue] instead.
+ *
+ * PT
+ * Extensão para TextUnit (Sp) com dimensionamento dinâmico baseado na **Largura da Tela (wDP)**.
+ * Retorna o valor original **auto-escalonado** usando o qualificador especificado se a condição não for atendida.
+ * Quando a métrica de tela para [qualifierType] é >= [qualifierValue], usa [qualifiedValue] no lugar.
+ */
 @Composable
 fun TextUnit.wspQualifier(
     qualifiedValue: Int,
@@ -445,7 +882,41 @@ fun TextUnit.wspQualifier(
     finalQualifierResolver: DpQualifier? = null,
     fontScale: Boolean = true
 ): TextUnit {
-    return this.value.toInt().wspQualifier(qualifiedValue, qualifierType, qualifierValue, finalQualifierResolver, fontScale)
+    val configuration = LocalConfiguration.current
+    val qualifierMatch = getQualifierValue(qualifierType, configuration) >= qualifierValue
+    return if (qualifierMatch) {
+        qualifiedValue.toDynamicScaledSp(finalQualifierResolver ?: DpQualifier.WIDTH, fontScale)
+    } else {
+        this.value.toInt().toDynamicScaledSp(finalQualifierResolver ?: DpQualifier.WIDTH, fontScale)
+    }
+}
+
+/**
+ * EN
+ * Extension for TextUnit (Sp) with dynamic scaling based on **Screen Width (wDP)**.
+ * Returns the original raw TextUnit value if the condition is not met.
+ * When the screen metric for [qualifierType] is >= [qualifierValue], it uses [qualifiedValue] instead.
+ *
+ * PT
+ * Extensão para TextUnit (Sp) com dimensionamento dinâmico baseado na **Largura da Tela (wDP)**.
+ * Retorna o valor original de TextUnit bruto se a condição não for atendida.
+ * Quando a métrica de tela para [qualifierType] é >= [qualifierValue], usa [qualifiedValue] no lugar.
+ */
+@Composable
+fun TextUnit.wspQualifierPlain(
+    qualifiedValue: Int,
+    qualifierType: DpQualifier,
+    qualifierValue: Int,
+    finalQualifierResolver: DpQualifier? = null,
+    fontScale: Boolean = true
+): TextUnit {
+    val configuration = LocalConfiguration.current
+    val qualifierMatch = getQualifierValue(qualifierType, configuration) >= qualifierValue
+    return if (qualifierMatch) {
+        qualifiedValue.toDynamicScaledSp(finalQualifierResolver ?: DpQualifier.WIDTH, fontScale)
+    } else {
+        this
+    }
 }
 
 // EN UiModeType + DpQualifier combined facilitator extensions for Sp.
@@ -492,6 +963,19 @@ fun Int.sspScreen(
     }
 }
 
+/**
+ * EN
+ * Extension for TextUnit (Sp) with dynamic scaling based on **Smallest Width (swDP)**.
+ * Returns the original value **auto-scaled** using the specified qualifier if the condition is not met.
+ * When the device matches [uiModeType] AND the screen metric for [qualifierType]
+ * is >= [qualifierValue], it uses [screenValue] instead.
+ *
+ * PT
+ * Extensão para TextUnit (Sp) com dimensionamento dinâmico baseado na **Smallest Width (swDP)**.
+ * Retorna o valor original **auto-escalonado** usando o qualificador especificado se a condição não for atendida.
+ * Quando o dispositivo corresponde ao [uiModeType] E a métrica de tela para
+ * [qualifierType] é >= [qualifierValue], usa [screenValue] no lugar.
+ */
 @Composable
 fun TextUnit.sspScreen(
     screenValue: Int,
@@ -501,7 +985,62 @@ fun TextUnit.sspScreen(
     finalQualifierResolver: DpQualifier? = null,
     fontScale: Boolean = true
 ): TextUnit {
-    return this.value.toInt().sspScreen(screenValue, uiModeType, qualifierType, qualifierValue, finalQualifierResolver, fontScale)
+    val context = LocalContext.current
+    val configuration = LocalConfiguration.current
+    val activity = context.findActivitySp()
+    val windowLayoutInfo = remember(activity) {
+        activity?.let { WindowInfoTracker.getOrCreate(it).windowLayoutInfo(it) }
+    }?.collectAsState(initial = null)
+    val foldingFeature = windowLayoutInfo?.value?.displayFeatures
+        ?.filterIsInstance<FoldingFeature>()?.firstOrNull()
+    val currentUiModeType = UiModeType.fromConfiguration(context, foldingFeature)
+    val uiModeMatch = currentUiModeType == uiModeType
+    val qualifierMatch = getQualifierValue(qualifierType, configuration) >= qualifierValue
+    return if (uiModeMatch && qualifierMatch) {
+        screenValue.toDynamicScaledSp(finalQualifierResolver ?: DpQualifier.SMALL_WIDTH, fontScale)
+    } else {
+        this.value.toInt().toDynamicScaledSp(finalQualifierResolver ?: DpQualifier.SMALL_WIDTH, fontScale)
+    }
+}
+
+/**
+ * EN
+ * Extension for TextUnit (Sp) with dynamic scaling based on **Smallest Width (swDP)**.
+ * Returns the original raw TextUnit value if the condition is not met.
+ * When the device matches [uiModeType] AND the screen metric for [qualifierType]
+ * is >= [qualifierValue], it uses [screenValue] instead.
+ *
+ * PT
+ * Extensão para TextUnit (Sp) com dimensionamento dinâmico baseado na **Smallest Width (swDP)**.
+ * Retorna o valor original de TextUnit bruto se a condição não for atendida.
+ * Quando o dispositivo corresponde ao [uiModeType] E a métrica de tela para
+ * [qualifierType] é >= [qualifierValue], usa [screenValue] no lugar.
+ */
+@Composable
+fun TextUnit.sspScreenPlain(
+    screenValue: Int,
+    uiModeType: UiModeType,
+    qualifierType: DpQualifier,
+    qualifierValue: Int,
+    finalQualifierResolver: DpQualifier? = null,
+    fontScale: Boolean = true
+): TextUnit {
+    val context = LocalContext.current
+    val configuration = LocalConfiguration.current
+    val activity = context.findActivitySp()
+    val windowLayoutInfo = remember(activity) {
+        activity?.let { WindowInfoTracker.getOrCreate(it).windowLayoutInfo(it) }
+    }?.collectAsState(initial = null)
+    val foldingFeature = windowLayoutInfo?.value?.displayFeatures
+        ?.filterIsInstance<FoldingFeature>()?.firstOrNull()
+    val currentUiModeType = UiModeType.fromConfiguration(context, foldingFeature)
+    val uiModeMatch = currentUiModeType == uiModeType
+    val qualifierMatch = getQualifierValue(qualifierType, configuration) >= qualifierValue
+    return if (uiModeMatch && qualifierMatch) {
+        screenValue.toDynamicScaledSp(finalQualifierResolver ?: DpQualifier.SMALL_WIDTH, fontScale)
+    } else {
+        this
+    }
 }
 
 /**
@@ -543,6 +1082,19 @@ fun Int.hspScreen(
     }
 }
 
+/**
+ * EN
+ * Extension for TextUnit (Sp) with dynamic scaling based on **Screen Height (hDP)**.
+ * Returns the original value **auto-scaled** using the specified qualifier if the condition is not met.
+ * When the device matches [uiModeType] AND the screen metric for [qualifierType]
+ * is >= [qualifierValue], it uses [screenValue] instead.
+ *
+ * PT
+ * Extensão para TextUnit (Sp) com dimensionamento dinâmico baseado na **Altura da Tela (hDP)**.
+ * Retorna o valor original **auto-escalonado** usando o qualificador especificado se a condição não for atendida.
+ * Quando o dispositivo corresponde ao [uiModeType] E a métrica de tela para
+ * [qualifierType] é >= [qualifierValue], usa [screenValue] no lugar.
+ */
 @Composable
 fun TextUnit.hspScreen(
     screenValue: Int,
@@ -552,7 +1104,62 @@ fun TextUnit.hspScreen(
     finalQualifierResolver: DpQualifier? = null,
     fontScale: Boolean = true
 ): TextUnit {
-    return this.value.toInt().hspScreen(screenValue, uiModeType, qualifierType, qualifierValue, finalQualifierResolver, fontScale)
+    val context = LocalContext.current
+    val configuration = LocalConfiguration.current
+    val activity = context.findActivitySp()
+    val windowLayoutInfo = remember(activity) {
+        activity?.let { WindowInfoTracker.getOrCreate(it).windowLayoutInfo(it) }
+    }?.collectAsState(initial = null)
+    val foldingFeature = windowLayoutInfo?.value?.displayFeatures
+        ?.filterIsInstance<FoldingFeature>()?.firstOrNull()
+    val currentUiModeType = UiModeType.fromConfiguration(context, foldingFeature)
+    val uiModeMatch = currentUiModeType == uiModeType
+    val qualifierMatch = getQualifierValue(qualifierType, configuration) >= qualifierValue
+    return if (uiModeMatch && qualifierMatch) {
+        screenValue.toDynamicScaledSp(finalQualifierResolver ?: DpQualifier.HEIGHT, fontScale)
+    } else {
+        this.value.toInt().toDynamicScaledSp(finalQualifierResolver ?: DpQualifier.HEIGHT, fontScale)
+    }
+}
+
+/**
+ * EN
+ * Extension for TextUnit (Sp) with dynamic scaling based on **Screen Height (hDP)**.
+ * Returns the original raw TextUnit value if the condition is not met.
+ * When the device matches [uiModeType] AND the screen metric for [qualifierType]
+ * is >= [qualifierValue], it uses [screenValue] instead.
+ *
+ * PT
+ * Extensão para TextUnit (Sp) com dimensionamento dinâmico baseado na **Altura da Tela (hDP)**.
+ * Retorna o valor original de TextUnit bruto se a condição não for atendida.
+ * Quando o dispositivo corresponde ao [uiModeType] E a métrica de tela para
+ * [qualifierType] é >= [qualifierValue], usa [screenValue] no lugar.
+ */
+@Composable
+fun TextUnit.hspScreenPlain(
+    screenValue: Int,
+    uiModeType: UiModeType,
+    qualifierType: DpQualifier,
+    qualifierValue: Int,
+    finalQualifierResolver: DpQualifier? = null,
+    fontScale: Boolean = true
+): TextUnit {
+    val context = LocalContext.current
+    val configuration = LocalConfiguration.current
+    val activity = context.findActivitySp()
+    val windowLayoutInfo = remember(activity) {
+        activity?.let { WindowInfoTracker.getOrCreate(it).windowLayoutInfo(it) }
+    }?.collectAsState(initial = null)
+    val foldingFeature = windowLayoutInfo?.value?.displayFeatures
+        ?.filterIsInstance<FoldingFeature>()?.firstOrNull()
+    val currentUiModeType = UiModeType.fromConfiguration(context, foldingFeature)
+    val uiModeMatch = currentUiModeType == uiModeType
+    val qualifierMatch = getQualifierValue(qualifierType, configuration) >= qualifierValue
+    return if (uiModeMatch && qualifierMatch) {
+        screenValue.toDynamicScaledSp(finalQualifierResolver ?: DpQualifier.HEIGHT, fontScale)
+    } else {
+        this
+    }
 }
 
 /**
@@ -594,6 +1201,19 @@ fun Int.wspScreen(
     }
 }
 
+/**
+ * EN
+ * Extension for TextUnit (Sp) with dynamic scaling based on **Screen Width (wDP)**.
+ * Returns the original value **auto-scaled** using the specified qualifier if the condition is not met.
+ * When the device matches [uiModeType] AND the screen metric for [qualifierType]
+ * is >= [qualifierValue], it uses [screenValue] instead.
+ *
+ * PT
+ * Extensão para TextUnit (Sp) com dimensionamento dinâmico baseado na **Largura da Tela (wDP)**.
+ * Retorna o valor original **auto-escalonado** usando o qualificador especificado se a condição não for atendida.
+ * Quando o dispositivo corresponde ao [uiModeType] E a métrica de tela para
+ * [qualifierType] é >= [qualifierValue], usa [screenValue] no lugar.
+ */
 @Composable
 fun TextUnit.wspScreen(
     screenValue: Int,
@@ -603,5 +1223,60 @@ fun TextUnit.wspScreen(
     finalQualifierResolver: DpQualifier? = null,
     fontScale: Boolean = true
 ): TextUnit {
-    return this.value.toInt().wspScreen(screenValue, uiModeType, qualifierType, qualifierValue, finalQualifierResolver, fontScale)
+    val context = LocalContext.current
+    val configuration = LocalConfiguration.current
+    val activity = context.findActivitySp()
+    val windowLayoutInfo = remember(activity) {
+        activity?.let { WindowInfoTracker.getOrCreate(it).windowLayoutInfo(it) }
+    }?.collectAsState(initial = null)
+    val foldingFeature = windowLayoutInfo?.value?.displayFeatures
+        ?.filterIsInstance<FoldingFeature>()?.firstOrNull()
+    val currentUiModeType = UiModeType.fromConfiguration(context, foldingFeature)
+    val uiModeMatch = currentUiModeType == uiModeType
+    val qualifierMatch = getQualifierValue(qualifierType, configuration) >= qualifierValue
+    return if (uiModeMatch && qualifierMatch) {
+        screenValue.toDynamicScaledSp(finalQualifierResolver ?: DpQualifier.WIDTH, fontScale)
+    } else {
+        this.value.toInt().toDynamicScaledSp(finalQualifierResolver ?: DpQualifier.WIDTH, fontScale)
+    }
+}
+
+/**
+ * EN
+ * Extension for TextUnit (Sp) with dynamic scaling based on **Screen Width (wDP)**.
+ * Returns the original raw TextUnit value if the condition is not met.
+ * When the device matches [uiModeType] AND the screen metric for [qualifierType]
+ * is >= [qualifierValue], it uses [screenValue] instead.
+ *
+ * PT
+ * Extensão para TextUnit (Sp) com dimensionamento dinâmico baseado na **Largura da Tela (wDP)**.
+ * Retorna o valor original de TextUnit bruto se a condição não for atendida.
+ * Quando o dispositivo corresponde ao [uiModeType] E a métrica de tela para
+ * [qualifierType] é >= [qualifierValue], usa [screenValue] no lugar.
+ */
+@Composable
+fun TextUnit.wspScreenPlain(
+    screenValue: Int,
+    uiModeType: UiModeType,
+    qualifierType: DpQualifier,
+    qualifierValue: Int,
+    finalQualifierResolver: DpQualifier? = null,
+    fontScale: Boolean = true
+): TextUnit {
+    val context = LocalContext.current
+    val configuration = LocalConfiguration.current
+    val activity = context.findActivitySp()
+    val windowLayoutInfo = remember(activity) {
+        activity?.let { WindowInfoTracker.getOrCreate(it).windowLayoutInfo(it) }
+    }?.collectAsState(initial = null)
+    val foldingFeature = windowLayoutInfo?.value?.displayFeatures
+        ?.filterIsInstance<FoldingFeature>()?.firstOrNull()
+    val currentUiModeType = UiModeType.fromConfiguration(context, foldingFeature)
+    val uiModeMatch = currentUiModeType == uiModeType
+    val qualifierMatch = getQualifierValue(qualifierType, configuration) >= qualifierValue
+    return if (uiModeMatch && qualifierMatch) {
+        screenValue.toDynamicScaledSp(finalQualifierResolver ?: DpQualifier.WIDTH, fontScale)
+    } else {
+        this
+    }
 }

@@ -73,9 +73,60 @@ fun Int.sdpRotate(rotationValue: Int, finalQualifierResolver: DpQualifier = DpQu
     }
 }
 
+/**
+ * EN
+ * Extension for Dp with dynamic scaling based on **Smallest Width (swDP)**.
+ * Returns the original value **auto-scaled** using the specified qualifier if the condition is not met.
+ * When the device is in the specified [orientation], it uses [rotationValue]
+ * scaled with the given [finalQualifierResolver].
+ *
+ * PT
+ * Extensão para Dp com dimensionamento dinâmico baseado na **Smallest Width (swDP)**.
+ * Retorna o valor original **auto-escalonado** usando o qualificador especificado se a condição não for atendida.
+ * Quando o dispositivo está na [orientation] especificada, usa [rotationValue]
+ * escalado com o [finalQualifierResolver] dado.
+ */
 @Composable
 fun Dp.sdpRotate(rotationValue: Int, finalQualifierResolver: DpQualifier = DpQualifier.SMALL_WIDTH, orientation: Orientation = Orientation.LANDSCAPE): Dp {
-    return this.value.toInt().sdpRotate(rotationValue, finalQualifierResolver, orientation)
+    val configuration = LocalConfiguration.current
+    val isTargetOrientation = when (orientation) {
+        Orientation.LANDSCAPE -> configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        Orientation.PORTRAIT -> configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+        else -> false
+    }
+    return if (isTargetOrientation) {
+        rotationValue.toDynamicScaledDp(finalQualifierResolver)
+    } else {
+        this.value.toInt().toDynamicScaledDp(finalQualifierResolver)
+    }
+}
+
+/**
+ * EN
+ * Extension for Dp with dynamic scaling based on **Smallest Width (swDP)**.
+ * Returns the original raw Dp value if the condition is not met.
+ * When the device is in the specified [orientation], it uses [rotationValue]
+ * scaled with the given [finalQualifierResolver].
+ *
+ * PT
+ * Extensão para Dp com dimensionamento dinâmico baseado na **Smallest Width (swDP)**.
+ * Retorna o valor original de Dp bruto se a condição não for atendida.
+ * Quando o dispositivo está na [orientation] especificada, usa [rotationValue]
+ * escalado com o [finalQualifierResolver] dado.
+ */
+@Composable
+fun Dp.sdpRotatePlain(rotationValue: Int, finalQualifierResolver: DpQualifier = DpQualifier.SMALL_WIDTH, orientation: Orientation = Orientation.LANDSCAPE): Dp {
+    val configuration = LocalConfiguration.current
+    val isTargetOrientation = when (orientation) {
+        Orientation.LANDSCAPE -> configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        Orientation.PORTRAIT -> configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+        else -> false
+    }
+    return if (isTargetOrientation) {
+        rotationValue.toDynamicScaledDp(finalQualifierResolver)
+    } else {
+        this
+    }
 }
 
 /**
@@ -108,9 +159,60 @@ fun Int.hdpRotate(rotationValue: Int, finalQualifierResolver: DpQualifier = DpQu
     }
 }
 
+/**
+ * EN
+ * Extension for Dp with dynamic scaling based on **Screen Height (hDP)**.
+ * Returns the original value **auto-scaled** using the specified qualifier if the condition is not met.
+ * When the device is in the specified [orientation], it uses [rotationValue]
+ * scaled with the given [finalQualifierResolver].
+ *
+ * PT
+ * Extensão para Dp com dimensionamento dinâmico baseado na **Altura da Tela (hDP)**.
+ * Retorna o valor original **auto-escalonado** usando o qualificador especificado se a condição não for atendida.
+ * Quando o dispositivo está na [orientation] especificada, usa [rotationValue]
+ * escalado com o [finalQualifierResolver] dado.
+ */
 @Composable
 fun Dp.hdpRotate(rotationValue: Int, finalQualifierResolver: DpQualifier = DpQualifier.HEIGHT, orientation: Orientation = Orientation.LANDSCAPE): Dp {
-    return this.value.toInt().hdpRotate(rotationValue, finalQualifierResolver, orientation)
+    val configuration = LocalConfiguration.current
+    val isTargetOrientation = when (orientation) {
+        Orientation.LANDSCAPE -> configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        Orientation.PORTRAIT -> configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+        else -> false
+    }
+    return if (isTargetOrientation) {
+        rotationValue.toDynamicScaledDp(finalQualifierResolver)
+    } else {
+        this.value.toInt().toDynamicScaledDp(finalQualifierResolver)
+    }
+}
+
+/**
+ * EN
+ * Extension for Dp with dynamic scaling based on **Screen Height (hDP)**.
+ * Returns the original raw Dp value if the condition is not met.
+ * When the device is in the specified [orientation], it uses [rotationValue]
+ * scaled with the given [finalQualifierResolver].
+ *
+ * PT
+ * Extensão para Dp com dimensionamento dinâmico baseado na **Altura da Tela (hDP)**.
+ * Retorna o valor original de Dp bruto se a condição não for atendida.
+ * Quando o dispositivo está na [orientation] especificada, usa [rotationValue]
+ * escalado com o [finalQualifierResolver] dado.
+ */
+@Composable
+fun Dp.hdpRotatePlain(rotationValue: Int, finalQualifierResolver: DpQualifier = DpQualifier.HEIGHT, orientation: Orientation = Orientation.LANDSCAPE): Dp {
+    val configuration = LocalConfiguration.current
+    val isTargetOrientation = when (orientation) {
+        Orientation.LANDSCAPE -> configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        Orientation.PORTRAIT -> configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+        else -> false
+    }
+    return if (isTargetOrientation) {
+        rotationValue.toDynamicScaledDp(finalQualifierResolver)
+    } else {
+        this
+    }
 }
 
 /**
@@ -143,9 +245,60 @@ fun Int.wdpRotate(rotationValue: Int, finalQualifierResolver: DpQualifier = DpQu
     }
 }
 
+/**
+ * EN
+ * Extension for Dp with dynamic scaling based on **Screen Width (wDP)**.
+ * Returns the original value **auto-scaled** using the specified qualifier if the condition is not met.
+ * When the device is in the specified [orientation], it uses [rotationValue]
+ * scaled with the given [finalQualifierResolver].
+ *
+ * PT
+ * Extensão para Dp com dimensionamento dinâmico baseado na **Largura da Tela (wDP)**.
+ * Retorna o valor original **auto-escalonado** usando o qualificador especificado se a condição não for atendida.
+ * Quando o dispositivo está na [orientation] especificada, usa [rotationValue]
+ * escalado com o [finalQualifierResolver] dado.
+ */
 @Composable
 fun Dp.wdpRotate(rotationValue: Int, finalQualifierResolver: DpQualifier = DpQualifier.WIDTH, orientation: Orientation = Orientation.LANDSCAPE): Dp {
-    return this.value.toInt().wdpRotate(rotationValue, finalQualifierResolver, orientation)
+    val configuration = LocalConfiguration.current
+    val isTargetOrientation = when (orientation) {
+        Orientation.LANDSCAPE -> configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        Orientation.PORTRAIT -> configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+        else -> false
+    }
+    return if (isTargetOrientation) {
+        rotationValue.toDynamicScaledDp(finalQualifierResolver)
+    } else {
+        this.value.toInt().toDynamicScaledDp(finalQualifierResolver)
+    }
+}
+
+/**
+ * EN
+ * Extension for Dp with dynamic scaling based on **Screen Width (wDP)**.
+ * Returns the original raw Dp value if the condition is not met.
+ * When the device is in the specified [orientation], it uses [rotationValue]
+ * scaled with the given [finalQualifierResolver].
+ *
+ * PT
+ * Extensão para Dp com dimensionamento dinâmico baseado na **Largura da Tela (wDP)**.
+ * Retorna o valor original de Dp bruto se a condição não for atendida.
+ * Quando o dispositivo está na [orientation] especificada, usa [rotationValue]
+ * escalado com o [finalQualifierResolver] dado.
+ */
+@Composable
+fun Dp.wdpRotatePlain(rotationValue: Int, finalQualifierResolver: DpQualifier = DpQualifier.WIDTH, orientation: Orientation = Orientation.LANDSCAPE): Dp {
+    val configuration = LocalConfiguration.current
+    val isTargetOrientation = when (orientation) {
+        Orientation.LANDSCAPE -> configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        Orientation.PORTRAIT -> configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+        else -> false
+    }
+    return if (isTargetOrientation) {
+        rotationValue.toDynamicScaledDp(finalQualifierResolver)
+    } else {
+        this
+    }
 }
 
 // EN Helps extract the activity from context wrapper
@@ -192,9 +345,60 @@ fun Int.sdpMode(modeValue: Int, uiModeType: UiModeType, finalQualifierResolver: 
     }
 }
 
+/**
+ * EN
+ * Extension for Dp with dynamic scaling based on **Smallest Width (swDP)**.
+ * Returns the original value **auto-scaled** using the specified qualifier if the condition is not met.
+ * When the device matches the specified [uiModeType], it uses [modeValue] instead.
+ *
+ * PT
+ * Extensão para Dp com dimensionamento dinâmico baseado na **Smallest Width (swDP)**.
+ * Retorna o valor original **auto-escalonado** usando o qualificador especificado se a condição não for atendida.
+ * Quando o dispositivo corresponde ao [uiModeType] especificado, usa [modeValue] no lugar.
+ */
 @Composable
 fun Dp.sdpMode(modeValue: Int, uiModeType: UiModeType, finalQualifierResolver: DpQualifier? = null): Dp {
-    return this.value.toInt().sdpMode(modeValue, uiModeType, finalQualifierResolver)
+    val context = LocalContext.current
+    val activity = context.findActivity()
+    val windowLayoutInfo = remember(activity) {
+        activity?.let { WindowInfoTracker.getOrCreate(it).windowLayoutInfo(it) }
+    }?.collectAsState(initial = null)
+    val foldingFeature = windowLayoutInfo?.value?.displayFeatures
+        ?.filterIsInstance<FoldingFeature>()?.firstOrNull()
+    val currentUiModeType = UiModeType.fromConfiguration(context, foldingFeature)
+    return if (currentUiModeType == uiModeType) {
+        modeValue.toDynamicScaledDp(finalQualifierResolver ?: DpQualifier.SMALL_WIDTH)
+    } else {
+        this.value.toInt().toDynamicScaledDp(finalQualifierResolver ?: DpQualifier.SMALL_WIDTH)
+    }
+}
+
+/**
+ * EN
+ * Extension for Dp with dynamic scaling based on **Smallest Width (swDP)**.
+ * Returns the original raw Dp value if the condition is not met.
+ * When the device matches the specified [uiModeType], it uses [modeValue] instead.
+ *
+ * PT
+ * Extensão para Dp com dimensionamento dinâmico baseado na **Smallest Width (swDP)**.
+ * Retorna o valor original de Dp bruto se a condição não for atendida.
+ * Quando o dispositivo corresponde ao [uiModeType] especificado, usa [modeValue] no lugar.
+ */
+@Composable
+fun Dp.sdpModePlain(modeValue: Int, uiModeType: UiModeType, finalQualifierResolver: DpQualifier? = null): Dp {
+    val context = LocalContext.current
+    val activity = context.findActivity()
+    val windowLayoutInfo = remember(activity) {
+        activity?.let { WindowInfoTracker.getOrCreate(it).windowLayoutInfo(it) }
+    }?.collectAsState(initial = null)
+    val foldingFeature = windowLayoutInfo?.value?.displayFeatures
+        ?.filterIsInstance<FoldingFeature>()?.firstOrNull()
+    val currentUiModeType = UiModeType.fromConfiguration(context, foldingFeature)
+    return if (currentUiModeType == uiModeType) {
+        modeValue.toDynamicScaledDp(finalQualifierResolver ?: DpQualifier.SMALL_WIDTH)
+    } else {
+        this
+    }
 }
 
 /**
@@ -230,10 +434,62 @@ fun Int.hdpMode(modeValue: Int, uiModeType: UiModeType, finalQualifierResolver: 
     }
 }
 
+/**
+ * EN
+ * Extension for Dp with dynamic scaling based on **Screen Height (hDP)**.
+ * Returns the original value **auto-scaled** using the specified qualifier if the condition is not met.
+ * When the device matches the specified [uiModeType], it uses [modeValue] instead.
+ *
+ * PT
+ * Extensão para Dp com dimensionamento dinâmico baseado na **Altura da Tela (hDP)**.
+ * Retorna o valor original **auto-escalonado** usando o qualificador especificado se a condição não for atendida.
+ * Quando o dispositivo corresponde ao [uiModeType] especificado, usa [modeValue] no lugar.
+ */
 @SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
 fun Dp.hdpMode(modeValue: Int, uiModeType: UiModeType, finalQualifierResolver: DpQualifier? = null): Dp {
-    return this.value.toInt().hdpMode(modeValue, uiModeType, finalQualifierResolver)
+    val context = LocalContext.current
+    val activity = context.findActivity()
+    val windowLayoutInfo = remember(activity) {
+        activity?.let { WindowInfoTracker.getOrCreate(it).windowLayoutInfo(it) }
+    }?.collectAsState(initial = null)
+    val foldingFeature = windowLayoutInfo?.value?.displayFeatures
+        ?.filterIsInstance<FoldingFeature>()?.firstOrNull()
+    val currentUiModeType = UiModeType.fromConfiguration(context, foldingFeature)
+    return if (currentUiModeType == uiModeType) {
+        modeValue.toDynamicScaledDp(finalQualifierResolver ?: DpQualifier.HEIGHT)
+    } else {
+        this.value.toInt().toDynamicScaledDp(finalQualifierResolver ?: DpQualifier.HEIGHT)
+    }
+}
+
+/**
+ * EN
+ * Extension for Dp with dynamic scaling based on **Screen Height (hDP)**.
+ * Returns the original raw Dp value if the condition is not met.
+ * When the device matches the specified [uiModeType], it uses [modeValue] instead.
+ *
+ * PT
+ * Extensão para Dp com dimensionamento dinâmico baseado na **Altura da Tela (hDP)**.
+ * Retorna o valor original de Dp bruto se a condição não for atendida.
+ * Quando o dispositivo corresponde ao [uiModeType] especificado, usa [modeValue] no lugar.
+ */
+@SuppressLint("ConfigurationScreenWidthHeight")
+@Composable
+fun Dp.hdpModePlain(modeValue: Int, uiModeType: UiModeType, finalQualifierResolver: DpQualifier? = null): Dp {
+    val context = LocalContext.current
+    val activity = context.findActivity()
+    val windowLayoutInfo = remember(activity) {
+        activity?.let { WindowInfoTracker.getOrCreate(it).windowLayoutInfo(it) }
+    }?.collectAsState(initial = null)
+    val foldingFeature = windowLayoutInfo?.value?.displayFeatures
+        ?.filterIsInstance<FoldingFeature>()?.firstOrNull()
+    val currentUiModeType = UiModeType.fromConfiguration(context, foldingFeature)
+    return if (currentUiModeType == uiModeType) {
+        modeValue.toDynamicScaledDp(finalQualifierResolver ?: DpQualifier.HEIGHT)
+    } else {
+        this
+    }
 }
 
 /**
@@ -269,10 +525,62 @@ fun Int.wdpMode(modeValue: Int, uiModeType: UiModeType, finalQualifierResolver: 
     }
 }
 
+/**
+ * EN
+ * Extension for Dp with dynamic scaling based on **Screen Width (wDP)**.
+ * Returns the original value **auto-scaled** using the specified qualifier if the condition is not met.
+ * When the device matches the specified [uiModeType], it uses [modeValue] instead.
+ *
+ * PT
+ * Extensão para Dp com dimensionamento dinâmico baseado na **Largura da Tela (wDP)**.
+ * Retorna o valor original **auto-escalonado** usando o qualificador especificado se a condição não for atendida.
+ * Quando o dispositivo corresponde ao [uiModeType] especificado, usa [modeValue] no lugar.
+ */
 @SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
 fun Dp.wdpMode(modeValue: Int, uiModeType: UiModeType, finalQualifierResolver: DpQualifier? = null): Dp {
-    return this.value.toInt().wdpMode(modeValue, uiModeType, finalQualifierResolver)
+    val context = LocalContext.current
+    val activity = context.findActivity()
+    val windowLayoutInfo = remember(activity) {
+        activity?.let { WindowInfoTracker.getOrCreate(it).windowLayoutInfo(it) }
+    }?.collectAsState(initial = null)
+    val foldingFeature = windowLayoutInfo?.value?.displayFeatures
+        ?.filterIsInstance<FoldingFeature>()?.firstOrNull()
+    val currentUiModeType = UiModeType.fromConfiguration(context, foldingFeature)
+    return if (currentUiModeType == uiModeType) {
+        modeValue.toDynamicScaledDp(finalQualifierResolver ?: DpQualifier.WIDTH)
+    } else {
+        this.value.toInt().toDynamicScaledDp(finalQualifierResolver ?: DpQualifier.WIDTH)
+    }
+}
+
+/**
+ * EN
+ * Extension for Dp with dynamic scaling based on **Screen Width (wDP)**.
+ * Returns the original raw Dp value if the condition is not met.
+ * When the device matches the specified [uiModeType], it uses [modeValue] instead.
+ *
+ * PT
+ * Extensão para Dp com dimensionamento dinâmico baseado na **Largura da Tela (wDP)**.
+ * Retorna o valor original de Dp bruto se a condição não for atendida.
+ * Quando o dispositivo corresponde ao [uiModeType] especificado, usa [modeValue] no lugar.
+ */
+@SuppressLint("ConfigurationScreenWidthHeight")
+@Composable
+fun Dp.wdpModePlain(modeValue: Int, uiModeType: UiModeType, finalQualifierResolver: DpQualifier? = null): Dp {
+    val context = LocalContext.current
+    val activity = context.findActivity()
+    val windowLayoutInfo = remember(activity) {
+        activity?.let { WindowInfoTracker.getOrCreate(it).windowLayoutInfo(it) }
+    }?.collectAsState(initial = null)
+    val foldingFeature = windowLayoutInfo?.value?.displayFeatures
+        ?.filterIsInstance<FoldingFeature>()?.firstOrNull()
+    val currentUiModeType = UiModeType.fromConfiguration(context, foldingFeature)
+    return if (currentUiModeType == uiModeType) {
+        modeValue.toDynamicScaledDp(finalQualifierResolver ?: DpQualifier.WIDTH)
+    } else {
+        this
+    }
 }
 
 // EN DpQualifier facilitator extensions.
@@ -305,10 +613,50 @@ fun Int.sdpQualifier(qualifiedValue: Int, qualifierType: DpQualifier, qualifierV
     }
 }
 
+/**
+ * EN
+ * Extension for Dp with dynamic scaling based on **Smallest Width (swDP)**.
+ * Returns the original value **auto-scaled** using the specified qualifier if the condition is not met.
+ * When the screen metric for [qualifierType] is >= [qualifierValue], it uses [qualifiedValue] instead.
+ *
+ * PT
+ * Extensão para Dp com dimensionamento dinâmico baseado na **Smallest Width (swDP)**.
+ * Retorna o valor original **auto-escalonado** usando o qualificador especificado se a condição não for atendida.
+ * Quando a métrica de tela para [qualifierType] é >= [qualifierValue], usa [qualifiedValue] no lugar.
+ */
 @SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
 fun Dp.sdpQualifier(qualifiedValue: Int, qualifierType: DpQualifier, qualifierValue: Int, finalQualifierResolver: DpQualifier? = null): Dp {
-    return this.value.toInt().sdpQualifier(qualifiedValue, qualifierType, qualifierValue, finalQualifierResolver)
+    val configuration = LocalConfiguration.current
+    val qualifierMatch = getQualifierValue(qualifierType, configuration) >= qualifierValue
+    return if (qualifierMatch) {
+        qualifiedValue.toDynamicScaledDp(finalQualifierResolver ?: DpQualifier.SMALL_WIDTH)
+    } else {
+        this.value.toInt().toDynamicScaledDp(finalQualifierResolver ?: DpQualifier.SMALL_WIDTH)
+    }
+}
+
+/**
+ * EN
+ * Extension for Dp with dynamic scaling based on **Smallest Width (swDP)**.
+ * Returns the original raw Dp value if the condition is not met.
+ * When the screen metric for [qualifierType] is >= [qualifierValue], it uses [qualifiedValue] instead.
+ *
+ * PT
+ * Extensão para Dp com dimensionamento dinâmico baseado na **Smallest Width (swDP)**.
+ * Retorna o valor original de Dp bruto se a condição não for atendida.
+ * Quando a métrica de tela para [qualifierType] é >= [qualifierValue], usa [qualifiedValue] no lugar.
+ */
+@SuppressLint("ConfigurationScreenWidthHeight")
+@Composable
+fun Dp.sdpQualifierPlain(qualifiedValue: Int, qualifierType: DpQualifier, qualifierValue: Int, finalQualifierResolver: DpQualifier? = null): Dp {
+    val configuration = LocalConfiguration.current
+    val qualifierMatch = getQualifierValue(qualifierType, configuration) >= qualifierValue
+    return if (qualifierMatch) {
+        qualifiedValue.toDynamicScaledDp(finalQualifierResolver ?: DpQualifier.SMALL_WIDTH)
+    } else {
+        this
+    }
 }
 
 /**
@@ -338,10 +686,50 @@ fun Int.hdpQualifier(qualifiedValue: Int, qualifierType: DpQualifier, qualifierV
     }
 }
 
+/**
+ * EN
+ * Extension for Dp with dynamic scaling based on **Screen Height (hDP)**.
+ * Returns the original value **auto-scaled** using the specified qualifier if the condition is not met.
+ * When the screen metric for [qualifierType] is >= [qualifierValue], it uses [qualifiedValue] instead.
+ *
+ * PT
+ * Extensão para Dp com dimensionamento dinâmico baseado na **Altura da Tela (hDP)**.
+ * Retorna o valor original **auto-escalonado** usando o qualificador especificado se a condição não for atendida.
+ * Quando a métrica de tela para [qualifierType] é >= [qualifierValue], usa [qualifiedValue] no lugar.
+ */
 @SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
 fun Dp.hdpQualifier(qualifiedValue: Int, qualifierType: DpQualifier, qualifierValue: Int, finalQualifierResolver: DpQualifier? = null): Dp {
-    return this.value.toInt().hdpQualifier(qualifiedValue, qualifierType, qualifierValue, finalQualifierResolver)
+    val configuration = LocalConfiguration.current
+    val qualifierMatch = getQualifierValue(qualifierType, configuration) >= qualifierValue
+    return if (qualifierMatch) {
+        qualifiedValue.toDynamicScaledDp(finalQualifierResolver ?: DpQualifier.HEIGHT)
+    } else {
+        this.value.toInt().toDynamicScaledDp(finalQualifierResolver ?: DpQualifier.HEIGHT)
+    }
+}
+
+/**
+ * EN
+ * Extension for Dp with dynamic scaling based on **Screen Height (hDP)**.
+ * Returns the original raw Dp value if the condition is not met.
+ * When the screen metric for [qualifierType] is >= [qualifierValue], it uses [qualifiedValue] instead.
+ *
+ * PT
+ * Extensão para Dp com dimensionamento dinâmico baseado na **Altura da Tela (hDP)**.
+ * Retorna o valor original de Dp bruto se a condição não for atendida.
+ * Quando a métrica de tela para [qualifierType] é >= [qualifierValue], usa [qualifiedValue] no lugar.
+ */
+@SuppressLint("ConfigurationScreenWidthHeight")
+@Composable
+fun Dp.hdpQualifierPlain(qualifiedValue: Int, qualifierType: DpQualifier, qualifierValue: Int, finalQualifierResolver: DpQualifier? = null): Dp {
+    val configuration = LocalConfiguration.current
+    val qualifierMatch = getQualifierValue(qualifierType, configuration) >= qualifierValue
+    return if (qualifierMatch) {
+        qualifiedValue.toDynamicScaledDp(finalQualifierResolver ?: DpQualifier.HEIGHT)
+    } else {
+        this
+    }
 }
 
 /**
@@ -371,10 +759,50 @@ fun Int.wdpQualifier(qualifiedValue: Int, qualifierType: DpQualifier, qualifierV
     }
 }
 
+/**
+ * EN
+ * Extension for Dp with dynamic scaling based on **Screen Width (wDP)**.
+ * Returns the original value **auto-scaled** using the specified qualifier if the condition is not met.
+ * When the screen metric for [qualifierType] is >= [qualifierValue], it uses [qualifiedValue] instead.
+ *
+ * PT
+ * Extensão para Dp com dimensionamento dinâmico baseado na **Largura da Tela (wDP)**.
+ * Retorna o valor original **auto-escalonado** usando o qualificador especificado se a condição não for atendida.
+ * Quando a métrica de tela para [qualifierType] é >= [qualifierValue], usa [qualifiedValue] no lugar.
+ */
 @SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
 fun Dp.wdpQualifier(qualifiedValue: Int, qualifierType: DpQualifier, qualifierValue: Int, finalQualifierResolver: DpQualifier? = null): Dp {
-    return this.value.toInt().wdpQualifier(qualifiedValue, qualifierType, qualifierValue, finalQualifierResolver)
+    val configuration = LocalConfiguration.current
+    val qualifierMatch = getQualifierValue(qualifierType, configuration) >= qualifierValue
+    return if (qualifierMatch) {
+        qualifiedValue.toDynamicScaledDp(finalQualifierResolver ?: DpQualifier.WIDTH)
+    } else {
+        this.value.toInt().toDynamicScaledDp(finalQualifierResolver ?: DpQualifier.WIDTH)
+    }
+}
+
+/**
+ * EN
+ * Extension for Dp with dynamic scaling based on **Screen Width (wDP)**.
+ * Returns the original raw Dp value if the condition is not met.
+ * When the screen metric for [qualifierType] is >= [qualifierValue], it uses [qualifiedValue] instead.
+ *
+ * PT
+ * Extensão para Dp com dimensionamento dinâmico baseado na **Largura da Tela (wDP)**.
+ * Retorna o valor original de Dp bruto se a condição não for atendida.
+ * Quando a métrica de tela para [qualifierType] é >= [qualifierValue], usa [qualifiedValue] no lugar.
+ */
+@SuppressLint("ConfigurationScreenWidthHeight")
+@Composable
+fun Dp.wdpQualifierPlain(qualifiedValue: Int, qualifierType: DpQualifier, qualifierValue: Int, finalQualifierResolver: DpQualifier? = null): Dp {
+    val configuration = LocalConfiguration.current
+    val qualifierMatch = getQualifierValue(qualifierType, configuration) >= qualifierValue
+    return if (qualifierMatch) {
+        qualifiedValue.toDynamicScaledDp(finalQualifierResolver ?: DpQualifier.WIDTH)
+    } else {
+        this
+    }
 }
 
 // EN UiModeType + DpQualifier combined facilitator extensions.
@@ -416,10 +844,72 @@ fun Int.sdpScreen(screenValue: Int, uiModeType: UiModeType, qualifierType: DpQua
     }
 }
 
+/**
+ * EN
+ * Extension for Dp with dynamic scaling based on **Smallest Width (swDP)**.
+ * Returns the original value **auto-scaled** using the specified qualifier if the condition is not met.
+ * When the device matches [uiModeType] AND the screen metric for [qualifierType]
+ * is >= [qualifierValue], it uses [screenValue] instead.
+ *
+ * PT
+ * Extensão para Dp com dimensionamento dinâmico baseado na **Smallest Width (swDP)**.
+ * Retorna o valor original **auto-escalonado** usando o qualificador especificado se a condição não for atendida.
+ * Quando o dispositivo corresponde ao [uiModeType] E a métrica de tela para
+ * [qualifierType] é >= [qualifierValue], usa [screenValue] no lugar.
+ */
 @SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
 fun Dp.sdpScreen(screenValue: Int, uiModeType: UiModeType, qualifierType: DpQualifier, qualifierValue: Int, finalQualifierResolver: DpQualifier? = null): Dp {
-    return this.value.toInt().sdpScreen(screenValue, uiModeType, qualifierType, qualifierValue, finalQualifierResolver)
+    val context = LocalContext.current
+    val configuration = LocalConfiguration.current
+    val activity = context.findActivity()
+    val windowLayoutInfo = remember(activity) {
+        activity?.let { WindowInfoTracker.getOrCreate(it).windowLayoutInfo(it) }
+    }?.collectAsState(initial = null)
+    val foldingFeature = windowLayoutInfo?.value?.displayFeatures
+        ?.filterIsInstance<FoldingFeature>()?.firstOrNull()
+    val currentUiModeType = UiModeType.fromConfiguration(context, foldingFeature)
+    val uiModeMatch = currentUiModeType == uiModeType
+    val qualifierMatch = getQualifierValue(qualifierType, configuration) >= qualifierValue
+    return if (uiModeMatch && qualifierMatch) {
+        screenValue.toDynamicScaledDp(finalQualifierResolver ?: DpQualifier.SMALL_WIDTH)
+    } else {
+        this.value.toInt().toDynamicScaledDp(finalQualifierResolver ?: DpQualifier.SMALL_WIDTH)
+    }
+}
+
+/**
+ * EN
+ * Extension for Dp with dynamic scaling based on **Smallest Width (swDP)**.
+ * Returns the original raw Dp value if the condition is not met.
+ * When the device matches [uiModeType] AND the screen metric for [qualifierType]
+ * is >= [qualifierValue], it uses [screenValue] instead.
+ *
+ * PT
+ * Extensão para Dp com dimensionamento dinâmico baseado na **Smallest Width (swDP)**.
+ * Retorna o valor original de Dp bruto se a condição não for atendida.
+ * Quando o dispositivo corresponde ao [uiModeType] E a métrica de tela para
+ * [qualifierType] é >= [qualifierValue], usa [screenValue] no lugar.
+ */
+@SuppressLint("ConfigurationScreenWidthHeight")
+@Composable
+fun Dp.sdpScreenPlain(screenValue: Int, uiModeType: UiModeType, qualifierType: DpQualifier, qualifierValue: Int, finalQualifierResolver: DpQualifier? = null): Dp {
+    val context = LocalContext.current
+    val configuration = LocalConfiguration.current
+    val activity = context.findActivity()
+    val windowLayoutInfo = remember(activity) {
+        activity?.let { WindowInfoTracker.getOrCreate(it).windowLayoutInfo(it) }
+    }?.collectAsState(initial = null)
+    val foldingFeature = windowLayoutInfo?.value?.displayFeatures
+        ?.filterIsInstance<FoldingFeature>()?.firstOrNull()
+    val currentUiModeType = UiModeType.fromConfiguration(context, foldingFeature)
+    val uiModeMatch = currentUiModeType == uiModeType
+    val qualifierMatch = getQualifierValue(qualifierType, configuration) >= qualifierValue
+    return if (uiModeMatch && qualifierMatch) {
+        screenValue.toDynamicScaledDp(finalQualifierResolver ?: DpQualifier.SMALL_WIDTH)
+    } else {
+        this
+    }
 }
 
 /**
@@ -458,10 +948,72 @@ fun Int.hdpScreen(screenValue: Int, uiModeType: UiModeType, qualifierType: DpQua
     }
 }
 
+/**
+ * EN
+ * Extension for Dp with dynamic scaling based on **Screen Height (hDP)**.
+ * Returns the original value **auto-scaled** using the specified qualifier if the condition is not met.
+ * When the device matches [uiModeType] AND the screen metric for [qualifierType]
+ * is >= [qualifierValue], it uses [screenValue] instead.
+ *
+ * PT
+ * Extensão para Dp com dimensionamento dinâmico baseado na **Altura da Tela (hDP)**.
+ * Retorna o valor original **auto-escalonado** usando o qualificador especificado se a condição não for atendida.
+ * Quando o dispositivo corresponde ao [uiModeType] E a métrica de tela para
+ * [qualifierType] é >= [qualifierValue], usa [screenValue] no lugar.
+ */
 @SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
 fun Dp.hdpScreen(screenValue: Int, uiModeType: UiModeType, qualifierType: DpQualifier, qualifierValue: Int, finalQualifierResolver: DpQualifier? = null): Dp {
-    return this.value.toInt().hdpScreen(screenValue, uiModeType, qualifierType, qualifierValue, finalQualifierResolver)
+    val context = LocalContext.current
+    val configuration = LocalConfiguration.current
+    val activity = context.findActivity()
+    val windowLayoutInfo = remember(activity) {
+        activity?.let { WindowInfoTracker.getOrCreate(it).windowLayoutInfo(it) }
+    }?.collectAsState(initial = null)
+    val foldingFeature = windowLayoutInfo?.value?.displayFeatures
+        ?.filterIsInstance<FoldingFeature>()?.firstOrNull()
+    val currentUiModeType = UiModeType.fromConfiguration(context, foldingFeature)
+    val uiModeMatch = currentUiModeType == uiModeType
+    val qualifierMatch = getQualifierValue(qualifierType, configuration) >= qualifierValue
+    return if (uiModeMatch && qualifierMatch) {
+        screenValue.toDynamicScaledDp(finalQualifierResolver ?: DpQualifier.HEIGHT)
+    } else {
+        this.value.toInt().toDynamicScaledDp(finalQualifierResolver ?: DpQualifier.HEIGHT)
+    }
+}
+
+/**
+ * EN
+ * Extension for Dp with dynamic scaling based on **Screen Height (hDP)**.
+ * Returns the original raw Dp value if the condition is not met.
+ * When the device matches [uiModeType] AND the screen metric for [qualifierType]
+ * is >= [qualifierValue], it uses [screenValue] instead.
+ *
+ * PT
+ * Extensão para Dp com dimensionamento dinâmico baseado na **Altura da Tela (hDP)**.
+ * Retorna o valor original de Dp bruto se a condição não for atendida.
+ * Quando o dispositivo corresponde ao [uiModeType] E a métrica de tela para
+ * [qualifierType] é >= [qualifierValue], usa [screenValue] no lugar.
+ */
+@SuppressLint("ConfigurationScreenWidthHeight")
+@Composable
+fun Dp.hdpScreenPlain(screenValue: Int, uiModeType: UiModeType, qualifierType: DpQualifier, qualifierValue: Int, finalQualifierResolver: DpQualifier? = null): Dp {
+    val context = LocalContext.current
+    val configuration = LocalConfiguration.current
+    val activity = context.findActivity()
+    val windowLayoutInfo = remember(activity) {
+        activity?.let { WindowInfoTracker.getOrCreate(it).windowLayoutInfo(it) }
+    }?.collectAsState(initial = null)
+    val foldingFeature = windowLayoutInfo?.value?.displayFeatures
+        ?.filterIsInstance<FoldingFeature>()?.firstOrNull()
+    val currentUiModeType = UiModeType.fromConfiguration(context, foldingFeature)
+    val uiModeMatch = currentUiModeType == uiModeType
+    val qualifierMatch = getQualifierValue(qualifierType, configuration) >= qualifierValue
+    return if (uiModeMatch && qualifierMatch) {
+        screenValue.toDynamicScaledDp(finalQualifierResolver ?: DpQualifier.HEIGHT)
+    } else {
+        this
+    }
 }
 
 /**
@@ -500,8 +1052,70 @@ fun Int.wdpScreen(screenValue: Int, uiModeType: UiModeType, qualifierType: DpQua
     }
 }
 
+/**
+ * EN
+ * Extension for Dp with dynamic scaling based on **Screen Width (wDP)**.
+ * Returns the original value **auto-scaled** using the specified qualifier if the condition is not met.
+ * When the device matches [uiModeType] AND the screen metric for [qualifierType]
+ * is >= [qualifierValue], it uses [screenValue] instead.
+ *
+ * PT
+ * Extensão para Dp com dimensionamento dinâmico baseado na **Largura da Tela (wDP)**.
+ * Retorna o valor original **auto-escalonado** usando o qualificador especificado se a condição não for atendida.
+ * Quando o dispositivo corresponde ao [uiModeType] E a métrica de tela para
+ * [qualifierType] é >= [qualifierValue], usa [screenValue] no lugar.
+ */
 @SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
 fun Dp.wdpScreen(screenValue: Int, uiModeType: UiModeType, qualifierType: DpQualifier, qualifierValue: Int, finalQualifierResolver: DpQualifier? = null): Dp {
-    return this.value.toInt().wdpScreen(screenValue, uiModeType, qualifierType, qualifierValue, finalQualifierResolver)
+    val context = LocalContext.current
+    val configuration = LocalConfiguration.current
+    val activity = context.findActivity()
+    val windowLayoutInfo = remember(activity) {
+        activity?.let { WindowInfoTracker.getOrCreate(it).windowLayoutInfo(it) }
+    }?.collectAsState(initial = null)
+    val foldingFeature = windowLayoutInfo?.value?.displayFeatures
+        ?.filterIsInstance<FoldingFeature>()?.firstOrNull()
+    val currentUiModeType = UiModeType.fromConfiguration(context, foldingFeature)
+    val uiModeMatch = currentUiModeType == uiModeType
+    val qualifierMatch = getQualifierValue(qualifierType, configuration) >= qualifierValue
+    return if (uiModeMatch && qualifierMatch) {
+        screenValue.toDynamicScaledDp(finalQualifierResolver ?: DpQualifier.WIDTH)
+    } else {
+        this.value.toInt().toDynamicScaledDp(finalQualifierResolver ?: DpQualifier.WIDTH)
+    }
+}
+
+/**
+ * EN
+ * Extension for Dp with dynamic scaling based on **Screen Width (wDP)**.
+ * Returns the original raw Dp value if the condition is not met.
+ * When the device matches [uiModeType] AND the screen metric for [qualifierType]
+ * is >= [qualifierValue], it uses [screenValue] instead.
+ *
+ * PT
+ * Extensão para Dp com dimensionamento dinâmico baseado na **Largura da Tela (wDP)**.
+ * Retorna o valor original de Dp bruto se a condição não for atendida.
+ * Quando o dispositivo corresponde ao [uiModeType] E a métrica de tela para
+ * [qualifierType] é >= [qualifierValue], usa [screenValue] no lugar.
+ */
+@SuppressLint("ConfigurationScreenWidthHeight")
+@Composable
+fun Dp.wdpScreenPlain(screenValue: Int, uiModeType: UiModeType, qualifierType: DpQualifier, qualifierValue: Int, finalQualifierResolver: DpQualifier? = null): Dp {
+    val context = LocalContext.current
+    val configuration = LocalConfiguration.current
+    val activity = context.findActivity()
+    val windowLayoutInfo = remember(activity) {
+        activity?.let { WindowInfoTracker.getOrCreate(it).windowLayoutInfo(it) }
+    }?.collectAsState(initial = null)
+    val foldingFeature = windowLayoutInfo?.value?.displayFeatures
+        ?.filterIsInstance<FoldingFeature>()?.firstOrNull()
+    val currentUiModeType = UiModeType.fromConfiguration(context, foldingFeature)
+    val uiModeMatch = currentUiModeType == uiModeType
+    val qualifierMatch = getQualifierValue(qualifierType, configuration) >= qualifierValue
+    return if (uiModeMatch && qualifierMatch) {
+        screenValue.toDynamicScaledDp(finalQualifierResolver ?: DpQualifier.WIDTH)
+    } else {
+        this
+    }
 }

@@ -74,25 +74,29 @@ val widthToHeight = 50.wdpLh
 **Facilitators — Quick Conditional Overrides:**
 ```kotlin
 import com.appdimens.sdps.compose.sdpRotate
+import com.appdimens.sdps.compose.sdpRotatePlain
 import com.appdimens.sdps.compose.sdpMode
 import com.appdimens.sdps.compose.sdpQualifier
 import com.appdimens.sdps.compose.sdpScreen
 
-// Rotate: 80.sdp default, 50.sdp in Landscape
-val rotVal = 80.sdpRotate(50)
+// 1. Int Extension: Scales by default (80.sdp default, 50.sdp in Landscape)
+val rotInt = 80.sdpRotate(50)
 
-// Mode: 30.sdp default, 200.sdp on TV
+// 2. Dp Extension (Always Scales): 30.dp scaled by swDP by default
+val rotDp = 30.dp.sdpRotate(50)
+
+// 3. Dp Extension (Plain - Raw Fallback): Returns 30.sdp in Portrait, scales 50 in Landscape
+val rotPlain = 30.sdp.sdpRotatePlain(50)
+
+// Mode, Qualifier, Screen examples (All support Int, Dp, and Plain variants)
 val modeVal = 30.sdpMode(200, UiModeType.TELEVISION)
-
-// Qualifier: 60.sdp default, 120.sdp when sw ≥ 600dp
 val qualVal = 60.sdpQualifier(120, DpQualifier.SMALL_WIDTH, 600)
-
-// Screen: 70.sdp default, 150.sdp on TV with sw ≥ 600dp
 val scrVal = 70.sdpScreen(150, UiModeType.TELEVISION, DpQualifier.SMALL_WIDTH, 600)
 
 // Sp Facilitators (Returns TextUnit)
-// .sspRotate, .hspRotate, .wspRotate, .sspMode, .sspQualifier, .sspScreen
+// Supports: .sspRotate, .sspRotatePlain, .sspMode, etc.
 val fontRot = 16.sspRotate(24)
+val fontPlain = 16.ssp.sspRotatePlain(24)
 val fontTV = 16.sspMode(40, UiModeType.TELEVISION)
 ```
 
