@@ -33,55 +33,51 @@ import com.appdimens.sdps.common.Orientation
 import com.appdimens.sdps.common.UiModeType
 
 /**
- * EN Starts the build chain for the custom dimension DimenScaled from a base Int.
- * PT Inicia a cadeia de construção para a dimensão customizada DimenScaled a partir de um Int base.
+ * EN Starts the build chain for ScaledSp from a base Int.
+ * Usage example: `16.scaledSp().screen(...)`.
+ *
+ * PT Inicia a cadeia de construção para ScaledSp a partir de um Int base.
+ * Exemplo de uso: `16.scaledSp().screen(...)`.
  */
-fun Int.scaledDp(): DimenScaled = DimenScaled(this)
+fun Int.scaledSp(): ScaledSp = ScaledSp(this)
 
 /**
  * EN
- * Represents a custom dimension entry with qualifiers and priority for code.
+ * Represents a custom Sp entry with qualifiers and priority for code.
  *
  * PT
- * Representa uma entrada de dimensão customizada com qualificadores e prioridade para código.
- *
- * @param uiModeType The UI mode (CAR, TELEVISION, WATCH, NORMAL). Null for any mode.
- * @param dpQualifierEntry The Dp qualifier entry (type and value, e.g., SMALL_WIDTH > 600). Null if only UI mode is used.
- * @param orientation The screen orientation (LANDSCAPE, PORTRAIT, DEFAULT).
- * @param customValue The int value to be used if the condition is met.
- * @param finalQualifierResolver Optional dimension qualifier (e.g., HEIGHT) to be applied at resolution time.
- * @param priority The resolution priority. 1 is more specific (UI + Qualifier), 3 is less specific (Qualifier only).
- * @param inverter The inverter type to adapt scaling width/height on rotation changes (default is Inverter.DEFAULT).
+ * Representa uma entrada de Sp customizada com qualificadores e prioridade para código.
  */
-data class CustomDpEntry(
+data class CustomSpEntry(
     val uiModeType: UiModeType? = null,
     val dpQualifierEntry: DpQualifierEntry? = null,
     val orientation: Orientation = Orientation.DEFAULT,
     val customValue: Int,
     val finalQualifierResolver: DpQualifier? = null,
     val priority: Int,
-    val inverter: Inverter = Inverter.DEFAULT
+    val inverter: Inverter = Inverter.DEFAULT,
+    val fontScale: Boolean = true
 )
 
 /**
  * EN
- * A class that allows defining custom dimensions based on screen qualifiers.
- * Resolves to the final dimension in pixels.
+ * A builder class that allows defining custom Sp dimensions based on screen qualifiers (non-Compose).
+ * Resolves to the final dimension in Sp pixels.
  *
  * PT
- * Classe que permite definir dimensões customizadas baseadas em qualificadores de tela.
- * Resolve para a dimensão final em pixels.
+ * Classe builder que permite definir dimensões Sp customizadas baseadas em qualificadores de tela (não-Compose).
+ * Resolve para a dimensão final em pixels Sp.
  */
-class DimenScaled internal constructor(
+class ScaledSp internal constructor(
     private val initialBaseValue: Int,
-    private val sortedCustomEntries: List<CustomDpEntry> = emptyList()
+    private val defaultFontScale: Boolean = true,
+    private val sortedCustomEntries: List<CustomSpEntry> = emptyList()
 ) {
+    constructor(initialBaseValue: Int) : this(initialBaseValue, true, emptyList())
 
-    constructor(initialBaseValue: Int) : this(initialBaseValue, emptyList())
-
-    private fun reorderEntries(newEntry: CustomDpEntry): List<CustomDpEntry> {
+    private fun reorderEntries(newEntry: CustomSpEntry): List<CustomSpEntry> {
         return (sortedCustomEntries + newEntry).sortedWith(
-            compareBy<CustomDpEntry> { it.priority }
+            compareBy<CustomSpEntry> { it.priority }
                 .thenByDescending { it.dpQualifierEntry?.value ?: 0 }
         )
     }
@@ -98,18 +94,20 @@ class DimenScaled internal constructor(
         customValue: Int,
         finalQualifierResolver: DpQualifier? = null,
         orientation: Orientation = Orientation.DEFAULT,
-        inverter: Inverter = Inverter.DEFAULT
-    ): DimenScaled {
-        val entry = CustomDpEntry(
+        inverter: Inverter = Inverter.DEFAULT,
+        fontScale: Boolean = defaultFontScale
+    ): ScaledSp {
+        val entry = CustomSpEntry(
             uiModeType = uiModeType,
             dpQualifierEntry = DpQualifierEntry(qualifierType, qualifierValue),
             orientation = orientation,
             customValue = customValue,
             finalQualifierResolver = finalQualifierResolver,
             priority = 1,
-            inverter = inverter
+            inverter = inverter,
+            fontScale = fontScale
         )
-        return DimenScaled(initialBaseValue, reorderEntries(entry))
+        return ScaledSp(initialBaseValue, defaultFontScale, reorderEntries(entry))
     }
 
     /**
@@ -118,21 +116,23 @@ class DimenScaled internal constructor(
      */
     @JvmOverloads
     fun screen(
-        type: UiModeType, 
-        customValue: Int, 
+        type: UiModeType,
+        customValue: Int,
         finalQualifierResolver: DpQualifier? = null,
         orientation: Orientation = Orientation.DEFAULT,
-        inverter: Inverter = Inverter.DEFAULT
-    ): DimenScaled {
-        val entry = CustomDpEntry(
+        inverter: Inverter = Inverter.DEFAULT,
+        fontScale: Boolean = defaultFontScale
+    ): ScaledSp {
+        val entry = CustomSpEntry(
             uiModeType = type,
             orientation = orientation,
             customValue = customValue,
             finalQualifierResolver = finalQualifierResolver,
             priority = 2,
-            inverter = inverter
+            inverter = inverter,
+            fontScale = fontScale
         )
-        return DimenScaled(initialBaseValue, reorderEntries(entry))
+        return ScaledSp(initialBaseValue, defaultFontScale, reorderEntries(entry))
     }
 
     /**
@@ -141,22 +141,24 @@ class DimenScaled internal constructor(
      */
     @JvmOverloads
     fun screen(
-        type: DpQualifier, 
-        value: Int, 
-        customValue: Int, 
+        type: DpQualifier,
+        value: Int,
+        customValue: Int,
         finalQualifierResolver: DpQualifier? = null,
         orientation: Orientation = Orientation.DEFAULT,
-        inverter: Inverter = Inverter.DEFAULT
-    ): DimenScaled {
-        val entry = CustomDpEntry(
+        inverter: Inverter = Inverter.DEFAULT,
+        fontScale: Boolean = defaultFontScale
+    ): ScaledSp {
+        val entry = CustomSpEntry(
             dpQualifierEntry = DpQualifierEntry(type, value),
             orientation = orientation,
             customValue = customValue,
             finalQualifierResolver = finalQualifierResolver,
             priority = 3,
-            inverter = inverter
+            inverter = inverter,
+            fontScale = fontScale
         )
-        return DimenScaled(initialBaseValue, reorderEntries(entry))
+        return ScaledSp(initialBaseValue, defaultFontScale, reorderEntries(entry))
     }
 
     /**
@@ -168,19 +170,21 @@ class DimenScaled internal constructor(
         orientation: Orientation = Orientation.DEFAULT,
         customValue: Int,
         finalQualifierResolver: DpQualifier? = null,
-        inverter: Inverter = Inverter.DEFAULT
-    ): DimenScaled {
-        val entry = CustomDpEntry(
+        inverter: Inverter = Inverter.DEFAULT,
+        fontScale: Boolean = defaultFontScale
+    ): ScaledSp {
+        val entry = CustomSpEntry(
             orientation = orientation,
             customValue = customValue,
             finalQualifierResolver = finalQualifierResolver,
             priority = 4,
-            inverter = inverter
+            inverter = inverter,
+            fontScale = fontScale
         )
-        return DimenScaled(initialBaseValue, reorderEntries(entry))
+        return ScaledSp(initialBaseValue, defaultFontScale, reorderEntries(entry))
     }
 
-    private fun findMatchingEntry(context: Context, foldingFeature: androidx.window.layout.FoldingFeature? = null): CustomDpEntry? {
+    private fun findMatchingEntry(context: Context, foldingFeature: androidx.window.layout.FoldingFeature? = null): CustomSpEntry? {
         val configuration = context.resources.configuration
         val currentUiModeType = UiModeType.fromConfiguration(context, foldingFeature)
 
@@ -190,7 +194,7 @@ class DimenScaled internal constructor(
         return sortedCustomEntries.firstOrNull { entry ->
             val qualifierEntry = entry.dpQualifierEntry
             val uiModeMatch = entry.uiModeType == null || entry.uiModeType == currentUiModeType
-            
+
             val orientationMatch = when (entry.orientation) {
                 Orientation.DEFAULT -> true
                 Orientation.LANDSCAPE -> isLandscape
@@ -210,14 +214,8 @@ class DimenScaled internal constructor(
 
                 return@firstOrNull false
             } else {
-                // EN Priority 2: Must match only uiModeMatch AND orientationMatch (without Dp qualifier).
-                // PT Prioridade 2: Deve casar apenas uiModeMatch E orientationMatch (sem qualificador de Dp).
                 if (entry.priority == 2 && uiModeMatch && orientationMatch) return@firstOrNull true
-
-                // EN Priority 4: Must match only orientationMatch (without Dp qualifier).
-                // PT Prioridade 4: Deve casar apenas orientationMatch (sem qualificador de Dp).
                 if (entry.priority == 4 && orientationMatch) return@firstOrNull true
-
                 return@firstOrNull false
             }
         }
@@ -227,73 +225,56 @@ class DimenScaled internal constructor(
         val foundEntry = findMatchingEntry(context, foldingFeature)
         val valueToUse = foundEntry?.customValue ?: initialBaseValue
         val actualQualifier = foundEntry?.finalQualifierResolver ?: qualifier
-        return DimenSdp.getDimensionInPx(context, actualQualifier, valueToUse, foundEntry?.inverter ?: Inverter.DEFAULT)
+        val actualFontScale = foundEntry?.fontScale ?: defaultFontScale
+        return DimenSsp.getDimensionInSpPx(context, actualQualifier, valueToUse, foundEntry?.inverter ?: Inverter.DEFAULT, actualFontScale)
     }
 
     private fun resolveRes(context: Context, qualifier: DpQualifier, foldingFeature: androidx.window.layout.FoldingFeature?): Int {
         val foundEntry = findMatchingEntry(context, foldingFeature)
         val valueToUse = foundEntry?.customValue ?: initialBaseValue
         val actualQualifier = foundEntry?.finalQualifierResolver ?: qualifier
-        return DimenSdp.getResourceId(context, actualQualifier, valueToUse, foundEntry?.inverter ?: Inverter.DEFAULT)
+        return DimenSsp.getResourceId(context, actualQualifier, valueToUse, foundEntry?.inverter ?: Inverter.DEFAULT)
     }
 
     /**
-     * EN Final dimension value resolved in pixels.
-     * PT Valor da dimensão final resolvida em pixels.
-     *
-     * @param context Application context
-     * @param foldingFeature Optional Jetpack WindowManager FoldingFeature to accurately detect foldable states.
+     * EN Final Sp pixels value resolved using Smallest Width.
+     * PT Valor final em pixels Sp resolvido usando Smallest Width.
      */
     @JvmOverloads
-    fun sdp(context: Context, foldingFeature: androidx.window.layout.FoldingFeature? = null): Float = resolve(context, DpQualifier.SMALL_WIDTH, foldingFeature)
-    
+    fun ssp(context: Context, foldingFeature: androidx.window.layout.FoldingFeature? = null): Float = resolve(context, DpQualifier.SMALL_WIDTH, foldingFeature)
+
     /**
-     * EN Final dimension value resolved in pixels.
-     * PT Valor da dimensão final resolvida em pixels.
-     *
-     * @param context Application context
-     * @param foldingFeature Optional Jetpack WindowManager FoldingFeature to accurately detect foldable states.
+     * EN Final Sp pixels value resolved using Screen Height.
+     * PT Valor final em pixels Sp resolvido usando Altura da Tela.
      */
     @JvmOverloads
-    fun hdp(context: Context, foldingFeature: androidx.window.layout.FoldingFeature? = null): Float = resolve(context, DpQualifier.HEIGHT, foldingFeature)
-    
+    fun hsp(context: Context, foldingFeature: androidx.window.layout.FoldingFeature? = null): Float = resolve(context, DpQualifier.HEIGHT, foldingFeature)
+
     /**
-     * EN Final dimension value resolved in pixels.
-     * PT Valor da dimensão final resolvida em pixels.
-     *
-     * @param context Application context
-     * @param foldingFeature Optional Jetpack WindowManager FoldingFeature to accurately detect foldable states.
+     * EN Final Sp pixels value resolved using Screen Width.
+     * PT Valor final em pixels Sp resolvido usando Largura da Tela.
      */
     @JvmOverloads
-    fun wdp(context: Context, foldingFeature: androidx.window.layout.FoldingFeature? = null): Float = resolve(context, DpQualifier.WIDTH, foldingFeature)
-    
+    fun wsp(context: Context, foldingFeature: androidx.window.layout.FoldingFeature? = null): Float = resolve(context, DpQualifier.WIDTH, foldingFeature)
+
     /**
-     * EN Final dimension value resolved as resource ID.
-     * PT Valor da dimensão final resolvida como ID do recurso.
-     *
-     * @param context Application context
-     * @param foldingFeature Optional Jetpack WindowManager FoldingFeature to accurately detect foldable states.
+     * EN Final resource ID resolved using Smallest Width.
+     * PT ID de recurso final resolvido usando Smallest Width.
      */
     @JvmOverloads
-    fun sdpRes(context: Context, foldingFeature: androidx.window.layout.FoldingFeature? = null): Int = resolveRes(context, DpQualifier.SMALL_WIDTH, foldingFeature)
-    
+    fun sspRes(context: Context, foldingFeature: androidx.window.layout.FoldingFeature? = null): Int = resolveRes(context, DpQualifier.SMALL_WIDTH, foldingFeature)
+
     /**
-     * EN Final dimension value resolved as resource ID.
-     * PT Valor da dimensão final resolvida como ID do recurso.
-     *
-     * @param context Application context
-     * @param foldingFeature Optional Jetpack WindowManager FoldingFeature to accurately detect foldable states.
+     * EN Final resource ID resolved using Screen Height.
+     * PT ID de recurso final resolvido usando Altura da Tela.
      */
     @JvmOverloads
-    fun hdpRes(context: Context, foldingFeature: androidx.window.layout.FoldingFeature? = null): Int = resolveRes(context, DpQualifier.HEIGHT, foldingFeature)
-    
+    fun hspRes(context: Context, foldingFeature: androidx.window.layout.FoldingFeature? = null): Int = resolveRes(context, DpQualifier.HEIGHT, foldingFeature)
+
     /**
-     * EN Final dimension value resolved as resource ID.
-     * PT Valor da dimensão final resolvida como ID do recurso.
-     *
-     * @param context Application context
-     * @param foldingFeature Optional Jetpack WindowManager FoldingFeature to accurately detect foldable states.
+     * EN Final resource ID resolved using Screen Width.
+     * PT ID de recurso final resolvido usando Largura da Tela.
      */
     @JvmOverloads
-    fun wdpRes(context: Context, foldingFeature: androidx.window.layout.FoldingFeature? = null): Int = resolveRes(context, DpQualifier.WIDTH, foldingFeature)
+    fun wspRes(context: Context, foldingFeature: androidx.window.layout.FoldingFeature? = null): Int = resolveRes(context, DpQualifier.WIDTH, foldingFeature)
 }

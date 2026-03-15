@@ -10,7 +10,7 @@
 
 ```kotlin
 dependencies {
-    implementation("io.github.bodenberg:appdimens-sdps:3.0.7")
+    implementation("io.github.bodenberg:appdimens-sdps:3.0.8")
 }
 ```
 
@@ -34,8 +34,21 @@ Box(
         .height(100.hdp)   // Scales relative to the device's height
         .padding(16.sdp)   // Scales relative to the smallest width
 ) {
-    Text("Hello World", fontSize = 14.sdp.value.sp)
+    Text("Hello World", fontSize = 14.sdp.value.sp) // Manual conversion
+    Text("Scalable Text", fontSize = 16.ssp)       // Direct TextUnit extension
 }
+```
+
+**Scalable Fonts (TextUnit) — Auto-Scaling Extensions:**
+```kotlin
+import com.appdimens.sdps.compose.ssp // Smallest Width
+import com.appdimens.sdps.compose.hsp // Height
+import com.appdimens.sdps.compose.wsp // Width
+import com.appdimens.sdps.compose.sem // Without font scale (Smallest Width)
+
+Text("Scalable", fontSize = 16.ssp)
+Text("Height based", fontSize = 20.hsp)
+Text("No font scale", fontSize = 16.sem)
 ```
 
 **Inverter Shortcuts — Orientation-Aware Scaling:**
@@ -76,6 +89,12 @@ val qualVal = 60.sdpQualifier(120, DpQualifier.SMALL_WIDTH, 600)
 
 // Screen: 70.sdp default, 150.sdp on TV with sw ≥ 600dp
 val scrVal = 70.sdpScreen(150, UiModeType.TELEVISION, DpQualifier.SMALL_WIDTH, 600)
+
+// Sp Facilitators (Returns TextUnit)
+// .sspRotate, .hspRotate, .wspRotate, .sspMode, .sspQualifier, .sspScreen
+val fontRot = 16.sspRotate(24)
+val fontTV = 16.sspMode(40, UiModeType.TELEVISION)
+```
 ```
 
 **DimenScaled Builder — Complex Multi-Condition Chains:**
@@ -96,6 +115,14 @@ val dynamicPadding = 16.scaledDp()
     // Priority 4: Landscape → 12
     .screen(Orientation.LANDSCAPE, 12)
     .sdp // Resolve with Smallest Width adaptation
+
+// ScaledSp Builder — Complex Font Chains (Returns TextUnit)
+import com.appdimens.sdps.compose.scaledSp
+
+val dynamicText = 16.scaledSp()
+    .screen(UiModeType.TELEVISION, 40)
+    .screen(Orientation.LANDSCAPE, 20)
+    .ssp // Resolve to TextUnit
 
 Box(modifier = Modifier.padding(dynamicPadding))
 ```
@@ -139,9 +166,9 @@ Use dimension resources directly — all values from `-300` to `600` are pre-gen
         android:layout_width="@dimen/_100hdp"
         android:layout_height="@dimen/_100hdp" />
 
-    <!-- SSP: Scalable SP for fonts (respects user font size preference) -->
+    <!-- SDP: Scales based on smallest width -->
     <TextView
-        android:textSize="@dimen/_16ssp" />
+        android:textSize="@dimen/_16sdp" />
 </LinearLayout>
 ```
 
@@ -152,6 +179,19 @@ Use dimension resources directly — all values from `-300` to `600` are pre-gen
 val paddingPx = DimenSdp.sdp(context, 16)     // Smallest Width
 val heightPx  = DimenSdp.hdp(context, 32)     // Height
 val widthPx   = DimenSdp.wdp(context, 100)    // Width
+
+// Scalable Sp - Pixel values
+val fontSizePx = DimenSsp.ssp(context, 16)    // With font scaling
+val fixedSpPx  = DimenSsp.sem(context, 16)    // Without font scaling
+
+// Kotlin Extensions for Sp
+import com.appdimens.sdps.code.ssp
+import com.appdimens.sdps.code.hsp
+import com.appdimens.sdps.code.scaledSp
+
+val size = 16.ssp(context)
+val adaptiveFont = 16.hsp(context)
+val builderSp = 16.scaledSp().screen(UiModeType.TELEVISION, 40).ssp(context)
 
 // Core — Resource IDs (for setTextSize, ViewGroup.LayoutParams, etc.)
 val resId = DimenSdp.sdpRes(context, 16)
@@ -181,6 +221,10 @@ val dpFromCm = DimenPhysicalUnits.toDpFromCm(2.5f, resources)
 // Core
 float paddingPx = DimenSdp.sdp(context, 16);
 int resId = DimenSdp.sdpRes(context, 16);
+
+// Scalable Sp
+float fontSizePx = DimenSsp.ssp(context, 16);
+int fontResId = DimenSsp.sspRes(context, 16);
 
 // Inverter shortcuts
 float adaptive = DimenSdp.hdpLw(context, 50);
@@ -228,6 +272,7 @@ DimenPhysicalUnits.toDpFromInch(1f, resources)
 | **Foldable Detection** | `FoldingFeature` integration via Jetpack WindowManager — detects Fold/Flip open/half-open states |
 | **UiModeType** | `NORMAL`, `TELEVISION`, `CAR`, `WATCH`, `FOLD_OPEN`, `FOLD_HALF`, `FLIP_OPEN`, `FLIP_HALF` |
 | **Physical Units** | `DimenPhysicalUnits` — convert mm, cm, inches to Dp/Px |
+| **Sp & TextUnit** | Full support for Scalable Sp in Compose (`TextUnit`) and Code — respects or ignores font scale |
 | **File Structure** | Modular files: `DimenSdp` (core), `DimenExtensions` (facilitators), `DimenScaled` (builder) |
 
 ---
@@ -325,7 +370,6 @@ Examples:
   _100wdp     →  100dp scaled by Width
   _50hdp      →  50dp scaled by Height
   _minus8sdp  →  -8dp (negative value)
-  _14ssp      →  14sp scaled by Smallest Width
 ```
 
 Range: **-300 to 600** for all qualifiers.
