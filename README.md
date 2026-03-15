@@ -469,4 +469,8 @@ Compose extensions: `10.mm`, `2.5f.cm`, `1.inch` → `Dp` values directly.
 
 ---
 
+> [!IMPORTANT]
+> **Recommended: Export as AAB (Android App Bundle)**
+> Since AppDimens generates thousands of pre-calculated `@dimen` resources to cover every screen variation, your APK size might increase. By exporting your app as an **AAB**, Google Play will automatically strip out all dimension resources that aren't specific to the user's device, ensuring the final download is as small as possible.
+
 *Created with the best responsive layout practices for the Android ecosystem.*
