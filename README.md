@@ -95,7 +95,6 @@ val scrVal = 70.sdpScreen(150, UiModeType.TELEVISION, DpQualifier.SMALL_WIDTH, 6
 val fontRot = 16.sspRotate(24)
 val fontTV = 16.sspMode(40, UiModeType.TELEVISION)
 ```
-```
 
 **DimenScaled Builder — Complex Multi-Condition Chains:**
 ```kotlin
