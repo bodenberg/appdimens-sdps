@@ -12,8 +12,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.appdimens.sdps.code.DimenPhysicalUnits
 import com.appdimens.sdps.code.DimenSdp
-import com.appdimens.sdps.code.DimenScaled
-import com.appdimens.sdps.code.scaledSdp
+import com.appdimens.sdps.code.scaledDp
 import com.appdimens.sdps.common.DpQualifier
 import com.appdimens.sdps.common.Orientation
 import com.appdimens.sdps.common.UiModeType
@@ -178,7 +177,7 @@ class ExampleActivity : AppCompatActivity() {
 
         // EN Alternative: Using Int extension scaledSdp() to start the chain
         // PT Alternativa: Usando a extensão Int scaledSdp() para iniciar a cadeia
-        val scaledAlt = 80.scaledSdp()
+        val scaledAlt = 80.scaledDp()
             .screen(UiModeType.TELEVISION, 300)
             .screen(DpQualifier.SMALL_WIDTH, 600, 120)
             .sdp(this)
