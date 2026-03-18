@@ -32,116 +32,116 @@ import com.appdimens.sdps.common.UiModeType
 // EN Extension functions for quick dynamic text scaling (Sp) from code (non-Compose).
 // PT Funções de extensão para escalonamento dinâmico rápido de texto (Sp) a partir de código (não-Compose).
 
-/** @see DimenSsp.ssp */
+/** EN Quick resolution for Smallest Width (ssp). PT Resolução rápida para Smallest Width (ssp). @see DimenSsp.ssp */
 fun Int.ssp(context: Context): Float = DimenSsp.ssp(context, this)
 
-/** @see DimenSsp.sspPh */
+/** EN Quick resolution for ssp, portrait -> Height. PT Resolução rápida para ssp, retrato -> Altura. @see DimenSsp.sspPh */
 fun Int.sspPh(context: Context): Float = DimenSsp.sspPh(context, this)
 
-/** @see DimenSsp.sspLh */
+/** EN Quick resolution for ssp, landscape -> Height. PT Resolução rápida para ssp, paisagem -> Altura. @see DimenSsp.sspLh */
 fun Int.sspLh(context: Context): Float = DimenSsp.sspLh(context, this)
 
-/** @see DimenSsp.sspPw */
+/** EN Quick resolution for ssp, portrait -> Width. PT Resolução rápida para ssp, retrato -> Largura. @see DimenSsp.sspPw */
 fun Int.sspPw(context: Context): Float = DimenSsp.sspPw(context, this)
 
-/** @see DimenSsp.sspLw */
+/** EN Quick resolution for ssp, landscape -> Width. PT Resolução rápida para ssp, paisagem -> Largura. @see DimenSsp.sspLw */
 fun Int.sspLw(context: Context): Float = DimenSsp.sspLw(context, this)
 
-/** @see DimenSsp.hsp */
+/** EN Quick resolution for Screen Height (hsp). PT Resolução rápida para Altura da Tela (hsp). @see DimenSsp.hsp */
 fun Int.hsp(context: Context): Float = DimenSsp.hsp(context, this)
 
-/** @see DimenSsp.hspLw */
+/** EN Quick resolution for hsp, landscape -> Width. PT Resolução rápida para hsp, paisagem -> Largura. @see DimenSsp.hspLw */
 fun Int.hspLw(context: Context): Float = DimenSsp.hspLw(context, this)
 
-/** @see DimenSsp.hspPw */
+/** EN Quick resolution for hsp, portrait -> Width. PT Resolução rápida para hsp, retrato -> Largura. @see DimenSsp.hspPw */
 fun Int.hspPw(context: Context): Float = DimenSsp.hspPw(context, this)
 
-/** @see DimenSsp.wsp */
+/** EN Quick resolution for Screen Width (wsp). PT Resolução rápida para Largura da Tela (wsp). @see DimenSsp.wsp */
 fun Int.wsp(context: Context): Float = DimenSsp.wsp(context, this)
 
-/** @see DimenSsp.wspLh */
+/** EN Quick resolution for wsp, landscape -> Height. PT Resolução rápida para wsp, paisagem -> Altura. @see DimenSsp.wspLh */
 fun Int.wspLh(context: Context): Float = DimenSsp.wspLh(context, this)
 
-/** @see DimenSsp.wspPh */
+/** EN Quick resolution for wsp, portrait -> Height. PT Resolução rápida para wsp, retrato -> Altura. @see DimenSsp.wspPh */
 fun Int.wspPh(context: Context): Float = DimenSsp.wspPh(context, this)
 
 // EN WITHOUT FONT SCALE variants
 // PT Variantes SEM ESCALA DE FONTE
 
-/** @see DimenSsp.sem */
+/** EN ssp without font scale. PT ssp sem escala de fonte. @see DimenSsp.sem */
 fun Int.sem(context: Context): Float = DimenSsp.sem(context, this)
 
-/** @see DimenSsp.semPh */
+/** EN ssp without font scale, portrait -> Height. PT ssp sem escala de fonte, retrato -> Altura. @see DimenSsp.semPh */
 fun Int.semPh(context: Context): Float = DimenSsp.semPh(context, this)
 
-/** @see DimenSsp.semLh */
+/** EN ssp without font scale, landscape -> Height. PT ssp sem escala de fonte, paisagem -> Altura. @see DimenSsp.semLh */
 fun Int.semLh(context: Context): Float = DimenSsp.semLh(context, this)
 
-/** @see DimenSsp.semPw */
+/** EN ssp without font scale, portrait -> Width. PT ssp sem escala de fonte, retrato -> Largura. @see DimenSsp.semPw */
 fun Int.semPw(context: Context): Float = DimenSsp.semPw(context, this)
 
-/** @see DimenSsp.semLw */
+/** EN ssp without font scale, landscape -> Width. PT ssp sem escala de fonte, paisagem -> Largura. @see DimenSsp.semLw */
 fun Int.semLw(context: Context): Float = DimenSsp.semLw(context, this)
 
-/** @see DimenSsp.hem */
+/** EN hsp without font scale. PT hsp sem escala de fonte. @see DimenSsp.hem */
 fun Int.hem(context: Context): Float = DimenSsp.hem(context, this)
 
-/** @see DimenSsp.hemLw */
+/** EN hsp without font scale, landscape -> Width. PT hsp sem escala de fonte, paisagem -> Largura. @see DimenSsp.hemLw */
 fun Int.hemLw(context: Context): Float = DimenSsp.hemLw(context, this)
 
-/** @see DimenSsp.hemPw */
+/** EN hsp without font scale, portrait -> Width. PT hsp sem escala de fonte, retrato -> Largura. @see DimenSsp.hemPw */
 fun Int.hemPw(context: Context): Float = DimenSsp.hemPw(context, this)
 
-/** @see DimenSsp.wem */
+/** EN wsp without font scale. PT wsp sem escala de fonte. @see DimenSsp.wem */
 fun Int.wem(context: Context): Float = DimenSsp.wem(context, this)
 
-/** @see DimenSsp.wemLh */
+/** EN wsp without font scale, landscape -> Height. PT wsp sem escala de fonte, paisagem -> Altura. @see DimenSsp.wemLh */
 fun Int.wemLh(context: Context): Float = DimenSsp.wemLh(context, this)
 
-/** @see DimenSsp.wemPh */
+/** EN wsp without font scale, portrait -> Height. PT wsp sem escala de fonte, retrato -> Altura. @see DimenSsp.wemPh */
 fun Int.wemPh(context: Context): Float = DimenSsp.wemPh(context, this)
 
 // EN Resource ID variants
 // PT Variantes que retornam o ID de recurso
 
-/** @see DimenSsp.sspRes */
+/** EN Quick resolution for Smallest Width resource ID (sspRes). PT Resolução rápida para ID de recurso Smallest Width (sspRes). @see DimenSsp.sspRes */
 fun Int.sspRes(context: Context): Int = DimenSsp.sspRes(context, this)
 
-/** @see DimenSsp.sspPhRes */
+/** EN Quick resolution for ssp resource ID, portrait -> Height. PT Resolução rápida para ID de recurso ssp, retrato -> Altura. @see DimenSsp.sspPhRes */
 fun Int.sspPhRes(context: Context): Int = DimenSsp.sspPhRes(context, this)
 
-/** @see DimenSsp.sspLhRes */
+/** EN Quick resolution for ssp resource ID, landscape -> Height. PT Resolução rápida para ID de recurso ssp, paisagem -> Altura. @see DimenSsp.sspLhRes */
 fun Int.sspLhRes(context: Context): Int = DimenSsp.sspLhRes(context, this)
 
-/** @see DimenSsp.sspPwRes */
+/** EN Quick resolution for ssp resource ID, portrait -> Width. PT Resolução rápida para ID de recurso ssp, retrato -> Largura. @see DimenSsp.sspPwRes */
 fun Int.sspPwRes(context: Context): Int = DimenSsp.sspPwRes(context, this)
 
-/** @see DimenSsp.sspLwRes */
+/** EN Quick resolution for ssp resource ID, landscape -> Width. PT Resolução rápida para ID de recurso ssp, paisagem -> Largura. @see DimenSsp.sspLwRes */
 fun Int.sspLwRes(context: Context): Int = DimenSsp.sspLwRes(context, this)
 
-/** @see DimenSsp.hspRes */
+/** EN Quick resolution for Screen Height resource ID (hspRes). PT Resolução rápida para ID de recurso Altura da Tela (hspRes). @see DimenSsp.hspRes */
 fun Int.hspRes(context: Context): Int = DimenSsp.hspRes(context, this)
 
-/** @see DimenSsp.hspLwRes */
+/** EN Quick resolution for hsp resource ID, landscape -> Width. PT Resolução rápida para ID de recurso hsp, paisagem -> Largura. @see DimenSsp.hspLwRes */
 fun Int.hspLwRes(context: Context): Int = DimenSsp.hspLwRes(context, this)
 
-/** @see DimenSsp.hspPwRes */
+/** EN Quick resolution for hsp resource ID, portrait -> Width. PT Resolução rápida para ID de recurso hsp, retrato -> Largura. @see DimenSsp.hspPwRes */
 fun Int.hspPwRes(context: Context): Int = DimenSsp.hspPwRes(context, this)
 
-/** @see DimenSsp.wspRes */
+/** EN Quick resolution for Screen Width resource ID (wspRes). PT Resolução rápida para ID de recurso Largura da Tela (wspRes). @see DimenSsp.wspRes */
 fun Int.wspRes(context: Context): Int = DimenSsp.wspRes(context, this)
 
-/** @see DimenSsp.wspLhRes */
+/** EN Quick resolution for wsp resource ID, landscape -> Height. PT Resolução rápida para ID de recurso wsp, paisagem -> Altura. @see DimenSsp.wspLhRes */
 fun Int.wspLhRes(context: Context): Int = DimenSsp.wspLhRes(context, this)
 
-/** @see DimenSsp.wspPhRes */
+/** EN Quick resolution for wsp resource ID, portrait -> Height. PT Resolução rápida para ID de recurso wsp, retrato -> Altura. @see DimenSsp.wspPhRes */
 fun Int.wspPhRes(context: Context): Int = DimenSsp.wspPhRes(context, this)
 
 
 // EN Rotation facilitator extensions for Sp from code.
 // PT Extensões facilitadoras de rotação para Sp de código.
 
-/** @see DimenSsp.sspRotate */
+/** EN Facilitator for ssp with rotation override. PT Facilitador para ssp com substituição por rotação. @see DimenSsp.sspRotate */
 fun Int.sspRotate(
     context: Context,
     rotationValue: Int,
@@ -150,7 +150,7 @@ fun Int.sspRotate(
     fontScale: Boolean = true
 ): Float = DimenSsp.sspRotate(context, this, rotationValue, finalQualifierResolver, orientation, fontScale)
 
-/** @see DimenSsp.hspRotate */
+/** EN Facilitator for hsp with rotation override. PT Facilitador para hsp com substituição por rotação. @see DimenSsp.hspRotate */
 fun Int.hspRotate(
     context: Context,
     rotationValue: Int,
@@ -159,7 +159,7 @@ fun Int.hspRotate(
     fontScale: Boolean = true
 ): Float = DimenSsp.hspRotate(context, this, rotationValue, finalQualifierResolver, orientation, fontScale)
 
-/** @see DimenSsp.wspRotate */
+/** EN Facilitator for wsp with rotation override. PT Facilitador para wsp com substituição por rotação. @see DimenSsp.wspRotate */
 fun Int.wspRotate(
     context: Context,
     rotationValue: Int,
@@ -171,7 +171,7 @@ fun Int.wspRotate(
 // EN UiModeType facilitator extensions for Sp from code.
 // PT Extensões facilitadoras de UiModeType para Sp de código.
 
-/** @see DimenSsp.sspMode */
+/** EN Facilitator for ssp with UiModeType override. PT Facilitador para ssp com substituição por UiModeType. @see DimenSsp.sspMode */
 fun Int.sspMode(
     context: Context,
     modeValue: Int,
@@ -181,7 +181,7 @@ fun Int.sspMode(
     fontScale: Boolean = true
 ): Float = DimenSsp.sspMode(context, this, modeValue, uiModeType, foldingFeature, finalQualifierResolver, fontScale)
 
-/** @see DimenSsp.hspMode */
+/** EN Facilitator for hsp with UiModeType override. PT Facilitador para hsp com substituição por UiModeType. @see DimenSsp.hspMode */
 fun Int.hspMode(
     context: Context,
     modeValue: Int,
@@ -191,7 +191,7 @@ fun Int.hspMode(
     fontScale: Boolean = true
 ): Float = DimenSsp.hspMode(context, this, modeValue, uiModeType, foldingFeature, finalQualifierResolver, fontScale)
 
-/** @see DimenSsp.wspMode */
+/** EN Facilitator for wsp with UiModeType override. PT Facilitador para wsp com substituição por UiModeType. @see DimenSsp.wspMode */
 fun Int.wspMode(
     context: Context,
     modeValue: Int,
@@ -204,7 +204,7 @@ fun Int.wspMode(
 // EN DpQualifier facilitator extensions for Sp from code.
 // PT Funções facilitadoras de DpQualifier para Sp de código.
 
-/** @see DimenSsp.sspQualifier */
+/** EN Facilitator for ssp with DpQualifier override. PT Facilitador para ssp com substituição por DpQualifier. @see DimenSsp.sspQualifier */
 fun Int.sspQualifier(
     context: Context,
     qualifiedValue: Int,
@@ -214,7 +214,7 @@ fun Int.sspQualifier(
     fontScale: Boolean = true
 ): Float = DimenSsp.sspQualifier(context, this, qualifiedValue, qualifierType, qualifierValue, finalQualifierResolver, fontScale)
 
-/** @see DimenSsp.hspQualifier */
+/** EN Facilitator for hsp with DpQualifier override. PT Facilitador para hsp com substituição por DpQualifier. @see DimenSsp.hspQualifier */
 fun Int.hspQualifier(
     context: Context,
     qualifiedValue: Int,
@@ -224,7 +224,7 @@ fun Int.hspQualifier(
     fontScale: Boolean = true
 ): Float = DimenSsp.hspQualifier(context, this, qualifiedValue, qualifierType, qualifierValue, finalQualifierResolver, fontScale)
 
-/** @see DimenSsp.wspQualifier */
+/** EN Facilitator for wsp with DpQualifier override. PT Facilitador para wsp com substituição por DpQualifier. @see DimenSsp.wspQualifier */
 fun Int.wspQualifier(
     context: Context,
     qualifiedValue: Int,
@@ -237,7 +237,7 @@ fun Int.wspQualifier(
 // EN UiModeType + DpQualifier combined facilitator extensions for Sp from code.
 // PT Extensões facilitadoras combinadas UiModeType + DpQualifier para Sp de código.
 
-/** @see DimenSsp.sspScreen */
+/** EN Facilitator for ssp with combined UiModeType + DpQualifier override. PT Facilitador para ssp com substituição combinada UiModeType + DpQualifier. @see DimenSsp.sspScreen */
 fun Int.sspScreen(
     context: Context,
     screenValue: Int,
@@ -249,7 +249,7 @@ fun Int.sspScreen(
     fontScale: Boolean = true
 ): Float = DimenSsp.sspScreen(context, this, screenValue, uiModeType, qualifierType, qualifierValue, foldingFeature, finalQualifierResolver, fontScale)
 
-/** @see DimenSsp.hspScreen */
+/** EN Facilitator for hsp with combined UiModeType + DpQualifier override. PT Facilitador para hsp com substituição combinada UiModeType + DpQualifier. @see DimenSsp.hspScreen */
 fun Int.hspScreen(
     context: Context,
     screenValue: Int,
@@ -261,7 +261,7 @@ fun Int.hspScreen(
     fontScale: Boolean = true
 ): Float = DimenSsp.hspScreen(context, this, screenValue, uiModeType, qualifierType, qualifierValue, foldingFeature, finalQualifierResolver, fontScale)
 
-/** @see DimenSsp.wspScreen */
+/** EN Facilitator for wsp with combined UiModeType + DpQualifier override. PT Facilitador para wsp com substituição combinada UiModeType + DpQualifier. @see DimenSsp.wspScreen */
 fun Int.wspScreen(
     context: Context,
     screenValue: Int,

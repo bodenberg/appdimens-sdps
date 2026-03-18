@@ -32,80 +32,81 @@ import com.appdimens.sdps.common.UiModeType
 // EN Extension functions for quick dynamic scaling (Dp) from code (non-Compose).
 // PT Funções de extensão para escalonamento dinâmico rápido (Dp) a partir de código (não-Compose).
 
-/** @see DimenSdp.sdp */
+/** EN Quick resolution for Smallest Width (sdp). PT Resolução rápida para Smallest Width (sdp). @see DimenSdp.sdp */
 fun Int.sdp(context: Context): Float = DimenSdp.sdp(context, this)
 
-/** @see DimenSdp.sdpPh */
+/** EN Quick resolution for sdp, portrait -> Height. PT Resolução rápida para sdp, retrato -> Altura. @see DimenSdp.sdpPh */
 fun Int.sdpPh(context: Context): Float = DimenSdp.sdpPh(context, this)
 
-/** @see DimenSdp.sdpLh */
+/** EN Quick resolution for sdp, landscape -> Height. PT Resolução rápida para sdp, paisagem -> Altura. @see DimenSdp.sdpLh */
 fun Int.sdpLh(context: Context): Float = DimenSdp.sdpLh(context, this)
 
-/** @see DimenSdp.sdpPw */
+/** EN Quick resolution for sdp, portrait -> Width. PT Resolução rápida para sdp, retrato -> Largura. @see DimenSdp.sdpPw */
 fun Int.sdpPw(context: Context): Float = DimenSdp.sdpPw(context, this)
 
-/** @see DimenSdp.sdpLw */
+/** EN Quick resolution for sdp, landscape -> Width. PT Resolução rápida para sdp, paisagem -> Largura. @see DimenSdp.sdpLw */
 fun Int.sdpLw(context: Context): Float = DimenSdp.sdpLw(context, this)
 
-/** @see DimenSdp.hdp */
+/** EN Quick resolution for Screen Height (hdp). PT Resolução rápida para Altura da Tela (hdp). @see DimenSdp.hdp */
 fun Int.hdp(context: Context): Float = DimenSdp.hdp(context, this)
 
-/** @see DimenSdp.hdpLw */
+/** EN Quick resolution for hdp, landscape -> Width. PT Resolução rápida para hdp, paisagem -> Largura. @see DimenSdp.hdpLw */
 fun Int.hdpLw(context: Context): Float = DimenSdp.hdpLw(context, this)
 
-/** @see DimenSdp.hdpPw */
+/** EN Quick resolution for hdp, portrait -> Width. PT Resolução rápida para hdp, retrato -> Largura. @see DimenSdp.hdpPw */
 fun Int.hdpPw(context: Context): Float = DimenSdp.hdpPw(context, this)
 
-/** @see DimenSdp.wdp */
+/** EN Quick resolution for Screen Width (wdp). PT Resolução rápida para Largura da Tela (wdp). @see DimenSdp.wdp */
 fun Int.wdp(context: Context): Float = DimenSdp.wdp(context, this)
 
-/** @see DimenSdp.wdpLh */
+/** EN Quick resolution for wdp, landscape -> Height. PT Resolução rápida para wdp, paisagem -> Altura. @see DimenSdp.wdpLh */
 fun Int.wdpLh(context: Context): Float = DimenSdp.wdpLh(context, this)
 
-/** @see DimenSdp.wdpPh */
+/** EN Quick resolution for wdp, portrait -> Height. PT Resolução rápida para wdp, retrato -> Altura. @see DimenSdp.wdpPh */
 fun Int.wdpPh(context: Context): Float = DimenSdp.wdpPh(context, this)
+
 
 // EN Resource ID variants
 // PT Variantes que retornam o ID de recurso
 
-/** @see DimenSdp.sdpRes */
+/** EN Quick resolution for Smallest Width resource ID (sdpRes). PT Resolução rápida para ID de recurso Smallest Width (sdpRes). @see DimenSdp.sdpRes */
 fun Int.sdpRes(context: Context): Int = DimenSdp.sdpRes(context, this)
 
-/** @see DimenSdp.sdpPhRes */
+/** EN Quick resolution for sdp resource ID, portrait -> Height. PT Resolução rápida para ID de recurso sdp, retrato -> Altura. @see DimenSdp.sdpPhRes */
 fun Int.sdpPhRes(context: Context): Int = DimenSdp.sdpPhRes(context, this)
 
-/** @see DimenSdp.sdpLhRes */
+/** EN Quick resolution for sdp resource ID, landscape -> Height. PT Resolução rápida para ID de recurso sdp, paisagem -> Altura. @see DimenSdp.sdpLhRes */
 fun Int.sdpLhRes(context: Context): Int = DimenSdp.sdpLhRes(context, this)
 
-/** @see DimenSdp.sdpPwRes */
+/** EN Quick resolution for sdp resource ID, portrait -> Width. PT Resolução rápida para ID de recurso sdp, retrato -> Largura. @see DimenSdp.sdpPwRes */
 fun Int.sdpPwRes(context: Context): Int = DimenSdp.sdpPwRes(context, this)
 
-/** @see DimenSdp.sdpLwRes */
+/** EN Quick resolution for sdp resource ID, landscape -> Width. PT Resolução rápida para ID de recurso sdp, paisagem -> Largura. @see DimenSdp.sdpLwRes */
 fun Int.sdpLwRes(context: Context): Int = DimenSdp.sdpLwRes(context, this)
 
-/** @see DimenSdp.hdpRes */
+/** EN Quick resolution for Screen Height resource ID (hdpRes). PT Resolução rápida para ID de recurso Altura da Tela (hspRes). @see DimenSdp.hdpRes */
 fun Int.hdpRes(context: Context): Int = DimenSdp.hdpRes(context, this)
 
-/** @see DimenSdp.hdpLwRes */
+/** EN Quick resolution for hdp resource ID, landscape -> Width. PT Resolução rápida para ID de recurso hdp, paisagem -> Largura. @see DimenSdp.hdpLwRes */
 fun Int.hdpLwRes(context: Context): Int = DimenSdp.hdpLwRes(context, this)
 
-/** @see DimenSdp.hdpPwRes */
+/** EN Quick resolution for hdp resource ID, portrait -> Width. PT Resolução rápida para ID de recurso hdp, retrato -> Largura. @see DimenSdp.hdpPwRes */
 fun Int.hdpPwRes(context: Context): Int = DimenSdp.hdpPwRes(context, this)
 
-/** @see DimenSdp.wdpRes */
+/** EN Quick resolution for Screen Width resource ID (wdpRes). PT Resolução rápida para ID de recurso Largura da Tela (wdpRes). @see DimenSdp.wdpRes */
 fun Int.wdpRes(context: Context): Int = DimenSdp.wdpRes(context, this)
 
-/** @see DimenSdp.wdpLhRes */
+/** EN Quick resolution for wdp resource ID, landscape -> Height. PT Resolução rápida para ID de recurso wdp, paisagem -> Altura. @see DimenSdp.wdpLhRes */
 fun Int.wdpLhRes(context: Context): Int = DimenSdp.wdpLhRes(context, this)
 
-/** @see DimenSdp.wdpPhRes */
+/** EN Quick resolution for wdp resource ID, portrait -> Height. PT Resolução rápida para ID de recurso wdp, retrato -> Altura. @see DimenSdp.wdpPhRes */
 fun Int.wdpPhRes(context: Context): Int = DimenSdp.wdpPhRes(context, this)
 
 
 // EN Rotation facilitator extensions for code.
 // PT Extensões facilitadoras de rotação para código.
 
-/** @see DimenSdp.sdpRotate */
+/** EN Facilitator for sdp with rotation override. PT Facilitador para sdp com substituição por rotação. @see DimenSdp.sdpRotate */
 fun Int.sdpRotate(
     context: Context,
     rotationValue: Int,
@@ -113,7 +114,7 @@ fun Int.sdpRotate(
     orientation: Orientation = Orientation.LANDSCAPE
 ): Float = DimenSdp.sdpRotate(context, this, rotationValue, finalQualifierResolver, orientation)
 
-/** @see DimenSdp.hdpRotate */
+/** EN Facilitator for hdp with rotation override. PT Facilitador para hdp com substituição por rotação. @see DimenSdp.hdpRotate */
 fun Int.hdpRotate(
     context: Context,
     rotationValue: Int,
@@ -121,7 +122,7 @@ fun Int.hdpRotate(
     orientation: Orientation = Orientation.LANDSCAPE
 ): Float = DimenSdp.hdpRotate(context, this, rotationValue, finalQualifierResolver, orientation)
 
-/** @see DimenSdp.wdpRotate */
+/** EN Facilitator for wdp with rotation override. PT Facilitador para wdp com substituição por rotação. @see DimenSdp.wdpRotate */
 fun Int.wdpRotate(
     context: Context,
     rotationValue: Int,
@@ -132,7 +133,7 @@ fun Int.wdpRotate(
 // EN UiModeType facilitator extensions for code.
 // PT Extensões facilitadoras de UiModeType para código.
 
-/** @see DimenSdp.sdpMode */
+/** EN Facilitator for sdp with UiModeType override. PT Facilitador para sdp com substituição por UiModeType. @see DimenSdp.sdpMode */
 fun Int.sdpMode(
     context: Context,
     modeValue: Int,
@@ -141,7 +142,7 @@ fun Int.sdpMode(
     finalQualifierResolver: DpQualifier? = null
 ): Float = DimenSdp.sdpMode(context, this, modeValue, uiModeType, foldingFeature, finalQualifierResolver)
 
-/** @see DimenSdp.hdpMode */
+/** EN Facilitator for hdp with UiModeType override. PT Facilitador para hdp com substituição por UiModeType. @see DimenSdp.hdpMode */
 fun Int.hdpMode(
     context: Context,
     modeValue: Int,
@@ -150,7 +151,7 @@ fun Int.hdpMode(
     finalQualifierResolver: DpQualifier? = null
 ): Float = DimenSdp.hdpMode(context, this, modeValue, uiModeType, foldingFeature, finalQualifierResolver)
 
-/** @see DimenSdp.wdpMode */
+/** EN Facilitator for wdp with UiModeType override. PT Facilitador para wdp com substituição por UiModeType. @see DimenSdp.wdpMode */
 fun Int.wdpMode(
     context: Context,
     modeValue: Int,
@@ -162,7 +163,7 @@ fun Int.wdpMode(
 // EN DpQualifier facilitator extensions for code.
 // PT Funções facilitadoras de DpQualifier para código.
 
-/** @see DimenSdp.sdpQualifier */
+/** EN Facilitator for sdp with DpQualifier override. PT Facilitador para sdp com substituição por DpQualifier. @see DimenSdp.sdpQualifier */
 fun Int.sdpQualifier(
     context: Context,
     qualifiedValue: Int,
@@ -171,7 +172,7 @@ fun Int.sdpQualifier(
     finalQualifierResolver: DpQualifier? = null
 ): Float = DimenSdp.sdpQualifier(context, this, qualifiedValue, qualifierType, qualifierValue, finalQualifierResolver)
 
-/** @see DimenSdp.hdpQualifier */
+/** EN Facilitator for hdp with DpQualifier override. PT Facilitador para hdp com substituição por DpQualifier. @see DimenSdp.hdpQualifier */
 fun Int.hdpQualifier(
     context: Context,
     qualifiedValue: Int,
@@ -180,7 +181,7 @@ fun Int.hdpQualifier(
     finalQualifierResolver: DpQualifier? = null
 ): Float = DimenSdp.hdpQualifier(context, this, qualifiedValue, qualifierType, qualifierValue, finalQualifierResolver)
 
-/** @see DimenSdp.wdpQualifier */
+/** EN Facilitator for wdp with DpQualifier override. PT Facilitador para wdp com substituição por DpQualifier. @see DimenSdp.wdpQualifier */
 fun Int.wdpQualifier(
     context: Context,
     qualifiedValue: Int,
@@ -192,7 +193,7 @@ fun Int.wdpQualifier(
 // EN UiModeType + DpQualifier combined facilitator extensions for code.
 // PT Extensões facilitadoras combinadas UiModeType + DpQualifier para código.
 
-/** @see DimenSdp.sdpScreen */
+/** EN Facilitator for sdp with combined UiModeType + DpQualifier override. PT Facilitador para sdp com substituição combinada UiModeType + DpQualifier. @see DimenSdp.sdpScreen */
 fun Int.sdpScreen(
     context: Context,
     screenValue: Int,
@@ -203,7 +204,7 @@ fun Int.sdpScreen(
     finalQualifierResolver: DpQualifier? = null
 ): Float = DimenSdp.sdpScreen(context, this, screenValue, uiModeType, qualifierType, qualifierValue, foldingFeature, finalQualifierResolver)
 
-/** @see DimenSdp.hdpScreen */
+/** EN Facilitator for hdp with combined UiModeType + DpQualifier override. PT Facilitador para hdp com substituição combinada UiModeType + DpQualifier. @see DimenSdp.hdpScreen */
 fun Int.hdpScreen(
     context: Context,
     screenValue: Int,
@@ -214,7 +215,7 @@ fun Int.hdpScreen(
     finalQualifierResolver: DpQualifier? = null
 ): Float = DimenSdp.hdpScreen(context, this, screenValue, uiModeType, qualifierType, qualifierValue, foldingFeature, finalQualifierResolver)
 
-/** @see DimenSdp.wdpScreen */
+/** EN Facilitator for wdp with combined UiModeType + DpQualifier override. PT Facilitador para wdp com substituição combinada UiModeType + DpQualifier. @see DimenSdp.wdpScreen */
 fun Int.wdpScreen(
     context: Context,
     screenValue: Int,

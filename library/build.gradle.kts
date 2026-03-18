@@ -14,7 +14,7 @@ val isJitPack = System.getenv("JITPACK") == "true"
         || System.getenv("ci") == "true"
 
 mavenPublishing {
-    coordinates("io.github.bodenberg", "appdimens-sdps", "3.0.9")
+    coordinates("io.github.bodenberg", "appdimens-sdps", "3.0.9.1")
 
     configure(
         AndroidSingleVariantLibrary(
@@ -25,7 +25,7 @@ mavenPublishing {
 
     pom {
         name.set("AppDimens SDP, HDP, WDP: Scalable Width and Height Dimensions (Responsive Layouts)")
-        description.set("It expands on the classic SDP (Scaled Density Pixels) standard by also introducing height-to-width (HDP) and width-to-width (WDP) scaling. Scalable width and height dimensions for Android layouts. (Sp and TextUnit supported)")
+        description.set("It expands on the classic SDP (Scaled Density Pixels) standard by also introducing height-to-width (HDP) and width-to-width (WDP) scaling. (dimens, dimension, dimensions, dp, sp, dimen, responsive, adaptative, text unit, font scale, font size, resize, textunit, mm, cm, inch, device, physical, android, dpi, sdpi, auto, hdpi, ldpi, mdpi, precision)")
         url.set("https://github.com/bodenberg/appdimens-sdps")
 
         licenses {

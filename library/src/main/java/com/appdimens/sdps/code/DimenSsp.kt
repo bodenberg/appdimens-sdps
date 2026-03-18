@@ -303,47 +303,47 @@ object DimenSsp {
     // EN Resource ID variants.
     // PT Variantes de ID de recurso.
 
-    /** @see DimenSdp.sdpRes */
+    /** EN Quick resolution for Smallest Width resource ID (sspRes). PT Resolução rápida para ID de recurso Smallest Width (sspRes). @see DimenSdp.sdpRes */
     @JvmStatic
     fun sspRes(context: Context, value: Int): Int = getResourceId(context, DpQualifier.SMALL_WIDTH, value)
 
-    /** @see DimenSdp.sdpPhRes */
+    /** EN Quick resolution for ssp resource ID, portrait -> Height. PT Resolução rápida para ID de recurso ssp, retrato -> Altura. @see DimenSdp.sdpPhRes */
     @JvmStatic
     fun sspPhRes(context: Context, value: Int): Int = getResourceId(context, DpQualifier.SMALL_WIDTH, value, Inverter.SW_TO_PH)
 
-    /** @see DimenSdp.sdpLhRes */
+    /** EN Quick resolution for ssp resource ID, landscape -> Height. PT Resolução rápida para ID de recurso ssp, paisagem -> Altura. @see DimenSdp.sdpLhRes */
     @JvmStatic
     fun sspLhRes(context: Context, value: Int): Int = getResourceId(context, DpQualifier.SMALL_WIDTH, value, Inverter.SW_TO_LH)
 
-    /** @see DimenSdp.sdpPwRes */
+    /** EN Quick resolution for ssp resource ID, portrait -> Width. PT Resolução rápida para ID de recurso ssp, retrato -> Largura. @see DimenSdp.sdpPwRes */
     @JvmStatic
     fun sspPwRes(context: Context, value: Int): Int = getResourceId(context, DpQualifier.SMALL_WIDTH, value, Inverter.SW_TO_PW)
 
-    /** @see DimenSdp.sdpLwRes */
+    /** EN Quick resolution for ssp resource ID, landscape -> Width. PT Resolução rápida para ID de recurso ssp, paisagem -> Largura. @see DimenSdp.sdpLwRes */
     @JvmStatic
     fun sspLwRes(context: Context, value: Int): Int = getResourceId(context, DpQualifier.SMALL_WIDTH, value, Inverter.SW_TO_LW)
 
-    /** @see DimenSdp.hdpRes */
+    /** EN Quick resolution for Screen Height resource ID (hspRes). PT Resolução rápida para ID de recurso Altura da Tela (hspRes). @see DimenSdp.hdpRes */
     @JvmStatic
     fun hspRes(context: Context, value: Int): Int = getResourceId(context, DpQualifier.HEIGHT, value)
 
-    /** @see DimenSdp.hdpLwRes */
+    /** EN Quick resolution for hsp resource ID, landscape -> Width. PT Resolução rápida para ID de recurso hsp, paisagem -> Largura. @see DimenSdp.hdpLwRes */
     @JvmStatic
     fun hspLwRes(context: Context, value: Int): Int = getResourceId(context, DpQualifier.HEIGHT, value, Inverter.PH_TO_LW)
 
-    /** @see DimenSdp.hdpPwRes */
+    /** EN Quick resolution for hsp resource ID, portrait -> Width. PT Resolução rápida para ID de recurso hsp, retrato -> Largura. @see DimenSdp.hdpPwRes */
     @JvmStatic
     fun hspPwRes(context: Context, value: Int): Int = getResourceId(context, DpQualifier.HEIGHT, value, Inverter.LH_TO_PW)
 
-    /** @see DimenSdp.wdpRes */
+    /** EN Quick resolution for Screen Width resource ID (wspRes). PT Resolução rápida para ID de recurso Largura da Tela (wspRes). @see DimenSdp.wdpRes */
     @JvmStatic
     fun wspRes(context: Context, value: Int): Int = getResourceId(context, DpQualifier.WIDTH, value)
 
-    /** @see DimenSdp.wdpLhRes */
+    /** EN Quick resolution for wsp resource ID, landscape -> Height. PT Resolução rápida para ID de recurso wsp, paisagem -> Altura. @see DimenSdp.wdpLhRes */
     @JvmStatic
     fun wspLhRes(context: Context, value: Int): Int = getResourceId(context, DpQualifier.WIDTH, value, Inverter.PW_TO_LH)
 
-    /** @see DimenSdp.wdpPhRes */
+    /** EN Quick resolution for wsp resource ID, portrait -> Height. PT Resolução rápida para ID de recurso wsp, retrato -> Altura. @see DimenSdp.wdpPhRes */
     @JvmStatic
     fun wspPhRes(context: Context, value: Int): Int = getResourceId(context, DpQualifier.WIDTH, value, Inverter.LW_TO_PH)
 
