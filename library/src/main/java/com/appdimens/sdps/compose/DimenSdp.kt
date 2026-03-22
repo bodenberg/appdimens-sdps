@@ -29,6 +29,7 @@ import android.content.res.Configuration
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -73,6 +74,16 @@ val Int.sdp: Dp get() = this.toDynamicScaledDp(DpQualifier.SMALL_WIDTH)
 
 /**
  * EN
+ * Extension for Pixel (Float) with dynamic scaling based on the **Smallest Width (swDP)**.
+ *
+ * PT
+ * Extensão para Pixel (Float) com dimensionamento dinâmico baseado na **Smallest Width (swDP)**.
+ */
+@get:Composable
+val Int.sdpPx: Float get() = LocalDensity.current.run { sdp.toPx() }
+
+/**
+ * EN
  * Extension for Dp with dynamic scaling based on **Smallest Width (swDP)**, but
  * in portrait orientation it acts as **Screen Height (hDP)**.
  * Usage example: `32.sdpPh`.
@@ -84,6 +95,16 @@ val Int.sdp: Dp get() = this.toDynamicScaledDp(DpQualifier.SMALL_WIDTH)
  */
 @get:Composable
 val Int.sdpPh: Dp get() = this.toDynamicScaledDp(DpQualifier.SMALL_WIDTH, Inverter.SW_TO_PH)
+
+/**
+ * EN
+ * Pixel version of sdpPh.
+ *
+ * PT
+ * Versão em pixel de sdpPh.
+ */
+@get:Composable
+val Int.sdpPhPx: Float get() = LocalDensity.current.run { sdpPh.toPx() }
 
 /**
  * EN
@@ -101,6 +122,16 @@ val Int.sdpLh: Dp get() = this.toDynamicScaledDp(DpQualifier.SMALL_WIDTH, Invert
 
 /**
  * EN
+ * Pixel version of sdpLh.
+ *
+ * PT
+ * Versão em pixel de sdpLh.
+ */
+@get:Composable
+val Int.sdpLhPx: Float get() = LocalDensity.current.run { sdpLh.toPx() }
+
+/**
+ * EN
  * Extension for Dp with dynamic scaling based on **Smallest Width (swDP)**, but
  * in portrait orientation it acts as **Screen Width (wDP)**.
  * Usage example: `32.sdpPw`.
@@ -112,6 +143,16 @@ val Int.sdpLh: Dp get() = this.toDynamicScaledDp(DpQualifier.SMALL_WIDTH, Invert
  */
 @get:Composable
 val Int.sdpPw: Dp get() = this.toDynamicScaledDp(DpQualifier.SMALL_WIDTH, Inverter.SW_TO_PW)
+
+/**
+ * EN
+ * Pixel version of sdpPw.
+ *
+ * PT
+ * Versão em pixel de sdpPw.
+ */
+@get:Composable
+val Int.sdpPwPx: Float get() = LocalDensity.current.run { sdpPw.toPx() }
 
 /**
  * EN
@@ -129,6 +170,16 @@ val Int.sdpLw: Dp get() = this.toDynamicScaledDp(DpQualifier.SMALL_WIDTH, Invert
 
 /**
  * EN
+ * Pixel version of sdpLw.
+ *
+ * PT
+ * Versão em pixel de sdpLw.
+ */
+@get:Composable
+val Int.sdpLwPx: Float get() = LocalDensity.current.run { sdpLw.toPx() }
+
+/**
+ * EN
  * Extension for Dp with dynamic scaling based on the **Screen Height (hDP)**.
  * Usage example: `32.hdp`.
  *
@@ -138,6 +189,16 @@ val Int.sdpLw: Dp get() = this.toDynamicScaledDp(DpQualifier.SMALL_WIDTH, Invert
  */
 @get:Composable
 val Int.hdp: Dp get() = this.toDynamicScaledDp(DpQualifier.HEIGHT)
+
+/**
+ * EN
+ * Extension for Pixel (Float) with dynamic scaling based on the **Screen Height (hDP)**.
+ *
+ * PT
+ * Extensão para Pixel (Float) com dimensionamento dinâmico baseado na **Altura da Tela (hDP)**.
+ */
+@get:Composable
+val Int.hdpPx: Float get() = LocalDensity.current.run { hdp.toPx() }
 
 /**
  * EN
@@ -155,6 +216,16 @@ val Int.hdpLw: Dp get() = this.toDynamicScaledDp(DpQualifier.HEIGHT, Inverter.PH
 
 /**
  * EN
+ * Pixel version of hdpLw.
+ *
+ * PT
+ * Versão em pixel de hdpLw.
+ */
+@get:Composable
+val Int.hdpLwPx: Float get() = LocalDensity.current.run { hdpLw.toPx() }
+
+/**
+ * EN
  * Extension for Dp with dynamic scaling based on the **Screen Height (hDP)**, but
  * in portrait orientation it acts as **Screen Width (wDP)**.
  * Usage example: `32.hdpPw`.
@@ -169,6 +240,16 @@ val Int.hdpPw: Dp get() = this.toDynamicScaledDp(DpQualifier.HEIGHT, Inverter.LH
 
 /**
  * EN
+ * Pixel version of hdpPw.
+ *
+ * PT
+ * Versão em pixel de hdpPw.
+ */
+@get:Composable
+val Int.hdpPwPx: Float get() = LocalDensity.current.run { hdpPw.toPx() }
+
+/**
+ * EN
  * Extension for Dp with dynamic scaling based on the **Screen Width (wDP)**.
  * Usage example: `100.wdp`.
  *
@@ -178,6 +259,16 @@ val Int.hdpPw: Dp get() = this.toDynamicScaledDp(DpQualifier.HEIGHT, Inverter.LH
  */
 @get:Composable
 val Int.wdp: Dp get() = this.toDynamicScaledDp(DpQualifier.WIDTH)
+
+/**
+ * EN
+ * Extension for Pixel (Float) with dynamic scaling based on the **Screen Width (wDP)**.
+ *
+ * PT
+ * Extensão para Pixel (Float) com dimensionamento dinâmico baseado na **Largura da Tela (wDP)**.
+ */
+@get:Composable
+val Int.wdpPx: Float get() = LocalDensity.current.run { wdp.toPx() }
 
 /**
  * EN
@@ -195,6 +286,16 @@ val Int.wdpLh: Dp get() = this.toDynamicScaledDp(DpQualifier.WIDTH, Inverter.PW_
 
 /**
  * EN
+ * Pixel version of wdpLh.
+ *
+ * PT
+ * Versão em pixel de wdpLh.
+ */
+@get:Composable
+val Int.wdpLhPx: Float get() = LocalDensity.current.run { wdpLh.toPx() }
+
+/**
+ * EN
  * Extension for Dp with dynamic scaling based on the **Screen Width (wDP)**, but
  * in portrait orientation it acts as **Screen Height (hDP)**.
  * Usage example: `100.wdpPh`.
@@ -206,6 +307,16 @@ val Int.wdpLh: Dp get() = this.toDynamicScaledDp(DpQualifier.WIDTH, Inverter.PW_
  */
 @get:Composable
 val Int.wdpPh: Dp get() = this.toDynamicScaledDp(DpQualifier.WIDTH, Inverter.LW_TO_PH)
+
+/**
+ * EN
+ * Pixel version of wdpPh.
+ *
+ * PT
+ * Versão em pixel de wdpPh.
+ */
+@get:Composable
+val Int.wdpPhPx: Float get() = LocalDensity.current.run { wdpPh.toPx() }
 
 // EN Dynamic scaling functions (Resource-based).
 // PT Funções de dimensionamento dinâmico (baseadas em recursos).

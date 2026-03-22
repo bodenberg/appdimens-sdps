@@ -34,6 +34,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.window.layout.FoldingFeature
@@ -472,6 +473,17 @@ class DimenScaled private constructor(
      */
     @get:Composable
     val sdp: Dp get() = resolve(DpQualifier.SMALL_WIDTH)
+
+    /**
+     * EN
+     * Pixel version of sdp.
+     *
+     * PT
+     * Versão em pixel de sdp.
+     */
+    @get:Composable
+    val sdpPx: Float get() = LocalDensity.current.run { sdp.toPx() }
+
     /**
      * EN
      * The final Dp value that is resolved in Compose.
@@ -481,6 +493,17 @@ class DimenScaled private constructor(
      */
     @get:Composable
     val hdp: Dp get() = resolve(DpQualifier.HEIGHT)
+
+    /**
+     * EN
+     * Pixel version of hdp.
+     *
+     * PT
+     * Versão em pixel de hdp.
+     */
+    @get:Composable
+    val hdpPx: Float get() = LocalDensity.current.run { hdp.toPx() }
+
     /**
      * EN
      * The final Dp value that is resolved in Compose.
@@ -490,4 +513,14 @@ class DimenScaled private constructor(
      */
     @get:Composable
     val wdp: Dp get() = resolve(DpQualifier.WIDTH)
+
+    /**
+     * EN
+     * Pixel version of wdp.
+     *
+     * PT
+     * Versão em pixel de wdp.
+     */
+    @get:Composable
+    val wdpPx: Float get() = LocalDensity.current.run { wdp.toPx() }
 }

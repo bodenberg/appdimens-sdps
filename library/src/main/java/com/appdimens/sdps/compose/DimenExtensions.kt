@@ -33,6 +33,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.window.layout.FoldingFeature
 import androidx.window.layout.WindowInfoTracker
@@ -75,6 +76,18 @@ fun Int.sdpRotate(rotationValue: Int, finalQualifierResolver: DpQualifier = DpQu
 
 /**
  * EN
+ * Pixel version of sdpRotate (Int).
+ *
+ * PT
+ * Versão em pixel de sdpRotate (Int).
+ */
+@Composable
+fun Int.sdpRotatePx(rotationValue: Int, finalQualifierResolver: DpQualifier = DpQualifier.SMALL_WIDTH, orientation: Orientation = Orientation.LANDSCAPE): Float {
+    return LocalDensity.current.run { sdpRotate(rotationValue, finalQualifierResolver, orientation).toPx() }
+}
+
+/**
+ * EN
  * Extension for Dp with dynamic scaling based on **Smallest Width (swDP)**.
  * Returns the original value **auto-scaled** using the specified qualifier if the condition is not met.
  * When the device is in the specified [orientation], it uses [rotationValue]
@@ -103,6 +116,18 @@ fun Dp.sdpRotate(rotationValue: Int, finalQualifierResolver: DpQualifier = DpQua
 
 /**
  * EN
+ * Pixel version of sdpRotate (Dp).
+ *
+ * PT
+ * Versão em pixel de sdpRotate (Dp).
+ */
+@Composable
+fun Dp.sdpRotatePx(rotationValue: Int, finalQualifierResolver: DpQualifier = DpQualifier.SMALL_WIDTH, orientation: Orientation = Orientation.LANDSCAPE): Float {
+    return LocalDensity.current.run { sdpRotate(rotationValue, finalQualifierResolver, orientation).toPx() }
+}
+
+/**
+ * EN
  * Extension for Dp with dynamic scaling based on **Smallest Width (swDP)**.
  * Returns the original raw Dp value if the condition is not met.
  * When the device is in the specified [orientation], it uses [rotationValue]
@@ -127,6 +152,18 @@ fun Dp.sdpRotatePlain(rotationValue: Int, finalQualifierResolver: DpQualifier = 
     } else {
         this
     }
+}
+
+/**
+ * EN
+ * Pixel version of sdpRotatePlain.
+ *
+ * PT
+ * Versão em pixel de sdpRotatePlain.
+ */
+@Composable
+fun Dp.sdpRotatePlainPx(rotationValue: Int, finalQualifierResolver: DpQualifier = DpQualifier.SMALL_WIDTH, orientation: Orientation = Orientation.LANDSCAPE): Float {
+    return LocalDensity.current.run { sdpRotatePlain(rotationValue, finalQualifierResolver, orientation).toPx() }
 }
 
 /**
@@ -161,6 +198,18 @@ fun Int.hdpRotate(rotationValue: Int, finalQualifierResolver: DpQualifier = DpQu
 
 /**
  * EN
+ * Pixel version of hdpRotate (Int).
+ *
+ * PT
+ * Versão em pixel de hdpRotate (Int).
+ */
+@Composable
+fun Int.hdpRotatePx(rotationValue: Int, finalQualifierResolver: DpQualifier = DpQualifier.HEIGHT, orientation: Orientation = Orientation.LANDSCAPE): Float {
+    return LocalDensity.current.run { hdpRotate(rotationValue, finalQualifierResolver, orientation).toPx() }
+}
+
+/**
+ * EN
  * Extension for Dp with dynamic scaling based on **Screen Height (hDP)**.
  * Returns the original value **auto-scaled** using the specified qualifier if the condition is not met.
  * When the device is in the specified [orientation], it uses [rotationValue]
@@ -189,6 +238,18 @@ fun Dp.hdpRotate(rotationValue: Int, finalQualifierResolver: DpQualifier = DpQua
 
 /**
  * EN
+ * Pixel version of hdpRotate (Dp).
+ *
+ * PT
+ * Versão em pixel de hdpRotate (Dp).
+ */
+@Composable
+fun Dp.hdpRotatePx(rotationValue: Int, finalQualifierResolver: DpQualifier = DpQualifier.HEIGHT, orientation: Orientation = Orientation.LANDSCAPE): Float {
+    return LocalDensity.current.run { hdpRotate(rotationValue, finalQualifierResolver, orientation).toPx() }
+}
+
+/**
+ * EN
  * Extension for Dp with dynamic scaling based on **Screen Height (hDP)**.
  * Returns the original raw Dp value if the condition is not met.
  * When the device is in the specified [orientation], it uses [rotationValue]
@@ -213,6 +274,18 @@ fun Dp.hdpRotatePlain(rotationValue: Int, finalQualifierResolver: DpQualifier = 
     } else {
         this
     }
+}
+
+/**
+ * EN
+ * Pixel version of hdpRotatePlain.
+ *
+ * PT
+ * Versão em pixel de hdpRotatePlain.
+ */
+@Composable
+fun Dp.hdpRotatePlainPx(rotationValue: Int, finalQualifierResolver: DpQualifier = DpQualifier.HEIGHT, orientation: Orientation = Orientation.LANDSCAPE): Float {
+    return LocalDensity.current.run { hdpRotatePlain(rotationValue, finalQualifierResolver, orientation).toPx() }
 }
 
 /**
@@ -247,6 +320,18 @@ fun Int.wdpRotate(rotationValue: Int, finalQualifierResolver: DpQualifier = DpQu
 
 /**
  * EN
+ * Pixel version of wdpRotate (Int).
+ *
+ * PT
+ * Versão em pixel de wdpRotate (Int).
+ */
+@Composable
+fun Int.wdpRotatePx(rotationValue: Int, finalQualifierResolver: DpQualifier = DpQualifier.WIDTH, orientation: Orientation = Orientation.LANDSCAPE): Float {
+    return LocalDensity.current.run { wdpRotate(rotationValue, finalQualifierResolver, orientation).toPx() }
+}
+
+/**
+ * EN
  * Extension for Dp with dynamic scaling based on **Screen Width (wDP)**.
  * Returns the original value **auto-scaled** using the specified qualifier if the condition is not met.
  * When the device is in the specified [orientation], it uses [rotationValue]
@@ -275,6 +360,18 @@ fun Dp.wdpRotate(rotationValue: Int, finalQualifierResolver: DpQualifier = DpQua
 
 /**
  * EN
+ * Pixel version of wdpRotate (Dp).
+ *
+ * PT
+ * Versão em pixel de wdpRotate (Dp).
+ */
+@Composable
+fun Dp.wdpRotatePx(rotationValue: Int, finalQualifierResolver: DpQualifier = DpQualifier.WIDTH, orientation: Orientation = Orientation.LANDSCAPE): Float {
+    return LocalDensity.current.run { wdpRotate(rotationValue, finalQualifierResolver, orientation).toPx() }
+}
+
+/**
+ * EN
  * Extension for Dp with dynamic scaling based on **Screen Width (wDP)**.
  * Returns the original raw Dp value if the condition is not met.
  * When the device is in the specified [orientation], it uses [rotationValue]
@@ -299,6 +396,18 @@ fun Dp.wdpRotatePlain(rotationValue: Int, finalQualifierResolver: DpQualifier = 
     } else {
         this
     }
+}
+
+/**
+ * EN
+ * Pixel version of wdpRotatePlain.
+ *
+ * PT
+ * Versão em pixel de wdpRotatePlain.
+ */
+@Composable
+fun Dp.wdpRotatePlainPx(rotationValue: Int, finalQualifierResolver: DpQualifier = DpQualifier.WIDTH, orientation: Orientation = Orientation.LANDSCAPE): Float {
+    return LocalDensity.current.run { wdpRotatePlain(rotationValue, finalQualifierResolver, orientation).toPx() }
 }
 
 // EN Helps extract the activity from context wrapper
@@ -347,6 +456,18 @@ fun Int.sdpMode(modeValue: Int, uiModeType: UiModeType, finalQualifierResolver: 
 
 /**
  * EN
+ * Pixel version of sdpMode (Int).
+ *
+ * PT
+ * Versão em pixel de sdpMode (Int).
+ */
+@Composable
+fun Int.sdpModePx(modeValue: Int, uiModeType: UiModeType, finalQualifierResolver: DpQualifier? = null): Float {
+    return LocalDensity.current.run { sdpMode(modeValue, uiModeType, finalQualifierResolver).toPx() }
+}
+
+/**
+ * EN
  * Extension for Dp with dynamic scaling based on **Smallest Width (swDP)**.
  * Returns the original value **auto-scaled** using the specified qualifier if the condition is not met.
  * When the device matches the specified [uiModeType], it uses [modeValue] instead.
@@ -375,6 +496,18 @@ fun Dp.sdpMode(modeValue: Int, uiModeType: UiModeType, finalQualifierResolver: D
 
 /**
  * EN
+ * Pixel version of sdpMode (Dp).
+ *
+ * PT
+ * Versão em pixel de sdpMode (Dp).
+ */
+@Composable
+fun Dp.sdpModePx(modeValue: Int, uiModeType: UiModeType, finalQualifierResolver: DpQualifier? = null): Float {
+    return LocalDensity.current.run { sdpMode(modeValue, uiModeType, finalQualifierResolver).toPx() }
+}
+
+/**
+ * EN
  * Extension for Dp with dynamic scaling based on **Smallest Width (swDP)**.
  * Returns the original raw Dp value if the condition is not met.
  * When the device matches the specified [uiModeType], it uses [modeValue] instead.
@@ -399,6 +532,18 @@ fun Dp.sdpModePlain(modeValue: Int, uiModeType: UiModeType, finalQualifierResolv
     } else {
         this
     }
+}
+
+/**
+ * EN
+ * Pixel version of sdpModePlain.
+ *
+ * PT
+ * Versão em pixel de sdpModePlain.
+ */
+@Composable
+fun Dp.sdpModePlainPx(modeValue: Int, uiModeType: UiModeType, finalQualifierResolver: DpQualifier? = null): Float {
+    return LocalDensity.current.run { sdpModePlain(modeValue, uiModeType, finalQualifierResolver).toPx() }
 }
 
 /**
@@ -436,6 +581,18 @@ fun Int.hdpMode(modeValue: Int, uiModeType: UiModeType, finalQualifierResolver: 
 
 /**
  * EN
+ * Pixel version of hdpMode (Int).
+ *
+ * PT
+ * Versão em pixel de hdpMode (Int).
+ */
+@Composable
+fun Int.hdpModePx(modeValue: Int, uiModeType: UiModeType, finalQualifierResolver: DpQualifier? = null): Float {
+    return LocalDensity.current.run { hdpMode(modeValue, uiModeType, finalQualifierResolver).toPx() }
+}
+
+/**
+ * EN
  * Extension for Dp with dynamic scaling based on **Screen Height (hDP)**.
  * Returns the original value **auto-scaled** using the specified qualifier if the condition is not met.
  * When the device matches the specified [uiModeType], it uses [modeValue] instead.
@@ -465,6 +622,18 @@ fun Dp.hdpMode(modeValue: Int, uiModeType: UiModeType, finalQualifierResolver: D
 
 /**
  * EN
+ * Pixel version of hdpMode (Dp).
+ *
+ * PT
+ * Versão em pixel de hdpMode (Dp).
+ */
+@Composable
+fun Dp.hdpModePx(modeValue: Int, uiModeType: UiModeType, finalQualifierResolver: DpQualifier? = null): Float {
+    return LocalDensity.current.run { hdpMode(modeValue, uiModeType, finalQualifierResolver).toPx() }
+}
+
+/**
+ * EN
  * Extension for Dp with dynamic scaling based on **Screen Height (hDP)**.
  * Returns the original raw Dp value if the condition is not met.
  * When the device matches the specified [uiModeType], it uses [modeValue] instead.
@@ -490,6 +659,18 @@ fun Dp.hdpModePlain(modeValue: Int, uiModeType: UiModeType, finalQualifierResolv
     } else {
         this
     }
+}
+
+/**
+ * EN
+ * Pixel version of hdpModePlain.
+ *
+ * PT
+ * Versão em pixel de hdpModePlain.
+ */
+@Composable
+fun Dp.hdpModePlainPx(modeValue: Int, uiModeType: UiModeType, finalQualifierResolver: DpQualifier? = null): Float {
+    return LocalDensity.current.run { hdpModePlain(modeValue, uiModeType, finalQualifierResolver).toPx() }
 }
 
 /**
@@ -527,6 +708,18 @@ fun Int.wdpMode(modeValue: Int, uiModeType: UiModeType, finalQualifierResolver: 
 
 /**
  * EN
+ * Pixel version of wdpMode (Int).
+ *
+ * PT
+ * Versão em pixel de wdpMode (Int).
+ */
+@Composable
+fun Int.wdpModePx(modeValue: Int, uiModeType: UiModeType, finalQualifierResolver: DpQualifier? = null): Float {
+    return LocalDensity.current.run { wdpMode(modeValue, uiModeType, finalQualifierResolver).toPx() }
+}
+
+/**
+ * EN
  * Extension for Dp with dynamic scaling based on **Screen Width (wDP)**.
  * Returns the original value **auto-scaled** using the specified qualifier if the condition is not met.
  * When the device matches the specified [uiModeType], it uses [modeValue] instead.
@@ -556,6 +749,18 @@ fun Dp.wdpMode(modeValue: Int, uiModeType: UiModeType, finalQualifierResolver: D
 
 /**
  * EN
+ * Pixel version of wdpMode (Dp).
+ *
+ * PT
+ * Versão em pixel de wdpMode (Dp).
+ */
+@Composable
+fun Dp.wdpModePx(modeValue: Int, uiModeType: UiModeType, finalQualifierResolver: DpQualifier? = null): Float {
+    return LocalDensity.current.run { wdpMode(modeValue, uiModeType, finalQualifierResolver).toPx() }
+}
+
+/**
+ * EN
  * Extension for Dp with dynamic scaling based on **Screen Width (wDP)**.
  * Returns the original raw Dp value if the condition is not met.
  * When the device matches the specified [uiModeType], it uses [modeValue] instead.
@@ -581,6 +786,18 @@ fun Dp.wdpModePlain(modeValue: Int, uiModeType: UiModeType, finalQualifierResolv
     } else {
         this
     }
+}
+
+/**
+ * EN
+ * Pixel version of wdpModePlain.
+ *
+ * PT
+ * Versão em pixel de wdpModePlain.
+ */
+@Composable
+fun Dp.wdpModePlainPx(modeValue: Int, uiModeType: UiModeType, finalQualifierResolver: DpQualifier? = null): Float {
+    return LocalDensity.current.run { wdpModePlain(modeValue, uiModeType, finalQualifierResolver).toPx() }
 }
 
 // EN DpQualifier facilitator extensions.
@@ -615,6 +832,18 @@ fun Int.sdpQualifier(qualifiedValue: Int, qualifierType: DpQualifier, qualifierV
 
 /**
  * EN
+ * Pixel version of sdpQualifier (Int).
+ *
+ * PT
+ * Versão em pixel de sdpQualifier (Int).
+ */
+@Composable
+fun Int.sdpQualifierPx(qualifiedValue: Int, qualifierType: DpQualifier, qualifierValue: Int, finalQualifierResolver: DpQualifier? = null): Float {
+    return LocalDensity.current.run { sdpQualifier(qualifiedValue, qualifierType, qualifierValue, finalQualifierResolver).toPx() }
+}
+
+/**
+ * EN
  * Extension for Dp with dynamic scaling based on **Smallest Width (swDP)**.
  * Returns the original value **auto-scaled** using the specified qualifier if the condition is not met.
  * When the screen metric for [qualifierType] is >= [qualifierValue], it uses [qualifiedValue] instead.
@@ -638,6 +867,18 @@ fun Dp.sdpQualifier(qualifiedValue: Int, qualifierType: DpQualifier, qualifierVa
 
 /**
  * EN
+ * Pixel version of sdpQualifier (Dp).
+ *
+ * PT
+ * Versão em pixel de sdpQualifier (Dp).
+ */
+@Composable
+fun Dp.sdpQualifierPx(qualifiedValue: Int, qualifierType: DpQualifier, qualifierValue: Int, finalQualifierResolver: DpQualifier? = null): Float {
+    return LocalDensity.current.run { sdpQualifier(qualifiedValue, qualifierType, qualifierValue, finalQualifierResolver).toPx() }
+}
+
+/**
+ * EN
  * Extension for Dp with dynamic scaling based on **Smallest Width (swDP)**.
  * Returns the original raw Dp value if the condition is not met.
  * When the screen metric for [qualifierType] is >= [qualifierValue], it uses [qualifiedValue] instead.
@@ -657,6 +898,18 @@ fun Dp.sdpQualifierPlain(qualifiedValue: Int, qualifierType: DpQualifier, qualif
     } else {
         this
     }
+}
+
+/**
+ * EN
+ * Pixel version of sdpQualifierPlain.
+ *
+ * PT
+ * Versão em pixel de sdpQualifierPlain.
+ */
+@Composable
+fun Dp.sdpQualifierPlainPx(qualifiedValue: Int, qualifierType: DpQualifier, qualifierValue: Int, finalQualifierResolver: DpQualifier? = null): Float {
+    return LocalDensity.current.run { sdpQualifierPlain(qualifiedValue, qualifierType, qualifierValue, finalQualifierResolver).toPx() }
 }
 
 /**
@@ -688,6 +941,18 @@ fun Int.hdpQualifier(qualifiedValue: Int, qualifierType: DpQualifier, qualifierV
 
 /**
  * EN
+ * Pixel version of hdpQualifier (Int).
+ *
+ * PT
+ * Versão em pixel de hdpQualifier (Int).
+ */
+@Composable
+fun Int.hdpQualifierPx(qualifiedValue: Int, qualifierType: DpQualifier, qualifierValue: Int, finalQualifierResolver: DpQualifier? = null): Float {
+    return LocalDensity.current.run { hdpQualifier(qualifiedValue, qualifierType, qualifierValue, finalQualifierResolver).toPx() }
+}
+
+/**
+ * EN
  * Extension for Dp with dynamic scaling based on **Screen Height (hDP)**.
  * Returns the original value **auto-scaled** using the specified qualifier if the condition is not met.
  * When the screen metric for [qualifierType] is >= [qualifierValue], it uses [qualifiedValue] instead.
@@ -711,6 +976,18 @@ fun Dp.hdpQualifier(qualifiedValue: Int, qualifierType: DpQualifier, qualifierVa
 
 /**
  * EN
+ * Pixel version of hdpQualifier (Dp).
+ *
+ * PT
+ * Versão em pixel de hdpQualifier (Dp).
+ */
+@Composable
+fun Dp.hdpQualifierPx(qualifiedValue: Int, qualifierType: DpQualifier, qualifierValue: Int, finalQualifierResolver: DpQualifier? = null): Float {
+    return LocalDensity.current.run { hdpQualifier(qualifiedValue, qualifierType, qualifierValue, finalQualifierResolver).toPx() }
+}
+
+/**
+ * EN
  * Extension for Dp with dynamic scaling based on **Screen Height (hDP)**.
  * Returns the original raw Dp value if the condition is not met.
  * When the screen metric for [qualifierType] is >= [qualifierValue], it uses [qualifiedValue] instead.
@@ -730,6 +1007,18 @@ fun Dp.hdpQualifierPlain(qualifiedValue: Int, qualifierType: DpQualifier, qualif
     } else {
         this
     }
+}
+
+/**
+ * EN
+ * Pixel version of hdpQualifierPlain.
+ *
+ * PT
+ * Versão em pixel de hdpQualifierPlain.
+ */
+@Composable
+fun Dp.hdpQualifierPlainPx(qualifiedValue: Int, qualifierType: DpQualifier, qualifierValue: Int, finalQualifierResolver: DpQualifier? = null): Float {
+    return LocalDensity.current.run { hdpQualifierPlain(qualifiedValue, qualifierType, qualifierValue, finalQualifierResolver).toPx() }
 }
 
 /**
@@ -761,6 +1050,18 @@ fun Int.wdpQualifier(qualifiedValue: Int, qualifierType: DpQualifier, qualifierV
 
 /**
  * EN
+ * Pixel version of wdpQualifier (Int).
+ *
+ * PT
+ * Versão em pixel de wdpQualifier (Int).
+ */
+@Composable
+fun Int.wdpQualifierPx(qualifiedValue: Int, qualifierType: DpQualifier, qualifierValue: Int, finalQualifierResolver: DpQualifier? = null): Float {
+    return LocalDensity.current.run { wdpQualifier(qualifiedValue, qualifierType, qualifierValue, finalQualifierResolver).toPx() }
+}
+
+/**
+ * EN
  * Extension for Dp with dynamic scaling based on **Screen Width (wDP)**.
  * Returns the original value **auto-scaled** using the specified qualifier if the condition is not met.
  * When the screen metric for [qualifierType] is >= [qualifierValue], it uses [qualifiedValue] instead.
@@ -784,6 +1085,18 @@ fun Dp.wdpQualifier(qualifiedValue: Int, qualifierType: DpQualifier, qualifierVa
 
 /**
  * EN
+ * Pixel version of wdpQualifier (Dp).
+ *
+ * PT
+ * Versão em pixel de wdpQualifier (Dp).
+ */
+@Composable
+fun Dp.wdpQualifierPx(qualifiedValue: Int, qualifierType: DpQualifier, qualifierValue: Int, finalQualifierResolver: DpQualifier? = null): Float {
+    return LocalDensity.current.run { wdpQualifier(qualifiedValue, qualifierType, qualifierValue, finalQualifierResolver).toPx() }
+}
+
+/**
+ * EN
  * Extension for Dp with dynamic scaling based on **Screen Width (wDP)**.
  * Returns the original raw Dp value if the condition is not met.
  * When the screen metric for [qualifierType] is >= [qualifierValue], it uses [qualifiedValue] instead.
@@ -803,6 +1116,18 @@ fun Dp.wdpQualifierPlain(qualifiedValue: Int, qualifierType: DpQualifier, qualif
     } else {
         this
     }
+}
+
+/**
+ * EN
+ * Pixel version of wdpQualifierPlain.
+ *
+ * PT
+ * Versão em pixel de wdpQualifierPlain.
+ */
+@Composable
+fun Dp.wdpQualifierPlainPx(qualifiedValue: Int, qualifierType: DpQualifier, qualifierValue: Int, finalQualifierResolver: DpQualifier? = null): Float {
+    return LocalDensity.current.run { wdpQualifierPlain(qualifiedValue, qualifierType, qualifierValue, finalQualifierResolver).toPx() }
 }
 
 // EN UiModeType + DpQualifier combined facilitator extensions.
@@ -846,6 +1171,18 @@ fun Int.sdpScreen(screenValue: Int, uiModeType: UiModeType, qualifierType: DpQua
 
 /**
  * EN
+ * Pixel version of sdpScreen (Int).
+ *
+ * PT
+ * Versão em pixel de sdpScreen (Int).
+ */
+@Composable
+fun Int.sdpScreenPx(screenValue: Int, uiModeType: UiModeType, qualifierType: DpQualifier, qualifierValue: Int, finalQualifierResolver: DpQualifier? = null): Float {
+    return LocalDensity.current.run { sdpScreen(screenValue, uiModeType, qualifierType, qualifierValue, finalQualifierResolver).toPx() }
+}
+
+/**
+ * EN
  * Extension for Dp with dynamic scaling based on **Smallest Width (swDP)**.
  * Returns the original value **auto-scaled** using the specified qualifier if the condition is not met.
  * When the device matches [uiModeType] AND the screen metric for [qualifierType]
@@ -880,6 +1217,18 @@ fun Dp.sdpScreen(screenValue: Int, uiModeType: UiModeType, qualifierType: DpQual
 
 /**
  * EN
+ * Pixel version of sdpScreen (Dp).
+ *
+ * PT
+ * Versão em pixel de sdpScreen (Dp).
+ */
+@Composable
+fun Dp.sdpScreenPx(screenValue: Int, uiModeType: UiModeType, qualifierType: DpQualifier, qualifierValue: Int, finalQualifierResolver: DpQualifier? = null): Float {
+    return LocalDensity.current.run { sdpScreen(screenValue, uiModeType, qualifierType, qualifierValue, finalQualifierResolver).toPx() }
+}
+
+/**
+ * EN
  * Extension for Dp with dynamic scaling based on **Smallest Width (swDP)**.
  * Returns the original raw Dp value if the condition is not met.
  * When the device matches [uiModeType] AND the screen metric for [qualifierType]
@@ -910,6 +1259,18 @@ fun Dp.sdpScreenPlain(screenValue: Int, uiModeType: UiModeType, qualifierType: D
     } else {
         this
     }
+}
+
+/**
+ * EN
+ * Pixel version of sdpScreenPlain.
+ *
+ * PT
+ * Versão em pixel de sdpScreenPlain.
+ */
+@Composable
+fun Dp.sdpScreenPlainPx(screenValue: Int, uiModeType: UiModeType, qualifierType: DpQualifier, qualifierValue: Int, finalQualifierResolver: DpQualifier? = null): Float {
+    return LocalDensity.current.run { sdpScreenPlain(screenValue, uiModeType, qualifierType, qualifierValue, finalQualifierResolver).toPx() }
 }
 
 /**
@@ -950,6 +1311,18 @@ fun Int.hdpScreen(screenValue: Int, uiModeType: UiModeType, qualifierType: DpQua
 
 /**
  * EN
+ * Pixel version of hdpScreen (Int).
+ *
+ * PT
+ * Versão em pixel de hdpScreen (Int).
+ */
+@Composable
+fun Int.hdpScreenPx(screenValue: Int, uiModeType: UiModeType, qualifierType: DpQualifier, qualifierValue: Int, finalQualifierResolver: DpQualifier? = null): Float {
+    return LocalDensity.current.run { hdpScreen(screenValue, uiModeType, qualifierType, qualifierValue, finalQualifierResolver).toPx() }
+}
+
+/**
+ * EN
  * Extension for Dp with dynamic scaling based on **Screen Height (hDP)**.
  * Returns the original value **auto-scaled** using the specified qualifier if the condition is not met.
  * When the device matches [uiModeType] AND the screen metric for [qualifierType]
@@ -984,6 +1357,18 @@ fun Dp.hdpScreen(screenValue: Int, uiModeType: UiModeType, qualifierType: DpQual
 
 /**
  * EN
+ * Pixel version of hdpScreen (Dp).
+ *
+ * PT
+ * Versão em pixel de hdpScreen (Dp).
+ */
+@Composable
+fun Dp.hdpScreenPx(screenValue: Int, uiModeType: UiModeType, qualifierType: DpQualifier, qualifierValue: Int, finalQualifierResolver: DpQualifier? = null): Float {
+    return LocalDensity.current.run { hdpScreen(screenValue, uiModeType, qualifierType, qualifierValue, finalQualifierResolver).toPx() }
+}
+
+/**
+ * EN
  * Extension for Dp with dynamic scaling based on **Screen Height (hDP)**.
  * Returns the original raw Dp value if the condition is not met.
  * When the device matches [uiModeType] AND the screen metric for [qualifierType]
@@ -1014,6 +1399,18 @@ fun Dp.hdpScreenPlain(screenValue: Int, uiModeType: UiModeType, qualifierType: D
     } else {
         this
     }
+}
+
+/**
+ * EN
+ * Pixel version of hdpScreenPlain.
+ *
+ * PT
+ * Versão em pixel de hdpScreenPlain.
+ */
+@Composable
+fun Dp.hdpScreenPlainPx(screenValue: Int, uiModeType: UiModeType, qualifierType: DpQualifier, qualifierValue: Int, finalQualifierResolver: DpQualifier? = null): Float {
+    return LocalDensity.current.run { hdpScreenPlain(screenValue, uiModeType, qualifierType, qualifierValue, finalQualifierResolver).toPx() }
 }
 
 /**
@@ -1054,6 +1451,18 @@ fun Int.wdpScreen(screenValue: Int, uiModeType: UiModeType, qualifierType: DpQua
 
 /**
  * EN
+ * Pixel version of wdpScreen (Int).
+ *
+ * PT
+ * Versão em pixel de wdpScreen (Int).
+ */
+@Composable
+fun Int.wdpScreenPx(screenValue: Int, uiModeType: UiModeType, qualifierType: DpQualifier, qualifierValue: Int, finalQualifierResolver: DpQualifier? = null): Float {
+    return LocalDensity.current.run { wdpScreen(screenValue, uiModeType, qualifierType, qualifierValue, finalQualifierResolver).toPx() }
+}
+
+/**
+ * EN
  * Extension for Dp with dynamic scaling based on **Screen Width (wDP)**.
  * Returns the original value **auto-scaled** using the specified qualifier if the condition is not met.
  * When the device matches [uiModeType] AND the screen metric for [qualifierType]
@@ -1088,6 +1497,18 @@ fun Dp.wdpScreen(screenValue: Int, uiModeType: UiModeType, qualifierType: DpQual
 
 /**
  * EN
+ * Pixel version of wdpScreen (Dp).
+ *
+ * PT
+ * Versão em pixel de wdpScreen (Dp).
+ */
+@Composable
+fun Dp.wdpScreenPx(screenValue: Int, uiModeType: UiModeType, qualifierType: DpQualifier, qualifierValue: Int, finalQualifierResolver: DpQualifier? = null): Float {
+    return LocalDensity.current.run { wdpScreen(screenValue, uiModeType, qualifierType, qualifierValue, finalQualifierResolver).toPx() }
+}
+
+/**
+ * EN
  * Extension for Dp with dynamic scaling based on **Screen Width (wDP)**.
  * Returns the original raw Dp value if the condition is not met.
  * When the device matches [uiModeType] AND the screen metric for [qualifierType]
@@ -1118,4 +1539,16 @@ fun Dp.wdpScreenPlain(screenValue: Int, uiModeType: UiModeType, qualifierType: D
     } else {
         this
     }
+}
+
+/**
+ * EN
+ * Pixel version of wdpScreenPlain.
+ *
+ * PT
+ * Versão em pixel de wdpScreenPlain.
+ */
+@Composable
+fun Dp.wdpScreenPlainPx(screenValue: Int, uiModeType: UiModeType, qualifierType: DpQualifier, qualifierValue: Int, finalQualifierResolver: DpQualifier? = null): Float {
+    return LocalDensity.current.run { wdpScreenPlain(screenValue, uiModeType, qualifierType, qualifierValue, finalQualifierResolver).toPx() }
 }

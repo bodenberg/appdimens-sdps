@@ -57,6 +57,16 @@ val Int.ssp: TextUnit get() = this.toDynamicScaledSp(DpQualifier.SMALL_WIDTH, fo
 
 /**
  * EN
+ * Pixel version of ssp.
+ *
+ * PT
+ * Versão em pixel de ssp.
+ */
+@get:Composable
+val Int.sspPx: Float get() = LocalDensity.current.run { ssp.toPx() }
+
+/**
+ * EN
  * Extension for TextUnit (Sp) with dynamic scaling based on **Smallest Width (swDP)**, but
  * in portrait orientation it acts as **Screen Height (hDP)**.
  * Usage example: `32.sspPh`.
@@ -68,6 +78,16 @@ val Int.ssp: TextUnit get() = this.toDynamicScaledSp(DpQualifier.SMALL_WIDTH, fo
  */
 @get:Composable
 val Int.sspPh: TextUnit get() = this.toDynamicScaledSp(DpQualifier.SMALL_WIDTH, fontScale = true, inverter = Inverter.SW_TO_PH)
+
+/**
+ * EN
+ * Pixel version of sspPh.
+ *
+ * PT
+ * Versão em pixel de sspPh.
+ */
+@get:Composable
+val Int.sspPhPx: Float get() = LocalDensity.current.run { sspPh.toPx() }
 
 /**
  * EN
@@ -85,6 +105,16 @@ val Int.sspLh: TextUnit get() = this.toDynamicScaledSp(DpQualifier.SMALL_WIDTH, 
 
 /**
  * EN
+ * Pixel version of sspLh.
+ *
+ * PT
+ * Versão em pixel de sspLh.
+ */
+@get:Composable
+val Int.sspLhPx: Float get() = LocalDensity.current.run { sspLh.toPx() }
+
+/**
+ * EN
  * Extension for TextUnit (Sp) with dynamic scaling based on **Smallest Width (swDP)**, but
  * in portrait orientation it acts as **Screen Width (wDP)**.
  * Usage example: `32.sspPw`.
@@ -96,6 +126,16 @@ val Int.sspLh: TextUnit get() = this.toDynamicScaledSp(DpQualifier.SMALL_WIDTH, 
  */
 @get:Composable
 val Int.sspPw: TextUnit get() = this.toDynamicScaledSp(DpQualifier.SMALL_WIDTH, fontScale = true, inverter = Inverter.SW_TO_PW)
+
+/**
+ * EN
+ * Pixel version of sspPw.
+ *
+ * PT
+ * Versão em pixel de sspPw.
+ */
+@get:Composable
+val Int.sspPwPx: Float get() = LocalDensity.current.run { sspPw.toPx() }
 
 /**
  * EN
@@ -113,6 +153,16 @@ val Int.sspLw: TextUnit get() = this.toDynamicScaledSp(DpQualifier.SMALL_WIDTH, 
 
 /**
  * EN
+ * Pixel version of sspLw.
+ *
+ * PT
+ * Versão em pixel de sspLw.
+ */
+@get:Composable
+val Int.sspLwPx: Float get() = LocalDensity.current.run { sspLw.toPx() }
+
+/**
+ * EN
  * Extension for TextUnit (Sp) with dynamic scaling based on the **Screen Height (hDP)**.
  * Usage example: `32.hsp`.
  *
@@ -122,6 +172,16 @@ val Int.sspLw: TextUnit get() = this.toDynamicScaledSp(DpQualifier.SMALL_WIDTH, 
  */
 @get:Composable
 val Int.hsp: TextUnit get() = this.toDynamicScaledSp(DpQualifier.HEIGHT, fontScale = true)
+
+/**
+ * EN
+ * Pixel version of hsp.
+ *
+ * PT
+ * Versão em pixel de hsp.
+ */
+@get:Composable
+val Int.hspPx: Float get() = LocalDensity.current.run { hsp.toPx() }
 
 /**
  * EN
@@ -139,6 +199,16 @@ val Int.hspLw: TextUnit get() = this.toDynamicScaledSp(DpQualifier.HEIGHT, fontS
 
 /**
  * EN
+ * Pixel version of hspLw.
+ *
+ * PT
+ * Versão em pixel de hspLw.
+ */
+@get:Composable
+val Int.hspLwPx: Float get() = LocalDensity.current.run { hspLw.toPx() }
+
+/**
+ * EN
  * Extension for TextUnit (Sp) with dynamic scaling based on the **Screen Height (hDP)**, but
  * in portrait orientation it acts as **Screen Width (wDP)**.
  * Usage example: `32.hspPw`.
@@ -153,6 +223,16 @@ val Int.hspPw: TextUnit get() = this.toDynamicScaledSp(DpQualifier.HEIGHT, fontS
 
 /**
  * EN
+ * Pixel version of hspPw.
+ *
+ * PT
+ * Versão em pixel de hspPw.
+ */
+@get:Composable
+val Int.hspPwPx: Float get() = LocalDensity.current.run { hspPw.toPx() }
+
+/**
+ * EN
  * Extension for TextUnit (Sp) with dynamic scaling based on the **Screen Width (wDP)**.
  * Usage example: `100.wsp`.
  *
@@ -162,6 +242,16 @@ val Int.hspPw: TextUnit get() = this.toDynamicScaledSp(DpQualifier.HEIGHT, fontS
  */
 @get:Composable
 val Int.wsp: TextUnit get() = this.toDynamicScaledSp(DpQualifier.WIDTH, fontScale = true)
+
+/**
+ * EN
+ * Pixel version of wsp.
+ *
+ * PT
+ * Versão em pixel de wsp.
+ */
+@get:Composable
+val Int.wspPx: Float get() = LocalDensity.current.run { wsp.toPx() }
 
 /**
  * EN
@@ -179,6 +269,16 @@ val Int.wspLh: TextUnit get() = this.toDynamicScaledSp(DpQualifier.WIDTH, fontSc
 
 /**
  * EN
+ * Pixel version of wspLh.
+ *
+ * PT
+ * Versão em pixel de wspLh.
+ */
+@get:Composable
+val Int.wspLhPx: Float get() = LocalDensity.current.run { wspLh.toPx() }
+
+/**
+ * EN
  * Extension for TextUnit (Sp) with dynamic scaling based on the **Screen Width (wDP)**, but
  * in portrait orientation it acts as **Screen Height (hDP)**.
  * Usage example: `100.wspPh`.
@@ -190,6 +290,16 @@ val Int.wspLh: TextUnit get() = this.toDynamicScaledSp(DpQualifier.WIDTH, fontSc
  */
 @get:Composable
 val Int.wspPh: TextUnit get() = this.toDynamicScaledSp(DpQualifier.WIDTH, fontScale = true, inverter = Inverter.LW_TO_PH)
+
+/**
+ * EN
+ * Pixel version of wspPh.
+ *
+ * PT
+ * Versão em pixel de wspPh.
+ */
+@get:Composable
+val Int.wspPhPx: Float get() = LocalDensity.current.run { wspPh.toPx() }
 
 // EN WITHOUT FONT SCALE variants (sem escala de fonte)
 // PT Variantes SEM ESCALA DE FONTE
@@ -208,6 +318,16 @@ val Int.sem: TextUnit get() = this.toDynamicScaledSp(DpQualifier.SMALL_WIDTH, fo
 
 /**
  * EN
+ * Pixel version of sem.
+ *
+ * PT
+ * Versão em pixel de sem.
+ */
+@get:Composable
+val Int.semPx: Float get() = LocalDensity.current.run { sem.toPx() }
+
+/**
+ * EN
  * Extension for TextUnit (Sp) with dynamic scaling based on **Smallest Width (swDP)** (WITHOUT FONT SCALE), but
  * in portrait orientation it acts as **Screen Height (hDP)**.
  * Usage example: `32.semPh`.
@@ -219,6 +339,16 @@ val Int.sem: TextUnit get() = this.toDynamicScaledSp(DpQualifier.SMALL_WIDTH, fo
  */
 @get:Composable
 val Int.semPh: TextUnit get() = this.toDynamicScaledSp(DpQualifier.SMALL_WIDTH, fontScale = false, inverter = Inverter.SW_TO_PH)
+
+/**
+ * EN
+ * Pixel version of semPh.
+ *
+ * PT
+ * Versão em pixel de semPh.
+ */
+@get:Composable
+val Int.semPhPx: Float get() = LocalDensity.current.run { semPh.toPx() }
 
 /**
  * EN
@@ -236,6 +366,16 @@ val Int.semLh: TextUnit get() = this.toDynamicScaledSp(DpQualifier.SMALL_WIDTH, 
 
 /**
  * EN
+ * Pixel version of semLh.
+ *
+ * PT
+ * Versão em pixel de semLh.
+ */
+@get:Composable
+val Int.semLhPx: Float get() = LocalDensity.current.run { semLh.toPx() }
+
+/**
+ * EN
  * Extension for TextUnit (Sp) with dynamic scaling based on **Smallest Width (swDP)** (WITHOUT FONT SCALE), but
  * in portrait orientation it acts as **Screen Width (wDP)**.
  * Usage example: `32.semPw`.
@@ -247,6 +387,16 @@ val Int.semLh: TextUnit get() = this.toDynamicScaledSp(DpQualifier.SMALL_WIDTH, 
  */
 @get:Composable
 val Int.semPw: TextUnit get() = this.toDynamicScaledSp(DpQualifier.SMALL_WIDTH, fontScale = false, inverter = Inverter.SW_TO_PW)
+
+/**
+ * EN
+ * Pixel version of semPw.
+ *
+ * PT
+ * Versão em pixel de semPw.
+ */
+@get:Composable
+val Int.semPwPx: Float get() = LocalDensity.current.run { semPw.toPx() }
 
 /**
  * EN
@@ -264,6 +414,16 @@ val Int.semLw: TextUnit get() = this.toDynamicScaledSp(DpQualifier.SMALL_WIDTH, 
 
 /**
  * EN
+ * Pixel version of semLw.
+ *
+ * PT
+ * Versão em pixel de semLw.
+ */
+@get:Composable
+val Int.semLwPx: Float get() = LocalDensity.current.run { semLw.toPx() }
+
+/**
+ * EN
  * Extension for TextUnit (Sp) with dynamic scaling based on the **Screen Height (hDP)** (WITHOUT FONT SCALE).
  * Usage example: `32.hem`.
  *
@@ -273,6 +433,16 @@ val Int.semLw: TextUnit get() = this.toDynamicScaledSp(DpQualifier.SMALL_WIDTH, 
  */
 @get:Composable
 val Int.hem: TextUnit get() = this.toDynamicScaledSp(DpQualifier.HEIGHT, fontScale = false)
+
+/**
+ * EN
+ * Pixel version of hem.
+ *
+ * PT
+ * Versão em pixel de hem.
+ */
+@get:Composable
+val Int.hemPx: Float get() = LocalDensity.current.run { hem.toPx() }
 
 /**
  * EN
@@ -289,6 +459,16 @@ val Int.hemLw: TextUnit get() = this.toDynamicScaledSp(DpQualifier.HEIGHT, fontS
 
 /**
  * EN
+ * Pixel version of hemLw.
+ *
+ * PT
+ * Versão em pixel de hemLw.
+ */
+@get:Composable
+val Int.hemLwPx: Float get() = LocalDensity.current.run { hemLw.toPx() }
+
+/**
+ * EN
  * Extension for TextUnit (Sp) with dynamic scaling based on the **Screen Height (hDP)** (WITHOUT FONT SCALE), but
  * in portrait orientation it acts as **Screen Width (wDP)**.
  * Usage example: `32.hemPw`.
@@ -302,6 +482,16 @@ val Int.hemPw: TextUnit get() = this.toDynamicScaledSp(DpQualifier.HEIGHT, fontS
 
 /**
  * EN
+ * Pixel version of hemPw.
+ *
+ * PT
+ * Versão em pixel de hemPw.
+ */
+@get:Composable
+val Int.hemPwPx: Float get() = LocalDensity.current.run { hemPw.toPx() }
+
+/**
+ * EN
  * Extension for TextUnit (Sp) with dynamic scaling based on the **Screen Width (wDP)** (WITHOUT FONT SCALE).
  * Usage example: `100.wem`.
  *
@@ -311,6 +501,16 @@ val Int.hemPw: TextUnit get() = this.toDynamicScaledSp(DpQualifier.HEIGHT, fontS
  */
 @get:Composable
 val Int.wem: TextUnit get() = this.toDynamicScaledSp(DpQualifier.WIDTH, fontScale = false)
+
+/**
+ * EN
+ * Pixel version of wem.
+ *
+ * PT
+ * Versão em pixel de wem.
+ */
+@get:Composable
+val Int.wemPx: Float get() = LocalDensity.current.run { wem.toPx() }
 
 /**
  * EN
@@ -327,6 +527,16 @@ val Int.wemLh: TextUnit get() = this.toDynamicScaledSp(DpQualifier.WIDTH, fontSc
 
 /**
  * EN
+ * Pixel version of wemLh.
+ *
+ * PT
+ * Versão em pixel de wemLh.
+ */
+@get:Composable
+val Int.wemLhPx: Float get() = LocalDensity.current.run { wemLh.toPx() }
+
+/**
+ * EN
  * Extension for TextUnit (Sp) with dynamic scaling based on the **Screen Width (wDP)** (WITHOUT FONT SCALE), but
  * in portrait orientation it acts as **Screen Height (hDP)**.
  * Usage example: `100.wemPh`.
@@ -337,6 +547,16 @@ val Int.wemLh: TextUnit get() = this.toDynamicScaledSp(DpQualifier.WIDTH, fontSc
  */
 @get:Composable
 val Int.wemPh: TextUnit get() = this.toDynamicScaledSp(DpQualifier.WIDTH, fontScale = false, inverter = Inverter.LW_TO_PH)
+
+/**
+ * EN
+ * Pixel version of wemPh.
+ *
+ * PT
+ * Versão em pixel de wemPh.
+ */
+@get:Composable
+val Int.wemPhPx: Float get() = LocalDensity.current.run { wemPh.toPx() }
 
 // EN Dynamic scaling function for Sp (Resource-based, reuses DP XML resources).
 // PT Função de dimensionamento dinâmico para Sp (baseada em recursos, reutiliza os recursos XML de DP).
