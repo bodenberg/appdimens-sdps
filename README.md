@@ -10,11 +10,13 @@
 
 ```kotlin
 dependencies {
-    implementation("io.github.bodenberg:appdimens-sdps:3.1.0")
+    implementation("io.github.bodenberg:appdimens-sdps:3.1.2")
 }
 ```
 
 **Requirements:** Min SDK 24 · Compile SDK 36 · Kotlin & Java · XML & Jetpack Compose
+
+**R8 / ProGuard / shrink resources:** The AAR ships `consumer-rules.pro` and `res/raw/keep.xml` so consuming apps can use `minifyEnabled`, R8 full mode (`android.enableR8.fullMode=true`), and `shrinkResources` without adding extra keep rules for this library’s dimens or Java-facing APIs.
 
 ---
 
@@ -88,6 +90,10 @@ val rotDp = 30.dp.sdpRotate(50)
 // 3. Dp Extension (Plain - Raw Fallback): Returns 30.sdp in Portrait, scales 50 in Landscape
 val rotPlain = 30.sdp.sdpRotatePlain(50)
 
+// 4. Plain with both sizes already resolved (no resource lookup — orientation branch only)
+val rotPlainBothDp = 30.sdp.sdpRotatePlain(20.sdp)
+val rotPlainBothDpEx = 30.sdp.sdpRotatePlain(20.sdp, Orientation.LANDSCAPE)
+
 // Mode, Qualifier, Screen examples (All support Int, Dp, and Plain variants)
 val modeVal = 30.sdpMode(200, UiModeType.TELEVISION)
 val qualVal = 60.sdpQualifier(120, DpQualifier.SMALL_WIDTH, 600)
@@ -97,8 +103,15 @@ val scrVal = 70.sdpScreen(150, UiModeType.TELEVISION, DpQualifier.SMALL_WIDTH, 6
 // Supports: .sspRotate, .sspRotatePlain, .sspMode, etc.
 val fontRot = 16.sspRotate(24)
 val fontPlain = 16.ssp.sspRotatePlain(24)
+val fontPlainBothSp = 16.ssp.sspRotatePlain(14.ssp)
 val fontTV = 16.sspMode(40, UiModeType.TELEVISION)
 ```
+
+**Nesting facilitators vs `.screen` on `scaledDp` / `scaledSp`:**
+
+You can chain facilitator extensions; each step uses the `Dp` or `TextUnit` from the previous call, so **order follows the call chain** (not a separate priority list). For nested chains, prefer **Plain** helpers: the `Int`-based Plain keeps the non-matching branch raw, or use **Plain with two `Dp` / `TextUnit` arguments** so neither side is re-scaled inside that facilitator.
+
+On **`scaledDp` / `scaledSp`**, multiple `.screen(...)` rules are applied using the library’s **priority order**. That is different from chaining standalone extensions, where evaluation is strictly sequential.
 
 **DimenScaled Builder — Complex Multi-Condition Chains:**
 ```kotlin
@@ -203,7 +216,10 @@ val resId = DimenSdp.sdpRes(context, 16)
 val adaptive = DimenSdp.hdpLw(context, 50)    // Height → Width in Landscape
 
 // Facilitators
-val rotated = DimenSdp.sdpRotate(context, 30, Orientation.LANDSCAPE)
+val rotated = DimenSdp.sdpRotate(context, 30, 45)
+val rotatedPlainPx = DimenSdp.sdpRotatePlain(context, DimenSdp.sdp(context, 30), DimenSdp.sdp(context, 20))
+// Or: val rotatedPlainPx = DimenSdp.sdp(context, 30).sdpRotatePlain(context, DimenSdp.sdp(context, 20))
+val rotatedPlainSp = DimenSsp.sspRotatePlain(context, DimenSsp.ssp(context, 16), DimenSsp.ssp(context, 14))
 val modeVal = DimenSdp.sdpMode(context, 30, 200, UiModeType.TELEVISION)
 val qualVal = DimenSdp.sdpQualifier(context, 30, 80, DpQualifier.SMALL_WIDTH, 600)
 
@@ -231,6 +247,9 @@ int fontResId = DimenSsp.sspRes(context, 16);
 
 // Inverter shortcuts
 float adaptive = DimenSdp.hdpLw(context, 50);
+
+// Plain rotation (pre-resolved px, no resource lookup inside the facilitator)
+float rotatedPlain = DimenSdp.sdpRotatePlain(context, DimenSdp.sdp(context, 30), DimenSdp.sdp(context, 20));
 
 // DimenScaled builder (uses @JvmStatic + @JvmOverloads)
 DimenScaled scaled = DimenSdp.scaled(16)

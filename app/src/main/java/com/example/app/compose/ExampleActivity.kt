@@ -45,9 +45,13 @@ import com.appdimens.sdps.compose.wdpLh
 // EN Facilitator extensions: conditional dimension resolution
 // PT Extensões facilitadoras: resolução condicional de dimensão
 import com.appdimens.sdps.compose.sdpRotate
+import com.appdimens.sdps.compose.sdpRotatePlain
 import com.appdimens.sdps.compose.sdpMode
+import com.appdimens.sdps.compose.sdpModePlain
 import com.appdimens.sdps.compose.sdpQualifier
 import com.appdimens.sdps.compose.sdpScreen
+import com.appdimens.sdps.compose.ssp
+import com.appdimens.sdps.compose.sspRotatePlain
 
 // EN DimenScaled builder for complex conditional dimensions
 // PT Builder DimenScaled para dimensões condicionais complexas
@@ -195,6 +199,34 @@ fun SdpDemoScreen() {
                         orientation = Orientation.PORTRAIT
                     ),
                     boxColor = Color(0xFFFF8A65)
+                )
+
+                // EN sdpRotatePlain(Dp): both sizes already resolved — no Int lookup inside rotate
+                // PT sdpRotatePlain(Dp): ambos os tamanhos já resolvidos — sem busca Int dentro da rotação
+                ExampleCard(
+                    title = "sdpRotatePlain (Dp + Dp)",
+                    description = "80.sdp.sdpRotatePlain(50.sdp) — portrait keeps 80.sdp; landscape uses 50.sdp (both pre-scaled). Optional: , Orientation.LANDSCAPE.",
+                    boxSize = 80.sdp.sdpRotatePlain(50.sdp),
+                    boxColor = Color(0xFFFFAB40)
+                )
+
+                // EN Nested Plain: call order = outer runs on inner result (unlike .screen priority in scaledDp)
+                // PT Plain aninhado: ordem das chamadas — a externa recebe o Dp já resolvido pela interna (diferente da prioridade .screen no scaledDp)
+                ExampleCard(
+                    title = "Nested Plain (sdpRotatePlain → sdpModePlain)",
+                    description = "64.sdp.sdpRotatePlain(40.sdp).sdpModePlain(28, UiModeType.WATCH) — rotation first, then Watch override; Plain avoids re-scaling the receiver.",
+                    boxSize = 64.sdp.sdpRotatePlain(40.sdp).sdpModePlain(28, UiModeType.WATCH),
+                    boxColor = Color(0xFFFFCC80)
+                )
+
+                // EN sspRotatePlain(TextUnit + TextUnit) — same “both pre-resolved” idea for fonts
+                // PT sspRotatePlain(TextUnit + TextUnit) — mesma ideia “ambos resolvidos” para fontes
+                Text(
+                    text = "sspRotatePlain: 16.ssp.sspRotatePlain(12.ssp)",
+                    fontSize = 16.ssp.sspRotatePlain(12.ssp),
+                    color = MaterialTheme.colorScheme.onBackground,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
                 )
 
                 // EN sdpMode — change value for specific UI modes (TV, Watch, etc.)

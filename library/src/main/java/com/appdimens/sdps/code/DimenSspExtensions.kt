@@ -168,6 +168,27 @@ fun Int.wspRotate(
     fontScale: Boolean = true
 ): Float = DimenSsp.wspRotate(context, this, rotationValue, finalQualifierResolver, orientation, fontScale)
 
+/** EN Plain rotation with pre-resolved sp px; receiver is base px. PT Rotação Plain com px de sp já resolvidos; o receiver é o px base. @see DimenSsp.sspRotatePlain */
+fun Float.sspRotatePlain(
+    context: Context,
+    rotationPx: Float,
+    orientation: Orientation = Orientation.LANDSCAPE
+): Float = DimenSsp.sspRotatePlain(context, this, rotationPx, orientation)
+
+/** EN Plain rotation (hSP name); receiver is base px. PT Rotação Plain (nome hSP); receiver é px base. @see DimenSsp.hspRotatePlain */
+fun Float.hspRotatePlain(
+    context: Context,
+    rotationPx: Float,
+    orientation: Orientation = Orientation.LANDSCAPE
+): Float = DimenSsp.hspRotatePlain(context, this, rotationPx, orientation)
+
+/** EN Plain rotation (wSP name); receiver is base px. PT Rotação Plain (nome wSP); receiver é px base. @see DimenSsp.wspRotatePlain */
+fun Float.wspRotatePlain(
+    context: Context,
+    rotationPx: Float,
+    orientation: Orientation = Orientation.LANDSCAPE
+): Float = DimenSsp.wspRotatePlain(context, this, rotationPx, orientation)
+
 // EN UiModeType facilitator extensions for Sp from code.
 // PT Extensões facilitadoras de UiModeType para Sp de código.
 

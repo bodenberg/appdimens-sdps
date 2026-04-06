@@ -130,6 +130,27 @@ fun Int.wdpRotate(
     orientation: Orientation = Orientation.LANDSCAPE
 ): Float = DimenSdp.wdpRotate(context, this, rotationValue, finalQualifierResolver, orientation)
 
+/** EN Plain rotation with pre-resolved px; receiver is base px. PT Rotação Plain com px já resolvidos; o receiver é o px base. @see DimenSdp.sdpRotatePlain */
+fun Float.sdpRotatePlain(
+    context: Context,
+    rotationPx: Float,
+    orientation: Orientation = Orientation.LANDSCAPE
+): Float = DimenSdp.sdpRotatePlain(context, this, rotationPx, orientation)
+
+/** EN Plain rotation (hDP name); receiver is base px. PT Rotação Plain (nome hDP); receiver é px base. @see DimenSdp.hdpRotatePlain */
+fun Float.hdpRotatePlain(
+    context: Context,
+    rotationPx: Float,
+    orientation: Orientation = Orientation.LANDSCAPE
+): Float = DimenSdp.hdpRotatePlain(context, this, rotationPx, orientation)
+
+/** EN Plain rotation (wDP name); receiver is base px. PT Rotação Plain (nome wDP); receiver é px base. @see DimenSdp.wdpRotatePlain */
+fun Float.wdpRotatePlain(
+    context: Context,
+    rotationPx: Float,
+    orientation: Orientation = Orientation.LANDSCAPE
+): Float = DimenSdp.wdpRotatePlain(context, this, rotationPx, orientation)
+
 // EN UiModeType facilitator extensions for code.
 // PT Extensões facilitadoras de UiModeType para código.
 

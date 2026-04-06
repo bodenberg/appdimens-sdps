@@ -121,6 +121,15 @@ class ExampleActivity : AppCompatActivity() {
         val rotateCustom = DimenSdp.sdpRotate(this, 60, 40, DpQualifier.HEIGHT, Orientation.PORTRAIT)
         Log.d(TAG, "4. Rotate Custom — sdpRotate(60, 40, HEIGHT, PORTRAIT)=${rotateCustom}px")
 
+        // EN sdpRotatePlain: pre-resolved px only — no lookup inside the facilitator
+        // PT sdpRotatePlain: apenas px já resolvidos — sem busca dentro do facilitador
+        val rotatePlainPx = DimenSdp.sdpRotatePlain(
+            this,
+            DimenSdp.sdp(this, 30),
+            DimenSdp.sdp(this, 20)
+        )
+        Log.d(TAG, "4. Rotate Plain — sdpRotatePlain(sdp(30), sdp(20))=${rotatePlainPx}px")
+
         // EN sdpMode: Use a different value based on UiModeType (TV, Car, Watch, etc.)
         // PT sdpMode: Usa um valor diferente baseado no UiModeType (TV, Carro, Relógio, etc.)
         val modeVal = DimenSdp.sdpMode(this, 30, 200, UiModeType.TELEVISION)

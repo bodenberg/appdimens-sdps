@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  AppDimens resolves dimen resources by name at runtime (Resources.getIdentifier).
+  Resource shrinking in consuming apps cannot infer those references statically.
+  This keep rules file preserves sdp/hdp/wdp dimens when shrinkResources is enabled.
+-->
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@dimen/_*sdp,@dimen/_*hdp,@dimen/_*wdp" />

@@ -198,6 +198,42 @@ fun TextUnit.sspRotatePlainPx(
 
 /**
  * EN
+ * Plain rotation override using **already-resolved** [TextUnit] values. No resource lookup and no
+ * dynamic scaling—only orientation branching. Prefer when nesting facilitator extensions or when
+ * both font sizes were computed elsewhere. For catalog-based rotation values, use [sspRotatePlain] with an [Int].
+ *
+ * PT
+ * Substituição por rotação **Plain** com [TextUnit] **já resolvidos**. Sem busca de recurso nem
+ * escalonamento dinâmico—só o desvio por orientação. Recomendado ao aninhar facilitadores ou quando
+ * ambos os tamanhos já foram calculados. Para escalar o valor de rotação pelo catálogo, use [sspRotatePlain] com [Int].
+ *
+ * Usage example / Exemplo: `16.ssp.sspRotatePlain(14.ssp)` or `16.ssp.sspRotatePlain(14.ssp, Orientation.LANDSCAPE)`.
+ */
+@Composable
+fun TextUnit.sspRotatePlain(rotationSp: TextUnit, orientation: Orientation = Orientation.LANDSCAPE): TextUnit {
+    val configuration = LocalConfiguration.current
+    val isTargetOrientation = when (orientation) {
+        Orientation.LANDSCAPE -> configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        Orientation.PORTRAIT -> configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+        else -> false
+    }
+    return if (isTargetOrientation) rotationSp else this
+}
+
+/**
+ * EN
+ * Pixel version of [sspRotatePlain] with pre-resolved [TextUnit] values.
+ *
+ * PT
+ * Versão em pixel de [sspRotatePlain] com valores [TextUnit] já resolvidos.
+ */
+@Composable
+fun TextUnit.sspRotatePlainPx(rotationSp: TextUnit, orientation: Orientation = Orientation.LANDSCAPE): Float {
+    return LocalDensity.current.run { sspRotatePlain(rotationSp, orientation).toPx() }
+}
+
+/**
+ * EN
  * Extension for TextUnit (Sp) with dynamic scaling based on **Screen Height (hDP)**.
  * Uses the base value by default, but when the device is in the specified [orientation],
  * it uses [rotationValue] scaled with the given [finalQualifierResolver].
@@ -348,6 +384,39 @@ fun TextUnit.hspRotatePlainPx(
 
 /**
  * EN
+ * Plain rotation (**hSP** semantics) with **already-resolved** [TextUnit] values. No lookup or
+ * dynamic scaling—only orientation branching. Prefer when nesting extensions. For catalog rotation,
+ * use [hspRotatePlain] with an [Int].
+ *
+ * PT
+ * Rotação **Plain** (semântica **hSP**) com [TextUnit] **já resolvidos**. Sem recurso nem escalonamento
+ * dinâmico—só orientação. Recomendado ao aninhar. Para rotação via catálogo, use [hspRotatePlain] com [Int].
+ */
+@Composable
+fun TextUnit.hspRotatePlain(rotationSp: TextUnit, orientation: Orientation = Orientation.LANDSCAPE): TextUnit {
+    val configuration = LocalConfiguration.current
+    val isTargetOrientation = when (orientation) {
+        Orientation.LANDSCAPE -> configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        Orientation.PORTRAIT -> configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+        else -> false
+    }
+    return if (isTargetOrientation) rotationSp else this
+}
+
+/**
+ * EN
+ * Pixel version of [hspRotatePlain] with pre-resolved [TextUnit] values.
+ *
+ * PT
+ * Versão em pixel de [hspRotatePlain] com valores [TextUnit] já resolvidos.
+ */
+@Composable
+fun TextUnit.hspRotatePlainPx(rotationSp: TextUnit, orientation: Orientation = Orientation.LANDSCAPE): Float {
+    return LocalDensity.current.run { hspRotatePlain(rotationSp, orientation).toPx() }
+}
+
+/**
+ * EN
  * Extension for TextUnit (Sp) with dynamic scaling based on **Screen Width (wDP)**.
  * Uses the base value by default, but when the device is in the specified [orientation],
  * it uses [rotationValue] scaled with the given [finalQualifierResolver].
@@ -494,6 +563,39 @@ fun TextUnit.wspRotatePlainPx(
     fontScale: Boolean = true
 ): Float {
     return LocalDensity.current.run { wspRotatePlain(rotationValue, finalQualifierResolver, orientation, fontScale).toPx() }
+}
+
+/**
+ * EN
+ * Plain rotation (**wSP** semantics) with **already-resolved** [TextUnit] values. No lookup or
+ * dynamic scaling—only orientation branching. Prefer when nesting extensions. For catalog rotation,
+ * use [wspRotatePlain] with an [Int].
+ *
+ * PT
+ * Rotação **Plain** (semântica **wSP**) com [TextUnit] **já resolvidos**. Sem recurso nem escalonamento
+ * dinâmico—só orientação. Recomendado ao aninhar. Para rotação via catálogo, use [wspRotatePlain] com [Int].
+ */
+@Composable
+fun TextUnit.wspRotatePlain(rotationSp: TextUnit, orientation: Orientation = Orientation.LANDSCAPE): TextUnit {
+    val configuration = LocalConfiguration.current
+    val isTargetOrientation = when (orientation) {
+        Orientation.LANDSCAPE -> configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        Orientation.PORTRAIT -> configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+        else -> false
+    }
+    return if (isTargetOrientation) rotationSp else this
+}
+
+/**
+ * EN
+ * Pixel version of [wspRotatePlain] with pre-resolved [TextUnit] values.
+ *
+ * PT
+ * Versão em pixel de [wspRotatePlain] com valores [TextUnit] já resolvidos.
+ */
+@Composable
+fun TextUnit.wspRotatePlainPx(rotationSp: TextUnit, orientation: Orientation = Orientation.LANDSCAPE): Float {
+    return LocalDensity.current.run { wspRotatePlain(rotationSp, orientation).toPx() }
 }
 
 // EN Helps extract the activity from context wrapper (Sp version)

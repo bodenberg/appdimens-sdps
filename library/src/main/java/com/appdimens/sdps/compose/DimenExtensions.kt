@@ -168,6 +168,44 @@ fun Dp.sdpRotatePlainPx(rotationValue: Int, finalQualifierResolver: DpQualifier 
 
 /**
  * EN
+ * Plain rotation override using **already-resolved** [Dp] values. No resource lookup and no
+ * dynamic scaling on either side—only orientation branching. Prefer this when nesting facilitator
+ * extensions or when both sizes were computed elsewhere (e.g. another extension).
+ * For catalog-based scaling of the rotation value, use [sdpRotatePlain] with an [Int] instead.
+ *
+ * PT
+ * Substituição por rotação **Plain** com valores [Dp] **já resolvidos**. Sem busca de recurso e
+ * sem escalonamento dinâmico em nenhum dos lados—apenas o desvio por orientação. Recomendado ao
+ * aninhar facilitadores ou quando ambos os tamanhos já foram calculados (por exemplo, por outra extensão).
+ * Para escalar o valor de rotação a partir do catálogo, use [sdpRotatePlain] com [Int].
+ *
+ * Usage example / Exemplo: `30.sdp.sdpRotatePlain(20.sdp)` or `30.sdp.sdpRotatePlain(20.sdp, Orientation.LANDSCAPE)`.
+ */
+@Composable
+fun Dp.sdpRotatePlain(rotationDp: Dp, orientation: Orientation = Orientation.LANDSCAPE): Dp {
+    val configuration = LocalConfiguration.current
+    val isTargetOrientation = when (orientation) {
+        Orientation.LANDSCAPE -> configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        Orientation.PORTRAIT -> configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+        else -> false
+    }
+    return if (isTargetOrientation) rotationDp else this
+}
+
+/**
+ * EN
+ * Pixel version of [sdpRotatePlain] with pre-resolved [Dp] values.
+ *
+ * PT
+ * Versão em pixel de [sdpRotatePlain] com valores [Dp] já resolvidos.
+ */
+@Composable
+fun Dp.sdpRotatePlainPx(rotationDp: Dp, orientation: Orientation = Orientation.LANDSCAPE): Float {
+    return LocalDensity.current.run { sdpRotatePlain(rotationDp, orientation).toPx() }
+}
+
+/**
+ * EN
  * Extension for Dp with dynamic scaling based on **Screen Height (hDP)**.
  * Uses the base value by default, but when the device is in the specified [orientation],
  * it uses [rotationValue] scaled with the given [finalQualifierResolver].
@@ -290,6 +328,42 @@ fun Dp.hdpRotatePlainPx(rotationValue: Int, finalQualifierResolver: DpQualifier 
 
 /**
  * EN
+ * Plain rotation override for **hDP** semantics using **already-resolved** [Dp] values.
+ * No resource lookup and no dynamic scaling—only orientation branching. Prefer when nesting
+ * extensions or when both sizes are precomputed. For catalog-based rotation values, use
+ * [hdpRotatePlain] with an [Int].
+ *
+ * PT
+ * Substituição por rotação **Plain** (semântica **hDP**) com [Dp] **já resolvidos**.
+ * Sem recurso nem escalonamento dinâmico—só o desvio por orientação. Recomendado ao aninhar
+ * extensões ou quando ambos os valores já foram calculados. Para o valor de rotação via catálogo,
+ * use [hdpRotatePlain] com [Int].
+ */
+@Composable
+fun Dp.hdpRotatePlain(rotationDp: Dp, orientation: Orientation = Orientation.LANDSCAPE): Dp {
+    val configuration = LocalConfiguration.current
+    val isTargetOrientation = when (orientation) {
+        Orientation.LANDSCAPE -> configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        Orientation.PORTRAIT -> configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+        else -> false
+    }
+    return if (isTargetOrientation) rotationDp else this
+}
+
+/**
+ * EN
+ * Pixel version of [hdpRotatePlain] with pre-resolved [Dp] values.
+ *
+ * PT
+ * Versão em pixel de [hdpRotatePlain] com valores [Dp] já resolvidos.
+ */
+@Composable
+fun Dp.hdpRotatePlainPx(rotationDp: Dp, orientation: Orientation = Orientation.LANDSCAPE): Float {
+    return LocalDensity.current.run { hdpRotatePlain(rotationDp, orientation).toPx() }
+}
+
+/**
+ * EN
  * Extension for Dp with dynamic scaling based on **Screen Width (wDP)**.
  * Uses the base value by default, but when the device is in the specified [orientation],
  * it uses [rotationValue] scaled with the given [finalQualifierResolver].
@@ -408,6 +482,42 @@ fun Dp.wdpRotatePlain(rotationValue: Int, finalQualifierResolver: DpQualifier = 
 @Composable
 fun Dp.wdpRotatePlainPx(rotationValue: Int, finalQualifierResolver: DpQualifier = DpQualifier.WIDTH, orientation: Orientation = Orientation.LANDSCAPE): Float {
     return LocalDensity.current.run { wdpRotatePlain(rotationValue, finalQualifierResolver, orientation).toPx() }
+}
+
+/**
+ * EN
+ * Plain rotation override for **wDP** semantics using **already-resolved** [Dp] values.
+ * No resource lookup and no dynamic scaling—only orientation branching. Prefer when nesting
+ * extensions or when both sizes are precomputed. For catalog-based rotation values, use
+ * [wdpRotatePlain] with an [Int].
+ *
+ * PT
+ * Substituição por rotação **Plain** (semântica **wDP**) com [Dp] **já resolvidos**.
+ * Sem recurso nem escalonamento dinâmico—só o desvio por orientação. Recomendado ao aninhar
+ * extensões ou quando ambos os valores já foram calculados. Para o valor de rotação via catálogo,
+ * use [wdpRotatePlain] com [Int].
+ */
+@Composable
+fun Dp.wdpRotatePlain(rotationDp: Dp, orientation: Orientation = Orientation.LANDSCAPE): Dp {
+    val configuration = LocalConfiguration.current
+    val isTargetOrientation = when (orientation) {
+        Orientation.LANDSCAPE -> configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        Orientation.PORTRAIT -> configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+        else -> false
+    }
+    return if (isTargetOrientation) rotationDp else this
+}
+
+/**
+ * EN
+ * Pixel version of [wdpRotatePlain] with pre-resolved [Dp] values.
+ *
+ * PT
+ * Versão em pixel de [wdpRotatePlain] com valores [Dp] já resolvidos.
+ */
+@Composable
+fun Dp.wdpRotatePlainPx(rotationDp: Dp, orientation: Orientation = Orientation.LANDSCAPE): Float {
+    return LocalDensity.current.run { wdpRotatePlain(rotationDp, orientation).toPx() }
 }
 
 // EN Helps extract the activity from context wrapper

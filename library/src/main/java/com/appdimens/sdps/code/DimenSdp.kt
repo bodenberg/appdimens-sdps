@@ -521,6 +521,53 @@ object DimenSdp {
         else getDimensionInPx(context, DpQualifier.WIDTH, value)
     }
 
+    /**
+     * EN
+     * Plain rotation using **pre-resolved pixel** values. No resource lookup—only orientation branching.
+     * Typical usage: pass values from [sdp], [hdp], or [wdp] (or any px source) already computed.
+     *
+     * PT
+     * Rotação **Plain** com valores em **pixel já resolvidos**. Sem busca de recurso—só desvio por orientação.
+     * Uso típico: passar valores de [sdp], [hdp] ou [wdp] (ou outra origem em px) já calculados.
+     *
+     * Usage example / Exemplo: `DimenSdp.sdpRotatePlain(context, DimenSdp.sdp(context, 30), DimenSdp.sdp(context, 20))`.
+     */
+    @JvmStatic
+    @JvmOverloads
+    fun sdpRotatePlain(context: Context, valuePx: Float, rotationPx: Float, orientation: Orientation = Orientation.LANDSCAPE): Float {
+        val configuration = context.resources.configuration
+        val isTarget = when (orientation) {
+            Orientation.LANDSCAPE -> configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+            Orientation.PORTRAIT -> configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+            else -> false
+        }
+        return if (isTarget) rotationPx else valuePx
+    }
+
+    /**
+     * EN
+     * Plain rotation for **hDP** naming; same behavior as [sdpRotatePlain] (orientation-only choice between px values).
+     *
+     * PT
+     * Rotação **Plain** com nome **hDP**; mesmo comportamento que [sdpRotatePlain] (escolha por orientação entre px).
+     */
+    @JvmStatic
+    @JvmOverloads
+    fun hdpRotatePlain(context: Context, valuePx: Float, rotationPx: Float, orientation: Orientation = Orientation.LANDSCAPE): Float =
+        sdpRotatePlain(context, valuePx, rotationPx, orientation)
+
+    /**
+     * EN
+     * Plain rotation for **wDP** naming; same behavior as [sdpRotatePlain].
+     *
+     * PT
+     * Rotação **Plain** com nome **wDP**; mesmo comportamento que [sdpRotatePlain].
+     */
+    @JvmStatic
+    @JvmOverloads
+    fun wdpRotatePlain(context: Context, valuePx: Float, rotationPx: Float, orientation: Orientation = Orientation.LANDSCAPE): Float =
+        sdpRotatePlain(context, valuePx, rotationPx, orientation)
+
     // EN UiModeType facilitator functions for code.
     // PT Funções facilitadoras de UiModeType para código.
 

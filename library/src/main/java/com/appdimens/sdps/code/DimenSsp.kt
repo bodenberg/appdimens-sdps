@@ -434,6 +434,51 @@ object DimenSsp {
         else getDimensionInSpPx(context, DpQualifier.WIDTH, value, fontScale = fontScale)
     }
 
+    /**
+     * EN
+     * Plain rotation for Sp using **pre-resolved pixel** values. No resource lookup—only orientation branching.
+     * Typical usage: pass values from [ssp], [hsp], or [wsp] already computed.
+     *
+     * PT
+     * Rotação **Plain** para Sp com **pixel já resolvidos**. Sem busca de recurso—só desvio por orientação.
+     * Uso típico: passar valores de [ssp], [hsp] ou [wsp] já calculados.
+     */
+    @JvmStatic
+    @JvmOverloads
+    fun sspRotatePlain(context: Context, valuePx: Float, rotationPx: Float, orientation: Orientation = Orientation.LANDSCAPE): Float {
+        val configuration = context.resources.configuration
+        val isTarget = when (orientation) {
+            Orientation.LANDSCAPE -> configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+            Orientation.PORTRAIT -> configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+            else -> false
+        }
+        return if (isTarget) rotationPx else valuePx
+    }
+
+    /**
+     * EN
+     * Plain rotation for **hSP** naming; same behavior as [sspRotatePlain].
+     *
+     * PT
+     * Rotação **Plain** com nome **hSP**; mesmo comportamento que [sspRotatePlain].
+     */
+    @JvmStatic
+    @JvmOverloads
+    fun hspRotatePlain(context: Context, valuePx: Float, rotationPx: Float, orientation: Orientation = Orientation.LANDSCAPE): Float =
+        sspRotatePlain(context, valuePx, rotationPx, orientation)
+
+    /**
+     * EN
+     * Plain rotation for **wSP** naming; same behavior as [sspRotatePlain].
+     *
+     * PT
+     * Rotação **Plain** com nome **wSP**; mesmo comportamento que [sspRotatePlain].
+     */
+    @JvmStatic
+    @JvmOverloads
+    fun wspRotatePlain(context: Context, valuePx: Float, rotationPx: Float, orientation: Orientation = Orientation.LANDSCAPE): Float =
+        sspRotatePlain(context, valuePx, rotationPx, orientation)
+
     // EN UiModeType facilitator functions for Sp.
     // PT Funções facilitadoras de UiModeType para Sp.
 
