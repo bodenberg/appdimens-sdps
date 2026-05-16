@@ -7,7 +7,6 @@ plugins {
 android {
     namespace = "com.example.app"
     compileSdk = 36
-
     defaultConfig {
         applicationId = "com.example.app"
         minSdk = 25
@@ -42,9 +41,9 @@ android {
 dependencies {
     api(project(":library"))
 
-    //implementation("io.github.bodenberg:appdimens-sdps:3.0.0")
+    //implementation("io.github.bodenberg:appdimens-sdps:3.1.5")
     // or
-    //implementation("com.github.bodenberg.appdimens:appdimens-sdps:3.0.0")
+    //implementation("com.github.bodenberg.appdimens:appdimens-sdps:3.1.5")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

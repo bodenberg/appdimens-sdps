@@ -10,13 +10,24 @@
 
 ```kotlin
 dependencies {
-    implementation("io.github.bodenberg:appdimens-sdps:3.1.2")
+    implementation("io.github.bodenberg:appdimens-sdps:3.1.5")
 }
 ```
 
 **Requirements:** Min SDK 24 · Compile SDK 36 · Kotlin & Java · XML & Jetpack Compose
 
 **R8 / ProGuard / shrink resources:** The AAR ships `consumer-rules.pro` and `res/raw/keep.xml` so consuming apps can use `minifyEnabled`, R8 full mode (`android.enableR8.fullMode=true`), and `shrinkResources` without adding extra keep rules for this library’s dimens or Java-facing APIs.
+
+### Sample app (`:app`)
+
+The sample module ships two **ExampleActivity** entry points that mirror the documentation:
+
+| Activity | What it demonstrates |
+| -------- | -------------------- |
+| **`com.example.app.compose.ExampleActivity`** | Jetpack Compose demo (default **launcher**). Includes **section 2 — Aspect ratio**: side-by-side **without vs with** aspect-ratio scaling for `.sdp` / `.sdpa`, `.hdp` / `.hdpa`, `.wdp` / `.wdpa`, plus **`.ssp` / `.sspa`** for text. |
+| **`com.example.app.kotlin.ExampleActivity`** | Kotlin + XML layout (add a manifest entry or run from Android Studio). Logs pixel comparisons for **`sdp` / `sdpa`**, **`hdp` / `hdpa`**, and **`wdp` / `wdpa`** (filter Logcat tag **`AppDimensExample`**, message **`2b. Aspect ratio`**). |
+
+Run the `:app` configuration on a device or emulator and open the launcher activity you wire to either class to explore the behavior (rotate or use emulators with different aspect ratios to see the `*a` delta more clearly).
 
 ---
 
@@ -72,6 +83,8 @@ val heightToWidth = 50.hdpLw
 // .wdpLh → uses Width by default; in Landscape → switches to Height
 val widthToHeight = 50.wdpLh
 ```
+
+**Aspect-ratio aware (`sdpa`, `sspa`):** Applies the **same default aspect-ratio multiplier** as [`appdimens-dynamic`](https://github.com/bodenberg/appdimens) on top of the XML-resolved `@dimen` value — effectively **one extra multiply** (`finalPx = getDimension(px) × arAdjustment`). Examples: **`16.sdpa`**, **`32.hdpa`**, **`16.sspa`**. The `*ia` names (`sspia`, `sdpia`) exist for API parity with dynamic (multi-window “ignore scaling” paths there); with SDPS XML they **match** the corresponding `*a` APIs. Adjustment factors invalidate when **`(smallestScreenWidthDp, screenWidthDp, screenHeightDp, densityDpi)`** changes. Optional prefetch: **`DimenSdp.warmupSdpsFactors(context)`**. Numeric parity with **appdimens-dynamic** holds when Android selects the **same resource bucket** for `_1sdp` / `_1wdp` / `_1hdp` used in the maths.
 
 **Facilitators — Quick Conditional Overrides:**
 ```kotlin
@@ -193,6 +206,7 @@ Use dimension resources directly — all values from `-300` to `600` are pre-gen
 ```kotlin
 // Core — Pixel values
 val paddingPx = DimenSdp.sdp(context, 16)     // Smallest Width
+val paddingArPx = DimenSdp.sdpa(context, 16)  // Same + aspect ratio (appdimens-dynamic sdpa parity)
 val heightPx  = DimenSdp.hdp(context, 32)     // Height
 val widthPx   = DimenSdp.wdp(context, 100)    // Width
 
@@ -239,6 +253,7 @@ val dpFromCm = DimenPhysicalUnits.toDpFromCm(2.5f, resources)
 ```java
 // Core
 float paddingPx = DimenSdp.sdp(context, 16);
+float paddingArPx = DimenSdp.sdpa(context, 16); // Aspect-ratio-aware sw variant
 int resId = DimenSdp.sdpRes(context, 16);
 
 // Scalable Sp
@@ -287,6 +302,8 @@ DimenPhysicalUnits.toDpFromInch(1f, resources)
 
 | Feature | Description |
 |---------|-------------|
+| **Aspect-ratio APIs (`*a`)** | `.sdpa`, `.hdpa`, `.wdpa`, `.sspa` (and code `DimenSdp.sdpa` / `hdpa` / `wdpa`) apply the same aspect-ratio multiplier as **appdimens-dynamic** on top of the scaled `@dimen` value. See the **Aspect-ratio aware** paragraph under Compose usage and **section 2** in the sample Compose activity. |
+| **Sample app: AR comparison** | The `:app` module demonstrates **baseline vs aspect-ratio** scaling in UI (Compose) and via **Logcat** (Kotlin activity). |
 | **Code-Level API** | Full `DimenSdp` object for Java & Kotlin — resolve dimensions outside of XML and Compose |
 | **Inverter Shortcuts** | `.sdpPh`, `.sdpLw`, `.sdpLh`, `.sdpPw`, `.hdpLw`, `.hdpPw`, `.wdpLh`, `.wdpPh` — orientation-aware switching |
 | **Facilitators** | `sdpRotate`, `sdpMode`, `sdpQualifier`, `sdpScreen` (+ hdp/wdp variants) — quick conditional overrides |

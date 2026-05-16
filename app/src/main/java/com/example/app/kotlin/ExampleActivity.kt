@@ -71,6 +71,18 @@ class ExampleActivity : AppCompatActivity() {
         Log.d(TAG, "2. Shortcuts Res — sdpRes(16)=$sdp16Res, hdpRes(32)=$hdp32Res, wdpRes(100)=$wdp100Res")
 
         // ╔══════════════════════════════════════════════════════════════╗
+        // ║ 2b. ASPECT RATIO — mesma base, com/sem multiplicador AR        ║
+        // ╚══════════════════════════════════════════════════════════════╝
+
+        val sdp60 = DimenSdp.sdp(this, 60)
+        val sdpa60 = DimenSdp.sdpa(this, 60)
+        val hdp70 = DimenSdp.hdp(this, 70)
+        val hdpa70 = DimenSdp.hdpa(this, 70)
+        val wdp80 = DimenSdp.wdp(this, 80)
+        val wdpa80 = DimenSdp.wdpa(this, 80)
+        Log.d(TAG, "2b. Aspect ratio — sdp(60)=${sdp60}px vs sdpa(60)=${sdpa60}px; hdp(70)=${hdp70}px vs hdpa(70)=${hdpa70}px; wdp(80)=${wdp80}px vs wdpa(80)=${wdpa80}px")
+
+        // ╔══════════════════════════════════════════════════════════════╗
         // ║ 3. INVERTER SHORTCUTS — sdpPh / sdpLw / hdpLw / wdpLh     ║
         // ╚══════════════════════════════════════════════════════════════╝
 

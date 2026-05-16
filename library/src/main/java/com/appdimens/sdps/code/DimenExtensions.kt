@@ -65,6 +65,98 @@ fun Int.wdpLh(context: Context): Float = DimenSdp.wdpLh(context, this)
 /** EN Quick resolution for wdp, portrait -> Height. PT Resolução rápida para wdp, retrato -> Altura. @see DimenSdp.wdpPh */
 fun Int.wdpPh(context: Context): Float = DimenSdp.wdpPh(context, this)
 
+// -------------------------------------------------------------------------
+// Aspect-ratio-aware (*a / *ia) — parity with appdimens-dynamic sdpa family.
+// *ia ignores multi-window in dynamic; here identical to *a (XML-backed).
+// -------------------------------------------------------------------------
+
+private fun Number.toSdpIndex(): Int =
+    kotlin.math.round(this.toDouble()).toInt().coerceIn(-300, 600)
+
+/** @see DimenSdp.sdpa */
+fun Number.sdpa(context: Context): Float = this.toSdpIndex().let { DimenSdp.sdpa(context, it) }
+
+/** @see DimenSdp.sdpia */
+fun Number.sdpia(context: Context): Float = sdpa(context)
+
+/** @see DimenSdp.sdpa */
+fun Int.sdpa(context: Context): Float = DimenSdp.sdpa(context, this.coerceIn(-300, 600))
+
+/** @see DimenSdp.sdpia */
+fun Int.sdpia(context: Context): Float = DimenSdp.sdpia(context, this.coerceIn(-300, 600))
+
+/** @see DimenSdp.sdpa */
+fun Float.sdpa(context: Context): Float = this.toSdpIndex().let { DimenSdp.sdpa(context, it) }
+
+/** @see DimenSdp.sdpia */
+fun Float.sdpia(context: Context): Float = sdpa(context)
+
+fun Number.sdpPha(context: Context): Float = this.toSdpIndex().let { DimenSdp.sdpPha(context, it) }
+fun Number.sdpPhia(context: Context): Float = sdpPha(context)
+
+fun Number.sdpLha(context: Context): Float = this.toSdpIndex().let { DimenSdp.sdpLha(context, it) }
+fun Number.sdpLhia(context: Context): Float = sdpLha(context)
+
+fun Number.sdpPwa(context: Context): Float = this.toSdpIndex().let { DimenSdp.sdpPwa(context, it) }
+fun Number.sdpPwia(context: Context): Float = sdpPwa(context)
+
+fun Number.sdpLwa(context: Context): Float = this.toSdpIndex().let { DimenSdp.sdpLwa(context, it) }
+fun Number.sdpLwia(context: Context): Float = sdpLwa(context)
+
+fun Number.hdpa(context: Context): Float = this.toSdpIndex().let { DimenSdp.hdpa(context, it) }
+fun Number.hdpia(context: Context): Float = hdpa(context)
+
+fun Int.hdpa(context: Context): Float = DimenSdp.hdpa(context, this.coerceIn(-300, 600))
+fun Int.hdpia(context: Context): Float = DimenSdp.hdpia(context, this.coerceIn(-300, 600))
+
+fun Float.hdpa(context: Context): Float = this.toSdpIndex().let { DimenSdp.hdpa(context, it) }
+fun Float.hdpia(context: Context): Float = hdpa(context)
+
+fun Number.hdpLwa(context: Context): Float = this.toSdpIndex().let { DimenSdp.hdpLwa(context, it) }
+fun Number.hdpLwia(context: Context): Float = hdpLwa(context)
+
+fun Number.hdpPwa(context: Context): Float = this.toSdpIndex().let { DimenSdp.hdpPwa(context, it) }
+fun Number.hdpPwia(context: Context): Float = hdpPwa(context)
+
+fun Number.wdpa(context: Context): Float = this.toSdpIndex().let { DimenSdp.wdpa(context, it) }
+fun Number.wdpia(context: Context): Float = wdpa(context)
+
+fun Int.wdpa(context: Context): Float = DimenSdp.wdpa(context, this.coerceIn(-300, 600))
+fun Int.wdpia(context: Context): Float = DimenSdp.wdpia(context, this.coerceIn(-300, 600))
+
+fun Float.wdpa(context: Context): Float = this.toSdpIndex().let { DimenSdp.wdpa(context, it) }
+fun Float.wdpia(context: Context): Float = wdpa(context)
+
+fun Number.wdpLha(context: Context): Float = this.toSdpIndex().let { DimenSdp.wdpLha(context, it) }
+fun Number.wdpLhia(context: Context): Float = wdpLha(context)
+
+fun Number.wdpPha(context: Context): Float = this.toSdpIndex().let { DimenSdp.wdpPha(context, it) }
+fun Number.wdpPhia(context: Context): Float = wdpPha(context)
+
+fun Int.sdpPha(context: Context): Float = DimenSdp.sdpPha(context, coerceIn(-300, 600))
+fun Int.sdpPhia(context: Context): Float = sdpPha(context)
+
+fun Int.sdpLha(context: Context): Float = DimenSdp.sdpLha(context, coerceIn(-300, 600))
+fun Int.sdpLhia(context: Context): Float = sdpLha(context)
+
+fun Int.sdpPwa(context: Context): Float = DimenSdp.sdpPwa(context, coerceIn(-300, 600))
+fun Int.sdpPwia(context: Context): Float = sdpPwa(context)
+
+fun Int.sdpLwa(context: Context): Float = DimenSdp.sdpLwa(context, coerceIn(-300, 600))
+fun Int.sdpLwia(context: Context): Float = sdpLwa(context)
+
+fun Int.hdpLwa(context: Context): Float = DimenSdp.hdpLwa(context, coerceIn(-300, 600))
+fun Int.hdpLwia(context: Context): Float = hdpLwa(context)
+
+fun Int.hdpPwa(context: Context): Float = DimenSdp.hdpPwa(context, coerceIn(-300, 600))
+fun Int.hdpPwia(context: Context): Float = hdpPwa(context)
+
+fun Int.wdpLha(context: Context): Float = DimenSdp.wdpLha(context, coerceIn(-300, 600))
+fun Int.wdpLhia(context: Context): Float = wdpLha(context)
+
+fun Int.wdpPha(context: Context): Float = DimenSdp.wdpPha(context, coerceIn(-300, 600))
+fun Int.wdpPhia(context: Context): Float = wdpPha(context)
+
 
 // EN Resource ID variants
 // PT Variantes que retornam o ID de recurso

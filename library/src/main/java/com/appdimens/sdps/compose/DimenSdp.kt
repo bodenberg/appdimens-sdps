@@ -34,7 +34,9 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.appdimens.sdps.common.DpQualifier
+import com.appdimens.sdps.common.effectiveDpQualifier
 import com.appdimens.sdps.common.Inverter
+import com.appdimens.sdps.core.AppDimensSdpsFactors
 import kotlin.math.abs
 
 /**
@@ -318,6 +320,144 @@ val Int.wdpPh: Dp get() = this.toDynamicScaledDp(DpQualifier.WIDTH, Inverter.LW_
 @get:Composable
 val Int.wdpPhPx: Float get() = LocalDensity.current.run { wdpPh.toPx() }
 
+// -------------------------------------------------------------------------
+// Aspect-ratio-aware Compose Dp (`sdpa` matrix; `sdpia` == `sdpa` API alias).
+// -------------------------------------------------------------------------
+
+/** EN Smallest Width + aspect ratio (appdimens-dynamic sdpa parity). PT Largura mínima + aspect ratio (`sdpa`). */
+@get:Composable
+val Int.sdpa: Dp get() = toDynamicScaledDp(DpQualifier.SMALL_WIDTH, applyAspectRatio = true)
+
+@get:Composable
+val Int.sdpPxa: Float get() = LocalDensity.current.run { sdpa.toPx() }
+
+/** EN Multi-window suppression API alias (dynamic); identical to [sdpa] here. PT Alias ignorar multi‑janelas; igual a [sdpa]. */
+@get:Composable
+val Int.sdpia: Dp get() = sdpa
+
+@get:Composable
+val Int.sdpPxIa: Float get() = sdpPxa
+
+@get:Composable
+val Int.sdpPha: Dp get() = this.toDynamicScaledDp(DpQualifier.SMALL_WIDTH, Inverter.SW_TO_PH, applyAspectRatio = true)
+
+@get:Composable
+val Int.sdpPxPha: Float get() = LocalDensity.current.run { sdpPha.toPx() }
+
+@get:Composable
+val Int.sdpPhia: Dp get() = sdpPha
+
+@get:Composable
+val Int.sdpPxPhia: Float get() = sdpPxPha
+
+@get:Composable
+val Int.sdpLha: Dp get() = this.toDynamicScaledDp(DpQualifier.SMALL_WIDTH, Inverter.SW_TO_LH, applyAspectRatio = true)
+
+@get:Composable
+val Int.sdpPxLha: Float get() = LocalDensity.current.run { sdpLha.toPx() }
+
+@get:Composable
+val Int.sdpLhia: Dp get() = sdpLha
+
+@get:Composable
+val Int.sdpPxLhia: Float get() = sdpPxLha
+
+@get:Composable
+val Int.sdpPwa: Dp get() = this.toDynamicScaledDp(DpQualifier.SMALL_WIDTH, Inverter.SW_TO_PW, applyAspectRatio = true)
+
+@get:Composable
+val Int.sdpPxPwa: Float get() = LocalDensity.current.run { sdpPwa.toPx() }
+
+@get:Composable
+val Int.sdpPwia: Dp get() = sdpPwa
+
+@get:Composable
+val Int.sdpPxPwia: Float get() = sdpPxPwa
+
+@get:Composable
+val Int.sdpLwa: Dp get() = this.toDynamicScaledDp(DpQualifier.SMALL_WIDTH, Inverter.SW_TO_LW, applyAspectRatio = true)
+
+@get:Composable
+val Int.sdpPxLwa: Float get() = LocalDensity.current.run { sdpLwa.toPx() }
+
+@get:Composable
+val Int.sdpLwia: Dp get() = sdpLwa
+
+@get:Composable
+val Int.sdpPxLwia: Float get() = sdpPxLwa
+
+@get:Composable
+val Int.hdpa: Dp get() = toDynamicScaledDp(DpQualifier.HEIGHT, applyAspectRatio = true)
+
+@get:Composable
+val Int.hdpPxA: Float get() = LocalDensity.current.run { hdpa.toPx() }
+
+@get:Composable
+val Int.hdpia: Dp get() = hdpa
+
+@get:Composable
+val Int.hdpPxIa: Float get() = hdpPxA
+
+@get:Composable
+val Int.hdpLwa: Dp get() = this.toDynamicScaledDp(DpQualifier.HEIGHT, Inverter.PH_TO_LW, applyAspectRatio = true)
+
+@get:Composable
+val Int.hdpPxLwa: Float get() = LocalDensity.current.run { hdpLwa.toPx() }
+
+@get:Composable
+val Int.hdpLwia: Dp get() = hdpLwa
+
+@get:Composable
+val Int.hdpPxLwia: Float get() = hdpPxLwa
+
+@get:Composable
+val Int.hdpPwa: Dp get() = this.toDynamicScaledDp(DpQualifier.HEIGHT, Inverter.LH_TO_PW, applyAspectRatio = true)
+
+@get:Composable
+val Int.hdpPxPwa: Float get() = LocalDensity.current.run { hdpPwa.toPx() }
+
+@get:Composable
+val Int.hdpPwia: Dp get() = hdpPwa
+
+@get:Composable
+val Int.hdpPxPwia: Float get() = hdpPxPwa
+
+@get:Composable
+val Int.wdpa: Dp get() = toDynamicScaledDp(DpQualifier.WIDTH, applyAspectRatio = true)
+
+@get:Composable
+val Int.wdpPxA: Float get() = LocalDensity.current.run { wdpa.toPx() }
+
+@get:Composable
+val Int.wdpia: Dp get() = wdpa
+
+@get:Composable
+val Int.wdpPxIa: Float get() = wdpPxA
+
+@get:Composable
+val Int.wdpLha: Dp get() = this.toDynamicScaledDp(DpQualifier.WIDTH, Inverter.PW_TO_LH, applyAspectRatio = true)
+
+@get:Composable
+val Int.wdpPxLha: Float get() = LocalDensity.current.run { wdpLha.toPx() }
+
+@get:Composable
+val Int.wdpLhia: Dp get() = wdpLha
+
+@get:Composable
+val Int.wdpPxLhia: Float get() = wdpPxLha
+
+@get:Composable
+val Int.wdpPha: Dp get() = this.toDynamicScaledDp(DpQualifier.WIDTH, Inverter.LW_TO_PH, applyAspectRatio = true)
+
+@get:Composable
+val Int.wdpPxPha: Float get() = LocalDensity.current.run { wdpPha.toPx() }
+
+@get:Composable
+val Int.wdpPhia: Dp get() = wdpPha
+
+@get:Composable
+val Int.wdpPxPhia: Float get() = wdpPxPha
+
 // EN Dynamic scaling functions (Resource-based).
 // PT Funções de dimensionamento dinâmico (baseadas em recursos).
 
@@ -367,36 +507,27 @@ private fun findResourceIdByName(resourceName: String): Int {
  * @return The Dp value loaded from the resource or the base Dp value.
  */
 @Composable
-fun Int.toDynamicScaledDp(qualifier: DpQualifier, inverter: Inverter = Inverter.DEFAULT): Dp {
+fun Int.toDynamicScaledDp(
+    qualifier: DpQualifier,
+    inverter: Inverter = Inverter.DEFAULT,
+    applyAspectRatio: Boolean = false,
+): Dp {
     // EN Validation requirement (limits usage to avoid creating thousands of dimens files).
     // PT Requisito de validação (limita o uso para evitar a criação de milhares de arquivos dimens).
     require(this in -300..600) { "Value must be between -300 and 600 to use the dynamic scaling dimension logic. Current value:: $this" }
 
     val configuration = LocalConfiguration.current
-    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-    val isPortrait = configuration.orientation == Configuration.ORIENTATION_PORTRAIT
-
-    var actualQualifier = qualifier
-
-    when (inverter) {
-        Inverter.PH_TO_LW -> if (isLandscape && qualifier == DpQualifier.HEIGHT) actualQualifier = DpQualifier.WIDTH
-        Inverter.PW_TO_LH -> if (isLandscape && qualifier == DpQualifier.WIDTH) actualQualifier = DpQualifier.HEIGHT
-        Inverter.LH_TO_PW -> if (isPortrait && qualifier == DpQualifier.HEIGHT) actualQualifier = DpQualifier.WIDTH
-        Inverter.LW_TO_PH -> if (isPortrait && qualifier == DpQualifier.WIDTH) actualQualifier = DpQualifier.HEIGHT
-        Inverter.SW_TO_LH -> if (isLandscape && qualifier == DpQualifier.SMALL_WIDTH) actualQualifier = DpQualifier.HEIGHT
-        Inverter.SW_TO_LW -> if (isLandscape && qualifier == DpQualifier.SMALL_WIDTH) actualQualifier = DpQualifier.WIDTH
-        Inverter.SW_TO_PH -> if (isPortrait && qualifier == DpQualifier.SMALL_WIDTH) actualQualifier = DpQualifier.HEIGHT
-        Inverter.SW_TO_PW -> if (isPortrait && qualifier == DpQualifier.SMALL_WIDTH) actualQualifier = DpQualifier.WIDTH
-        Inverter.DEFAULT -> {}
-    }
+    val context = LocalContext.current
+    val actualQualifier = effectiveDpQualifier(configuration, qualifier, inverter)
 
     // EN Determines the qualifier prefix: s (Smallest Width), h (Height), w (Width).
     // PT Determina o prefixo do qualificador: s (Smallest Width), h (Height), w (Width).
-    val attrName = when (actualQualifier) {
-        DpQualifier.HEIGHT -> "h"
-        DpQualifier.WIDTH -> "w"
-        else -> "s"
-    }
+    val attrName =
+        when (actualQualifier) {
+            DpQualifier.HEIGHT -> "h"
+            DpQualifier.WIDTH -> "w"
+            else -> "s"
+        }
 
     // EN Handles negative values, using the "minus" prefix in the naming convention.
     // PT Lida com valores negativos, usando o prefixo "minus" na convenção de nome.
@@ -409,7 +540,19 @@ fun Int.toDynamicScaledDp(qualifier: DpQualifier, inverter: Inverter = Inverter.
 
     // EN If the resource ID is valid (not 0 or -1), loads the dimension.
     // PT Se o ID do recurso for válido (diferente de 0 ou -1), carrega a dimensão.
-    return if (dimenResourceId != 0 && dimenResourceId != -1)
-        dimensionResource(id = dimenResourceId)
-    else this.dp // EN Otherwise, returns the default Compose Dp value. / PT Caso contrário, retorna o valor de Dp padrão do Compose.
+    return if (dimenResourceId != 0 && dimenResourceId != -1) {
+        if (!applyAspectRatio) {
+            dimensionResource(id = dimenResourceId)
+        } else {
+            AppDimensSdpsFactors.ensureUpToDate(context)
+            val adjustment = AppDimensSdpsFactors.adjustmentForQualifier(actualQualifier)
+            LocalDensity.current.run {
+                val px = dimensionResource(dimenResourceId).toPx() * adjustment
+                px.toDp()
+            }
+        }
+    } else {
+        // EN Otherwise, returns the default Compose Dp value. / PT Caso contrário, retorna o valor de Dp padrão do Compose.
+        this.dp
+    }
 }

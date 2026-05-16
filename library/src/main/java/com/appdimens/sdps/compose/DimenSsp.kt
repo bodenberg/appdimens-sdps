@@ -25,15 +25,17 @@
 package com.appdimens.sdps.compose
 
 import android.annotation.SuppressLint
-import android.content.res.Configuration
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import com.appdimens.sdps.common.DpQualifier
+import com.appdimens.sdps.common.effectiveDpQualifier
 import com.appdimens.sdps.common.Inverter
+import com.appdimens.sdps.core.AppDimensSdpsFactors
 import kotlin.math.abs
 
 // EN Composable extensions for quick dynamic text scaling (Sp) using the DP XML resources.
@@ -300,6 +302,140 @@ val Int.wspPh: TextUnit get() = this.toDynamicScaledSp(DpQualifier.WIDTH, fontSc
  */
 @get:Composable
 val Int.wspPhPx: Float get() = LocalDensity.current.run { wspPh.toPx() }
+
+// Aspect-ratio-aware Compose Sp (`sspa` mirrors `sdpa`; `sspia` is alias of `sspa`, like dynamic).
+
+@get:Composable
+val Int.sspa: TextUnit get() = toDynamicScaledSp(DpQualifier.SMALL_WIDTH, fontScale = true, applyAspectRatio = true)
+
+@get:Composable
+val Int.sspPxA: Float get() = LocalDensity.current.run { sspa.toPx() }
+
+@get:Composable
+val Int.sspia: TextUnit get() = sspa
+
+@get:Composable
+val Int.sspPxIa: Float get() = sspPxA
+
+@get:Composable
+val Int.sspPha: TextUnit get() = toDynamicScaledSp(DpQualifier.SMALL_WIDTH, fontScale = true, inverter = Inverter.SW_TO_PH, applyAspectRatio = true)
+
+@get:Composable
+val Int.sspPxPha: Float get() = LocalDensity.current.run { sspPha.toPx() }
+
+@get:Composable
+val Int.sspPhia: TextUnit get() = sspPha
+
+@get:Composable
+val Int.sspPxPhia: Float get() = sspPxPha
+
+@get:Composable
+val Int.sspLha: TextUnit get() = toDynamicScaledSp(DpQualifier.SMALL_WIDTH, fontScale = true, inverter = Inverter.SW_TO_LH, applyAspectRatio = true)
+
+@get:Composable
+val Int.sspPxLha: Float get() = LocalDensity.current.run { sspLha.toPx() }
+
+@get:Composable
+val Int.sspLhia: TextUnit get() = sspLha
+
+@get:Composable
+val Int.sspPxLhia: Float get() = sspPxLha
+
+@get:Composable
+val Int.sspPwa: TextUnit get() = toDynamicScaledSp(DpQualifier.SMALL_WIDTH, fontScale = true, inverter = Inverter.SW_TO_PW, applyAspectRatio = true)
+
+@get:Composable
+val Int.sspPxPwa: Float get() = LocalDensity.current.run { sspPwa.toPx() }
+
+@get:Composable
+val Int.sspPwia: TextUnit get() = sspPwa
+
+@get:Composable
+val Int.sspPxPwia: Float get() = sspPxPwa
+
+@get:Composable
+val Int.sspLwa: TextUnit get() = toDynamicScaledSp(DpQualifier.SMALL_WIDTH, fontScale = true, inverter = Inverter.SW_TO_LW, applyAspectRatio = true)
+
+@get:Composable
+val Int.sspPxLwa: Float get() = LocalDensity.current.run { sspLwa.toPx() }
+
+@get:Composable
+val Int.sspLwia: TextUnit get() = sspLwa
+
+@get:Composable
+val Int.sspPxLwia: Float get() = sspPxLwa
+
+@get:Composable
+val Int.hspa: TextUnit get() = toDynamicScaledSp(DpQualifier.HEIGHT, fontScale = true, applyAspectRatio = true)
+
+@get:Composable
+val Int.hspPxA: Float get() = LocalDensity.current.run { hspa.toPx() }
+
+@get:Composable
+val Int.hspia: TextUnit get() = hspa
+
+@get:Composable
+val Int.hspPxIa: Float get() = hspPxA
+
+@get:Composable
+val Int.hspLwa: TextUnit get() = toDynamicScaledSp(DpQualifier.HEIGHT, fontScale = true, inverter = Inverter.PH_TO_LW, applyAspectRatio = true)
+
+@get:Composable
+val Int.hspPxLwa: Float get() = LocalDensity.current.run { hspLwa.toPx() }
+
+@get:Composable
+val Int.hspLwia: TextUnit get() = hspLwa
+
+@get:Composable
+val Int.hspPxLwia: Float get() = hspPxLwa
+
+@get:Composable
+val Int.hspPwa: TextUnit get() = toDynamicScaledSp(DpQualifier.HEIGHT, fontScale = true, inverter = Inverter.LH_TO_PW, applyAspectRatio = true)
+
+@get:Composable
+val Int.hspPxPwa: Float get() = LocalDensity.current.run { hspPwa.toPx() }
+
+@get:Composable
+val Int.hspPwia: TextUnit get() = hspPwa
+
+@get:Composable
+val Int.hspPxPwia: Float get() = hspPxPwa
+
+@get:Composable
+val Int.wspa: TextUnit get() = toDynamicScaledSp(DpQualifier.WIDTH, fontScale = true, applyAspectRatio = true)
+
+@get:Composable
+val Int.wspPxA: Float get() = LocalDensity.current.run { wspa.toPx() }
+
+@get:Composable
+val Int.wspia: TextUnit get() = wspa
+
+@get:Composable
+val Int.wspPxIa: Float get() = wspPxA
+
+@get:Composable
+val Int.wspLha: TextUnit get() = toDynamicScaledSp(DpQualifier.WIDTH, fontScale = true, inverter = Inverter.PW_TO_LH, applyAspectRatio = true)
+
+@get:Composable
+val Int.wspPxLha: Float get() = LocalDensity.current.run { wspLha.toPx() }
+
+@get:Composable
+val Int.wspLhia: TextUnit get() = wspLha
+
+@get:Composable
+val Int.wspPxLhia: Float get() = wspPxLha
+
+@get:Composable
+val Int.wspPha: TextUnit get() = toDynamicScaledSp(DpQualifier.WIDTH, fontScale = true, inverter = Inverter.LW_TO_PH, applyAspectRatio = true)
+
+@get:Composable
+val Int.wspPxPha: Float get() = LocalDensity.current.run { wspPha.toPx() }
+
+@get:Composable
+val Int.wspPhia: TextUnit get() = wspPha
+
+@get:Composable
+val Int.wspPxPhia: Float get() = wspPxPha
 
 // EN WITHOUT FONT SCALE variants (sem escala de fonte)
 // PT Variantes SEM ESCALA DE FONTE
@@ -592,37 +728,25 @@ val Int.wemPhPx: Float get() = LocalDensity.current.run { wemPh.toPx() }
 fun Int.toDynamicScaledSp(
     qualifier: DpQualifier,
     fontScale: Boolean,
-    inverter: Inverter = Inverter.DEFAULT
+    inverter: Inverter = Inverter.DEFAULT,
+    applyAspectRatio: Boolean = false,
 ): TextUnit {
     require(this in 1..600) {
         "Value must be between 1 and 600 to use the dynamic scaling dimension logic. Current value: $this"
     }
 
     val configuration = LocalConfiguration.current
-    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-    val isPortrait = configuration.orientation == Configuration.ORIENTATION_PORTRAIT
-
-    var actualQualifier = qualifier
-
-    when (inverter) {
-        Inverter.PH_TO_LW -> if (isLandscape && qualifier == DpQualifier.HEIGHT) actualQualifier = DpQualifier.WIDTH
-        Inverter.PW_TO_LH -> if (isLandscape && qualifier == DpQualifier.WIDTH) actualQualifier = DpQualifier.HEIGHT
-        Inverter.LH_TO_PW -> if (isPortrait && qualifier == DpQualifier.HEIGHT) actualQualifier = DpQualifier.WIDTH
-        Inverter.LW_TO_PH -> if (isPortrait && qualifier == DpQualifier.WIDTH) actualQualifier = DpQualifier.HEIGHT
-        Inverter.SW_TO_LH -> if (isLandscape && qualifier == DpQualifier.SMALL_WIDTH) actualQualifier = DpQualifier.HEIGHT
-        Inverter.SW_TO_LW -> if (isLandscape && qualifier == DpQualifier.SMALL_WIDTH) actualQualifier = DpQualifier.WIDTH
-        Inverter.SW_TO_PH -> if (isPortrait && qualifier == DpQualifier.SMALL_WIDTH) actualQualifier = DpQualifier.HEIGHT
-        Inverter.SW_TO_PW -> if (isPortrait && qualifier == DpQualifier.SMALL_WIDTH) actualQualifier = DpQualifier.WIDTH
-        Inverter.DEFAULT -> {}
-    }
+    val context = LocalContext.current
+    val actualQualifier = effectiveDpQualifier(configuration, qualifier, inverter)
 
     // EN Reuses the existing DP XML resource naming convention: _Nsdp, _Nhdp, _Nwdp.
     // PT Reutiliza a convenção de nomenclatura dos recursos XML de DP: _Nsdp, _Nhdp, _Nwdp.
-    val suffix = when (actualQualifier) {
-        DpQualifier.HEIGHT -> "hdp"
-        DpQualifier.WIDTH -> "wdp"
-        else -> "sdp"
-    }
+    val suffix =
+        when (actualQualifier) {
+            DpQualifier.HEIGHT -> "hdp"
+            DpQualifier.WIDTH -> "wdp"
+            else -> "sdp"
+        }
 
     val resourceName = "_${abs(this)}$suffix"
     val dimenResourceId = findResourceIdByNameSsp(resourceName)
@@ -630,7 +754,11 @@ fun Int.toDynamicScaledSp(
     // EN If the resource is found, loads the dp value and treats it as sp.
     // PT Se o recurso for encontrado, carrega o valor dp e o trata como sp.
     return if (dimenResourceId != 0 && dimenResourceId != -1) {
-        val dpValue = dimensionResource(id = dimenResourceId).value
+        var dpValue = dimensionResource(id = dimenResourceId).value
+        if (applyAspectRatio) {
+            AppDimensSdpsFactors.ensureUpToDate(context)
+            dpValue *= AppDimensSdpsFactors.adjustmentForQualifier(actualQualifier)
+        }
         if (fontScale) dpValue.sp
         else (dpValue / LocalDensity.current.fontScale).sp
     } else {

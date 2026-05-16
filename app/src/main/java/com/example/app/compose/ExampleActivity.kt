@@ -32,8 +32,11 @@ import com.appdimens.sdps.common.UiModeType
 // EN Core extensions: .sdp, .hdp, .wdp (based on smallest width, height, width)
 // PT Extensões principais: .sdp, .hdp, .wdp (baseadas em menor largura, altura, largura)
 import com.appdimens.sdps.compose.sdp
+import com.appdimens.sdps.compose.sdpa
 import com.appdimens.sdps.compose.hdp
+import com.appdimens.sdps.compose.hdpa
 import com.appdimens.sdps.compose.wdp
+import com.appdimens.sdps.compose.wdpa
 
 // EN Inverter shortcuts: orientation-aware dimension switching
 // PT Atalhos inversores: troca de dimensão com base na orientação
@@ -51,6 +54,7 @@ import com.appdimens.sdps.compose.sdpModePlain
 import com.appdimens.sdps.compose.sdpQualifier
 import com.appdimens.sdps.compose.sdpScreen
 import com.appdimens.sdps.compose.ssp
+import com.appdimens.sdps.compose.sspa
 import com.appdimens.sdps.compose.sspRotatePlain
 
 // EN DimenScaled builder for complex conditional dimensions
@@ -101,7 +105,7 @@ fun SdpDemoScreen() {
                 )
 
                 Text(
-                    "Comprehensive examples of .sdp, .hdp, .wdp, inverters, facilitators, and DimenScaled",
+                    "Comprehensive examples of .sdp, .hdp, .wdp, aspect ratio (.sdpa), inverters, facilitators, and DimenScaled",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center
@@ -137,8 +141,54 @@ fun SdpDemoScreen() {
                     boxColor = Color(0xFF66BB6A)
                 )
 
-                // ── 2. INVERTER SHORTCUTS ───────────────────────────────────
-                SectionTitle("2. Inverter Shortcuts")
+                // ── 2. ASPECT RATIO (*a) vs BASELINE ───────────────────────
+                SectionTitle("2. Aspect Ratio (sem vs com .sdpa / .hdpa / .wdpa)")
+
+                Text(
+                    "O sufixo «a» aplica o mesmo multiplicador de aspect ratio do appdimens-dynamic por cima da escala já resolvida. Em telas próximas da proporção de referência a diferença é pequena; em formatos mais «esticados» ou «largos» os dois lados ficam mais visíveis.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                AspectRatioComparisonCard(
+                    title = ".sdp vs .sdpa (menor largura)",
+                    description = "Mesmo índice 60: à esquerda sem ajuste de aspect ratio; à direita com .sdpa.",
+                    labelWithout = "60.sdp",
+                    labelWith = "60.sdpa",
+                    dpWithout = 60.sdp,
+                    dpWith = 60.sdpa,
+                    colorWithout = Color(0xFF42A5F5),
+                    colorWith = Color(0xFF0D47A1)
+                )
+
+                AspectRatioComparisonCard(
+                    title = ".hdp vs .hdpa (altura)",
+                    description = "Mesmo índice 70: comparação em escala por altura de tela.",
+                    labelWithout = "70.hdp",
+                    labelWith = "70.hdpa",
+                    dpWithout = 70.hdp,
+                    dpWith = 70.hdpa,
+                    colorWithout = Color(0xFFEF5350),
+                    colorWith = Color(0xFFB71C1C)
+                )
+
+                AspectRatioComparisonCard(
+                    title = ".wdp vs .wdpa (largura)",
+                    description = "Mesmo índice 80: comparação em escala por largura de tela.",
+                    labelWithout = "80.wdp",
+                    labelWith = "80.wdpa",
+                    dpWithout = 80.wdp,
+                    dpWith = 80.wdpa,
+                    colorWithout = Color(0xFF66BB6A),
+                    colorWith = Color(0xFF1B5E20)
+                )
+
+                AspectRatioTextComparisonCard()
+
+                // ── 3. INVERTER SHORTCUTS ───────────────────────────────────
+                SectionTitle("3. Inverter Shortcuts")
 
                 // EN .sdpPh — uses swDP normally, but in PORTRAIT acts as hDP
                 // PT .sdpPh — usa swDP normalmente, mas em RETRATO atua como hDP
@@ -176,8 +226,8 @@ fun SdpDemoScreen() {
                     boxColor = Color(0xFF26A69A)
                 )
 
-                // ── 3. FACILITATOR EXTENSIONS ──────────────────────────────
-                SectionTitle("3. Facilitator Extensions")
+                // ── 4. FACILITATOR EXTENSIONS ──────────────────────────────
+                SectionTitle("4. Facilitator Extensions")
 
                 // EN sdpRotate — use a different value when in landscape
                 // PT sdpRotate — usa um valor diferente quando em paisagem
@@ -265,8 +315,8 @@ fun SdpDemoScreen() {
                     boxColor = Color(0xFF78909C)
                 )
 
-                // ── 4. DimenScaled BUILDER (Complex Conditions) ────────────
-                SectionTitle("4. DimenScaled Builder")
+                // ── 5. DimenScaled BUILDER (Complex Conditions) ────────────
+                SectionTitle("5. DimenScaled Builder")
 
                 DimenScaledExampleCard()
             }
@@ -338,6 +388,155 @@ fun ExampleCard(title: String, description: String, boxSize: Dp, boxColor: Color
                     style = MaterialTheme.typography.bodySmall,
                     fontWeight = FontWeight.Bold
                 )
+            }
+        }
+    }
+}
+
+/**
+ * EN Side-by-side boxes: baseline scaling vs aspect-ratio-aware (*a) for the same index.
+ * PT Duas caixas: escala base vs com aspect ratio (*a) para o mesmo índice.
+ */
+@Composable
+fun AspectRatioComparisonCard(
+    title: String,
+    description: String,
+    labelWithout: String,
+    labelWith: String,
+    dpWithout: Dp,
+    dpWith: Dp,
+    colorWithout: Color,
+    colorWith: Color,
+) {
+    Card(
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFECEFF1)),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(
+            modifier = Modifier.padding(16.sdp),
+            verticalArrangement = Arrangement.spacedBy(12.sdp)
+        ) {
+            Text(title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+            Text(description, style = MaterialTheme.typography.bodySmall, color = Color(0xFF616161))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.sdp)
+            ) {
+                AspectRatioDemoBox(
+                    modifier = Modifier.weight(1f),
+                    caption = labelWithout,
+                    size = dpWithout,
+                    boxColor = colorWithout
+                )
+                AspectRatioDemoBox(
+                    modifier = Modifier.weight(1f),
+                    caption = labelWith,
+                    size = dpWith,
+                    boxColor = colorWith
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun AspectRatioDemoBox(
+    modifier: Modifier = Modifier,
+    caption: String,
+    size: Dp,
+    boxColor: Color,
+) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(8.sdp)
+    ) {
+        Text(
+            text = caption,
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center
+        )
+        Box(
+            modifier = Modifier
+                .size(size)
+                .background(boxColor, RoundedCornerShape(12.dp)),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "${size.value.toInt()} dp",
+                color = Color.White,
+                style = MaterialTheme.typography.bodySmall,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center
+            )
+        }
+    }
+}
+
+/**
+ * EN Same font index with and without aspect-ratio adjustment on sp.
+ * PT Mesmo índice de fonte com e sem ajuste de aspect ratio no sp.
+ */
+@Composable
+fun AspectRatioTextComparisonCard() {
+    val baseSp = 15.ssp
+    val arSp = 15.sspa
+    Card(
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFE8EAF6)),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(
+            modifier = Modifier.padding(16.sdp),
+            verticalArrangement = Arrangement.spacedBy(12.sdp)
+        ) {
+            Text(
+                ".ssp vs .sspa (texto)",
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                "Mesmo índice 15: à esquerda 15.ssp; à direita 15.sspa (escala sp + aspect ratio).",
+                style = MaterialTheme.typography.bodySmall,
+                color = Color(0xFF616161)
+            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.sdp)
+            ) {
+                Column(
+                    modifier = Modifier.weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(6.sdp)
+                ) {
+                    Text("15.ssp", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(
+                        text = "AppDimens SDP",
+                        fontSize = baseSp,
+                        fontWeight = FontWeight.Medium,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        textAlign = TextAlign.Center
+                    )
+                }
+                Column(
+                    modifier = Modifier.weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(6.sdp)
+                ) {
+                    Text("15.sspa", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(
+                        text = "AppDimens SDP",
+                        fontSize = arSp,
+                        fontWeight = FontWeight.Medium,
+                        color = MaterialTheme.colorScheme.primary,
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
         }
     }

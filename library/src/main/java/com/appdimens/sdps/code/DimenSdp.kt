@@ -29,9 +29,11 @@ import android.content.Context
 import android.content.res.Configuration
 import com.appdimens.sdps.common.DpQualifier
 import com.appdimens.sdps.common.DpQualifierEntry
+import com.appdimens.sdps.common.effectiveDpQualifier
 import com.appdimens.sdps.common.Inverter
 import com.appdimens.sdps.common.Orientation
 import com.appdimens.sdps.common.UiModeType
+import com.appdimens.sdps.core.AppDimensSdpsFactors
 
 /**
  * EN
@@ -61,15 +63,41 @@ object DimenSdp {
      * @param inverter The inverter type to dynamically adapt scaling (default is Inverter.DEFAULT).
      * @return The dimension in pixels, or 0f if not found.
      */
+    /**
+     * EN
+     * Gets the dimension in pixels from an SDP value, optionally applying the same aspect-ratio
+     * multiplier model as appdimens-dynamic on top of the XML-pre-scaled resource (single extra multiply).
+     *
+     * PT
+     * Obtém a dimensão em pixels a partir de um valor SDP, opcionalmente aplicando o multiplicador
+     * de aspect ratio do appdimens-dynamic sobre o recurso já pré-escalado em XML (uma multiplicação extra).
+     *
+     * @param applyAspectRatio When true, multiply resolved pixels by the precomputed per-axis adjustment.
+     */
     @JvmStatic
     @JvmOverloads
-    fun getDimensionInPx(context: Context, dpQualifier: DpQualifier, value: Int, inverter: Inverter = Inverter.DEFAULT): Float {
+    fun getDimensionInPx(
+        context: Context,
+        dpQualifier: DpQualifier,
+        value: Int,
+        inverter: Inverter = Inverter.DEFAULT,
+        applyAspectRatio: Boolean = false,
+    ): Float {
         if (value == 0) return 0f
+        val configuration = context.resources.configuration
+        val actualQualifier = effectiveDpQualifier(configuration, dpQualifier, inverter)
         val resourceId = getResourceId(context, dpQualifier, value, inverter)
-        return if (resourceId != 0) {
-            context.resources.getDimension(resourceId)
-        } else 0f
+        val basePx =
+            if (resourceId != 0) context.resources.getDimension(resourceId)
+            else 0f
+        if (!applyAspectRatio || basePx == 0f) return basePx
+        AppDimensSdpsFactors.ensureUpToDate(context)
+        return basePx * AppDimensSdpsFactors.adjustmentForQualifier(actualQualifier)
     }
+
+    /** EN Pre-computes aspect-ratio factors once for the current (sw,w,h,dpi); optional cold-start. PT Pré-calcula fatores AR para (sw,w,h,dpi); opcional no cold-start. */
+    @JvmStatic
+    fun warmupSdpsFactors(context: Context): Unit = AppDimensSdpsFactors.warmup(context)
 
     /**
      * EN
@@ -91,22 +119,7 @@ object DimenSdp {
         if (value == 0) return 0
 
         val configuration = context.resources.configuration
-        val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-        val isPortrait = configuration.orientation == Configuration.ORIENTATION_PORTRAIT
-
-        var actualQualifier = dpQualifier
-
-        when (inverter) {
-            Inverter.PH_TO_LW -> if (isLandscape && dpQualifier == DpQualifier.HEIGHT) actualQualifier = DpQualifier.WIDTH
-            Inverter.PW_TO_LH -> if (isLandscape && dpQualifier == DpQualifier.WIDTH) actualQualifier = DpQualifier.HEIGHT
-            Inverter.LH_TO_PW -> if (isPortrait && dpQualifier == DpQualifier.HEIGHT) actualQualifier = DpQualifier.WIDTH
-            Inverter.LW_TO_PH -> if (isPortrait && dpQualifier == DpQualifier.WIDTH) actualQualifier = DpQualifier.HEIGHT
-            Inverter.SW_TO_LH -> if (isLandscape && dpQualifier == DpQualifier.SMALL_WIDTH) actualQualifier = DpQualifier.HEIGHT
-            Inverter.SW_TO_LW -> if (isLandscape && dpQualifier == DpQualifier.SMALL_WIDTH) actualQualifier = DpQualifier.WIDTH
-            Inverter.SW_TO_PH -> if (isPortrait && dpQualifier == DpQualifier.SMALL_WIDTH) actualQualifier = DpQualifier.HEIGHT
-            Inverter.SW_TO_PW -> if (isPortrait && dpQualifier == DpQualifier.SMALL_WIDTH) actualQualifier = DpQualifier.WIDTH
-            Inverter.DEFAULT -> {}
-        }
+        val actualQualifier = effectiveDpQualifier(configuration, dpQualifier, inverter)
 
         val safeValue = value.coerceIn(MIN_VALUE, MAX_VALUE)
         val sdpSuffix = when (actualQualifier) {
@@ -269,6 +282,90 @@ object DimenSdp {
      */
     @JvmStatic
     fun wdpPh(context: Context, value: Int): Float = getDimensionInPx(context, DpQualifier.WIDTH, value, Inverter.LW_TO_PH)
+
+    /**
+     * EN Same as [sdp]; applies aspect-ratio adjustment (see appdimens-dynamic sdpa). PT Igual a [sdp] com ajuste de aspect ratio (`sdpa`).
+     */
+    @JvmStatic
+    fun sdpa(context: Context, value: Int): Float =
+        getDimensionInPx(context, DpQualifier.SMALL_WIDTH, value, applyAspectRatio = true)
+
+    /**
+     * EN API parity alias for multi-window suppression in dynamic; identical to [sdpa] here (XML-backed).
+     * PT Alias de API; igual a [sdpa] (multi-janelas não aplicável ao XML).
+     */
+    @JvmStatic
+    fun sdpia(context: Context, value: Int): Float = sdpa(context, value)
+
+    @JvmStatic
+    fun sdpPha(context: Context, value: Int): Float =
+        getDimensionInPx(context, DpQualifier.SMALL_WIDTH, value, Inverter.SW_TO_PH, applyAspectRatio = true)
+
+    @JvmStatic
+    fun sdpPhia(context: Context, value: Int): Float = sdpPha(context, value)
+
+    @JvmStatic
+    fun sdpLha(context: Context, value: Int): Float =
+        getDimensionInPx(context, DpQualifier.SMALL_WIDTH, value, Inverter.SW_TO_LH, applyAspectRatio = true)
+
+    @JvmStatic
+    fun sdpLhia(context: Context, value: Int): Float = sdpLha(context, value)
+
+    @JvmStatic
+    fun sdpPwa(context: Context, value: Int): Float =
+        getDimensionInPx(context, DpQualifier.SMALL_WIDTH, value, Inverter.SW_TO_PW, applyAspectRatio = true)
+
+    @JvmStatic
+    fun sdpPwia(context: Context, value: Int): Float = sdpPwa(context, value)
+
+    @JvmStatic
+    fun sdpLwa(context: Context, value: Int): Float =
+        getDimensionInPx(context, DpQualifier.SMALL_WIDTH, value, Inverter.SW_TO_LW, applyAspectRatio = true)
+
+    @JvmStatic
+    fun sdpLwia(context: Context, value: Int): Float = sdpLwa(context, value)
+
+    @JvmStatic
+    fun hdpa(context: Context, value: Int): Float =
+        getDimensionInPx(context, DpQualifier.HEIGHT, value, applyAspectRatio = true)
+
+    @JvmStatic
+    fun hdpia(context: Context, value: Int): Float = hdpa(context, value)
+
+    @JvmStatic
+    fun hdpLwa(context: Context, value: Int): Float =
+        getDimensionInPx(context, DpQualifier.HEIGHT, value, Inverter.PH_TO_LW, applyAspectRatio = true)
+
+    @JvmStatic
+    fun hdpLwia(context: Context, value: Int): Float = hdpLwa(context, value)
+
+    @JvmStatic
+    fun hdpPwa(context: Context, value: Int): Float =
+        getDimensionInPx(context, DpQualifier.HEIGHT, value, Inverter.LH_TO_PW, applyAspectRatio = true)
+
+    @JvmStatic
+    fun hdpPwia(context: Context, value: Int): Float = hdpPwa(context, value)
+
+    @JvmStatic
+    fun wdpa(context: Context, value: Int): Float =
+        getDimensionInPx(context, DpQualifier.WIDTH, value, applyAspectRatio = true)
+
+    @JvmStatic
+    fun wdpia(context: Context, value: Int): Float = wdpa(context, value)
+
+    @JvmStatic
+    fun wdpLha(context: Context, value: Int): Float =
+        getDimensionInPx(context, DpQualifier.WIDTH, value, Inverter.PW_TO_LH, applyAspectRatio = true)
+
+    @JvmStatic
+    fun wdpLhia(context: Context, value: Int): Float = wdpLha(context, value)
+
+    @JvmStatic
+    fun wdpPha(context: Context, value: Int): Float =
+        getDimensionInPx(context, DpQualifier.WIDTH, value, Inverter.LW_TO_PH, applyAspectRatio = true)
+
+    @JvmStatic
+    fun wdpPhia(context: Context, value: Int): Float = wdpPha(context, value)
 
     // EN Resource ID variants of the above extensions.
     // PT Variantes que retornam o ID de recurso das extensões acima.
