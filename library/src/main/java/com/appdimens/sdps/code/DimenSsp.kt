@@ -32,6 +32,9 @@ import com.appdimens.sdps.common.DpQualifier
 import com.appdimens.sdps.common.Inverter
 import com.appdimens.sdps.common.Orientation
 import com.appdimens.sdps.common.UiModeType
+import com.appdimens.sdps.common.effectiveDpQualifier
+import com.appdimens.sdps.core.AppDimensSdpsFactors
+import com.appdimens.sdps.core.DimenResourceIdCache
 import kotlin.math.abs
 
 /**
@@ -48,23 +51,25 @@ import kotlin.math.abs
 object DimenSsp {
     private const val MIN_VALUE = 1
     private const val MAX_VALUE = 600
-    private const val DIMEN_TYPE = "dimen"
 
     /**
      * EN
      * Gets the dimension in pixels (Sp) from an SSP value.
-     * Reads the DP XML resource and converts it to Sp pixels.
+     * Reads the DP XML resource and converts it to Sp pixels, respecting or ignoring the system font scale.
+     * Optionally applies the same aspect-ratio multiplier as [DimenSdp.getDimensionInPx] / Compose `sspa`.
      *
      * PT
      * Obtém a dimensão em pixels (Sp) a partir de um valor SSP.
-     * Lê o recurso XML de DP e converte para pixels Sp.
+     * Lê o recurso XML de DP e converte para pixels Sp, respeitando ou ignorando a escala de fonte.
+     * Opcionalmente aplica o mesmo multiplicador de aspect ratio de [DimenSdp.getDimensionInPx] / Compose `sspa`.
      *
      * @param context The application context.
      * @param dpQualifier DpQualifier (SMALL_WIDTH, HEIGHT, WIDTH).
      * @param value The SSP value (1 to 600).
      * @param inverter The inverter type (default is Inverter.DEFAULT).
      * @param fontScale Whether to include the system font scale. Default true.
-     * @return The dimension in pixels (Sp), or 0f if not found.
+     * @param applyAspectRatio When true, multiply resolved Sp pixels by the per-axis AR adjustment.
+     * @return The dimension in Sp pixels. If the XML resource is missing, falls back to an unscaled Sp value.
      */
     @JvmStatic
     @JvmOverloads
@@ -73,26 +78,32 @@ object DimenSsp {
         dpQualifier: DpQualifier,
         value: Int,
         inverter: Inverter = Inverter.DEFAULT,
-        fontScale: Boolean = true
+        fontScale: Boolean = true,
+        applyAspectRatio: Boolean = false,
     ): Float {
         if (value == 0) return 0f
         require(value in MIN_VALUE..MAX_VALUE) {
             "Value must be between $MIN_VALUE and $MAX_VALUE. Current value: $value"
         }
-        val resourceId = getResourceId(context, dpQualifier, value, inverter)
-        if (resourceId == 0) return 0f
-
-        // EN Gets the raw dp value from the resource and converts to sp pixels.
-        // PT Obtém o valor dp bruto do recurso e converte para pixels sp.
-        val dpValue = context.resources.getDimension(resourceId) / context.resources.displayMetrics.density
+        val configuration = context.resources.configuration
+        val actualQualifier = effectiveDpQualifier(configuration, dpQualifier, inverter)
+        val resourceId = resolveResourceId(context, actualQualifier, value)
         val metrics = context.resources.displayMetrics
-        return if (fontScale) {
+
+        val dpValue = if (resourceId != 0) {
+            context.resources.getDimension(resourceId) / metrics.density
+        } else {
+            value.toFloat()
+        }
+
+        val baseSpPx = if (fontScale) {
             TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, dpValue, metrics)
         } else {
-            // EN Bypasses font scale by using complexUnitDip since 1dp = (density/fontScale) sp display pixels.
-            // PT Ignora a escala de fonte usando a densidade diretamente.
             dpValue * metrics.density
         }
+        if (!applyAspectRatio) return baseSpPx
+        AppDimensSdpsFactors.ensureUpToDate(context)
+        return baseSpPx * AppDimensSdpsFactors.adjustmentForQualifier(actualQualifier)
     }
 
     /**
@@ -112,7 +123,6 @@ object DimenSsp {
      */
     @JvmStatic
     @JvmOverloads
-    @SuppressLint("DiscouragedApi")
     fun getResourceId(
         context: Context,
         dpQualifier: DpQualifier,
@@ -120,35 +130,24 @@ object DimenSsp {
         inverter: Inverter = Inverter.DEFAULT
     ): Int {
         if (value == 0) return 0
-
         val configuration = context.resources.configuration
-        val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-        val isPortrait = configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+        val actualQualifier = effectiveDpQualifier(configuration, dpQualifier, inverter)
+        return resolveResourceId(context, actualQualifier, value)
+    }
 
-        var actualQualifier = dpQualifier
-
-        when (inverter) {
-            Inverter.PH_TO_LW -> if (isLandscape && dpQualifier == DpQualifier.HEIGHT) actualQualifier = DpQualifier.WIDTH
-            Inverter.PW_TO_LH -> if (isLandscape && dpQualifier == DpQualifier.WIDTH) actualQualifier = DpQualifier.HEIGHT
-            Inverter.LH_TO_PW -> if (isPortrait && dpQualifier == DpQualifier.HEIGHT) actualQualifier = DpQualifier.WIDTH
-            Inverter.LW_TO_PH -> if (isPortrait && dpQualifier == DpQualifier.WIDTH) actualQualifier = DpQualifier.HEIGHT
-            Inverter.SW_TO_LH -> if (isLandscape && dpQualifier == DpQualifier.SMALL_WIDTH) actualQualifier = DpQualifier.HEIGHT
-            Inverter.SW_TO_LW -> if (isLandscape && dpQualifier == DpQualifier.SMALL_WIDTH) actualQualifier = DpQualifier.WIDTH
-            Inverter.SW_TO_PH -> if (isPortrait && dpQualifier == DpQualifier.SMALL_WIDTH) actualQualifier = DpQualifier.HEIGHT
-            Inverter.SW_TO_PW -> if (isPortrait && dpQualifier == DpQualifier.SMALL_WIDTH) actualQualifier = DpQualifier.WIDTH
-            Inverter.DEFAULT -> {}
-        }
-
+    private fun resolveResourceId(context: Context, actualQualifier: DpQualifier, value: Int): Int {
         val safeValue = value.coerceIn(MIN_VALUE, MAX_VALUE)
-        // EN Reuses DP resource naming convention: _Nsdp, _Nhdp, _Nwdp.
-        // PT Reutiliza convenção de nomenclatura DP: _Nsdp, _Nhdp, _Nwdp.
         val suffix = when (actualQualifier) {
             DpQualifier.SMALL_WIDTH -> "sdp"
             DpQualifier.HEIGHT -> "hdp"
             DpQualifier.WIDTH -> "wdp"
         }
         val dimenName = "_${abs(safeValue)}$suffix"
-        return context.resources.getIdentifier(dimenName, DIMEN_TYPE, context.packageName)
+        return DimenResourceIdCache.getOrResolve(
+            context.resources,
+            context.packageName,
+            dimenName,
+        )
     }
 
     // EN Quick-resolution methods.
@@ -299,6 +298,88 @@ object DimenSsp {
     @JvmStatic
     fun wemPh(context: Context, value: Int): Float =
         getDimensionInSpPx(context, DpQualifier.WIDTH, value, Inverter.LW_TO_PH, fontScale = false)
+
+    // EN Aspect-ratio aware Sp (`*a` / `*ia`).
+    // PT Sp com aspect ratio (`*a` / `*ia`).
+
+    /** EN [ssp] with aspect-ratio adjustment. PT [ssp] com ajuste de aspect ratio. */
+    @JvmStatic
+    fun sspa(context: Context, value: Int): Float =
+        getDimensionInSpPx(context, DpQualifier.SMALL_WIDTH, value, applyAspectRatio = true)
+
+    /** EN Alias of [sspa]. PT Alias de [sspa]. */
+    @JvmStatic
+    fun sspia(context: Context, value: Int): Float = sspa(context, value)
+
+    @JvmStatic
+    fun sspPha(context: Context, value: Int): Float =
+        getDimensionInSpPx(context, DpQualifier.SMALL_WIDTH, value, Inverter.SW_TO_PH, applyAspectRatio = true)
+
+    @JvmStatic
+    fun sspPhia(context: Context, value: Int): Float = sspPha(context, value)
+
+    @JvmStatic
+    fun sspLha(context: Context, value: Int): Float =
+        getDimensionInSpPx(context, DpQualifier.SMALL_WIDTH, value, Inverter.SW_TO_LH, applyAspectRatio = true)
+
+    @JvmStatic
+    fun sspLhia(context: Context, value: Int): Float = sspLha(context, value)
+
+    @JvmStatic
+    fun sspPwa(context: Context, value: Int): Float =
+        getDimensionInSpPx(context, DpQualifier.SMALL_WIDTH, value, Inverter.SW_TO_PW, applyAspectRatio = true)
+
+    @JvmStatic
+    fun sspPwia(context: Context, value: Int): Float = sspPwa(context, value)
+
+    @JvmStatic
+    fun sspLwa(context: Context, value: Int): Float =
+        getDimensionInSpPx(context, DpQualifier.SMALL_WIDTH, value, Inverter.SW_TO_LW, applyAspectRatio = true)
+
+    @JvmStatic
+    fun sspLwia(context: Context, value: Int): Float = sspLwa(context, value)
+
+    @JvmStatic
+    fun hspa(context: Context, value: Int): Float =
+        getDimensionInSpPx(context, DpQualifier.HEIGHT, value, applyAspectRatio = true)
+
+    @JvmStatic
+    fun hspia(context: Context, value: Int): Float = hspa(context, value)
+
+    @JvmStatic
+    fun hspLwa(context: Context, value: Int): Float =
+        getDimensionInSpPx(context, DpQualifier.HEIGHT, value, Inverter.PH_TO_LW, applyAspectRatio = true)
+
+    @JvmStatic
+    fun hspLwia(context: Context, value: Int): Float = hspLwa(context, value)
+
+    @JvmStatic
+    fun hspPwa(context: Context, value: Int): Float =
+        getDimensionInSpPx(context, DpQualifier.HEIGHT, value, Inverter.LH_TO_PW, applyAspectRatio = true)
+
+    @JvmStatic
+    fun hspPwia(context: Context, value: Int): Float = hspPwa(context, value)
+
+    @JvmStatic
+    fun wspa(context: Context, value: Int): Float =
+        getDimensionInSpPx(context, DpQualifier.WIDTH, value, applyAspectRatio = true)
+
+    @JvmStatic
+    fun wspia(context: Context, value: Int): Float = wspa(context, value)
+
+    @JvmStatic
+    fun wspLha(context: Context, value: Int): Float =
+        getDimensionInSpPx(context, DpQualifier.WIDTH, value, Inverter.PW_TO_LH, applyAspectRatio = true)
+
+    @JvmStatic
+    fun wspLhia(context: Context, value: Int): Float = wspLha(context, value)
+
+    @JvmStatic
+    fun wspPha(context: Context, value: Int): Float =
+        getDimensionInSpPx(context, DpQualifier.WIDTH, value, Inverter.LW_TO_PH, applyAspectRatio = true)
+
+    @JvmStatic
+    fun wspPhia(context: Context, value: Int): Float = wspPha(context, value)
 
     // EN Resource ID variants.
     // PT Variantes de ID de recurso.

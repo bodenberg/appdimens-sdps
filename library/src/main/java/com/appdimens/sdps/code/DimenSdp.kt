@@ -34,6 +34,7 @@ import com.appdimens.sdps.common.Inverter
 import com.appdimens.sdps.common.Orientation
 import com.appdimens.sdps.common.UiModeType
 import com.appdimens.sdps.core.AppDimensSdpsFactors
+import com.appdimens.sdps.core.DimenResourceIdCache
 
 /**
  * EN
@@ -47,22 +48,7 @@ object DimenSdp {
         -300 // EN Minimum allowed SDP value. / PT Valor mínimo permitido para SDP.
     private const val MAX_VALUE =
         600 // EN Maximum allowed SDP value. / PT Valor máximo permitido para SDP.
-    private const val DIMEN_TYPE =
-        "dimen" // EN The resource type for dimensions. / PT O tipo de recurso para dimensões.
 
-    /**
-     * EN
-     * Gets the dimension in pixels from an SDP value.
-     *
-     * PT
-     * Obtém a dimensão em pixels a partir de um valor SDP.
-     *
-     * @param context The application context.
-     * @param dpQualifier DpQualifier.
-     * @param value The SDP value (-300 to 600).
-     * @param inverter The inverter type to dynamically adapt scaling (default is Inverter.DEFAULT).
-     * @return The dimension in pixels, or 0f if not found.
-     */
     /**
      * EN
      * Gets the dimension in pixels from an SDP value, optionally applying the same aspect-ratio
@@ -73,6 +59,7 @@ object DimenSdp {
      * de aspect ratio do appdimens-dynamic sobre o recurso já pré-escalado em XML (uma multiplicação extra).
      *
      * @param applyAspectRatio When true, multiply resolved pixels by the precomputed per-axis adjustment.
+     * @return The dimension in pixels. If the XML resource is missing, falls back to unscaled `value * density`.
      */
     @JvmStatic
     @JvmOverloads
@@ -86,16 +73,20 @@ object DimenSdp {
         if (value == 0) return 0f
         val configuration = context.resources.configuration
         val actualQualifier = effectiveDpQualifier(configuration, dpQualifier, inverter)
-        val resourceId = getResourceId(context, dpQualifier, value, inverter)
+        val resourceId = resolveResourceId(context, actualQualifier, value)
+        val density = context.resources.displayMetrics.density
         val basePx =
             if (resourceId != 0) context.resources.getDimension(resourceId)
-            else 0f
+            else value * density
         if (!applyAspectRatio || basePx == 0f) return basePx
         AppDimensSdpsFactors.ensureUpToDate(context)
         return basePx * AppDimensSdpsFactors.adjustmentForQualifier(actualQualifier)
     }
 
-    /** EN Pre-computes aspect-ratio factors once for the current (sw,w,h,dpi); optional cold-start. PT Pré-calcula fatores AR para (sw,w,h,dpi); opcional no cold-start. */
+    /**
+     * EN Precomputes aspect-ratio adjustment factors for the current screen metrics.
+     * PT Pré-calcula os fatores de ajuste de aspect ratio para as métricas atuais da tela.
+     */
     @JvmStatic
     fun warmupSdpsFactors(context: Context): Unit = AppDimensSdpsFactors.warmup(context)
 
@@ -114,13 +105,14 @@ object DimenSdp {
      */
     @JvmStatic
     @JvmOverloads
-    @SuppressLint("DiscouragedApi")
     fun getResourceId(context: Context, dpQualifier: DpQualifier, value: Int, inverter: Inverter = Inverter.DEFAULT): Int {
         if (value == 0) return 0
-
         val configuration = context.resources.configuration
         val actualQualifier = effectiveDpQualifier(configuration, dpQualifier, inverter)
+        return resolveResourceId(context, actualQualifier, value)
+    }
 
+    private fun resolveResourceId(context: Context, actualQualifier: DpQualifier, value: Int): Int {
         val safeValue = value.coerceIn(MIN_VALUE, MAX_VALUE)
         val sdpSuffix = when (actualQualifier) {
             DpQualifier.SMALL_WIDTH -> "sdp"
@@ -128,8 +120,11 @@ object DimenSdp {
             DpQualifier.WIDTH -> "wdp"
         }
         val dimenName = buildResourceName(safeValue, sdpSuffix)
-
-        return context.resources.getIdentifier(dimenName, DIMEN_TYPE, context.packageName)
+        return DimenResourceIdCache.getOrResolve(
+            context.resources,
+            context.packageName,
+            dimenName,
+        )
     }
 
     // EN Extensions style functions similar to the compose equivalents for quick resolution.

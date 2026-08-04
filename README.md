@@ -10,7 +10,7 @@
 
 ```kotlin
 dependencies {
-    implementation("io.github.bodenberg:appdimens-sdps:3.1.5")
+    implementation("io.github.bodenberg:appdimens-sdps:3.1.6")
 }
 ```
 
@@ -84,7 +84,19 @@ val heightToWidth = 50.hdpLw
 val widthToHeight = 50.wdpLh
 ```
 
-**Aspect-ratio aware (`sdpa`, `sspa`):** Applies the **same default aspect-ratio multiplier** as [`appdimens-dynamic`](https://github.com/bodenberg/appdimens) on top of the XML-resolved `@dimen` value — effectively **one extra multiply** (`finalPx = getDimension(px) × arAdjustment`). Examples: **`16.sdpa`**, **`32.hdpa`**, **`16.sspa`**. The `*ia` names (`sspia`, `sdpia`) exist for API parity with dynamic (multi-window “ignore scaling” paths there); with SDPS XML they **match** the corresponding `*a` APIs. Adjustment factors invalidate when **`(smallestScreenWidthDp, screenWidthDp, screenHeightDp, densityDpi)`** changes. Optional prefetch: **`DimenSdp.warmupSdpsFactors(context)`**. Numeric parity with **appdimens-dynamic** holds when Android selects the **same resource bucket** for `_1sdp` / `_1wdp` / `_1hdp` used in the maths.
+**Aspect-ratio aware (`sdpa`, `sspa`):** Applies an aspect-ratio adjustment on top of the XML-resolved `@dimen` value (`finalPx = resourcePx × arAdjustment`), using the same default model as [`appdimens-dynamic`](https://github.com/bodenberg/appdimens).
+
+```kotlin
+// Compose
+Box(Modifier = Modifier.size(16.sdpa))
+Text("Scaled", fontSize = 16.sspa)
+
+// Code
+val padPx = DimenSdp.sdpa(context, 16)
+val textPx = DimenSsp.sspa(context, 16)
+```
+
+Available on SDP / HDP / WDP / SSP (Compose and code), including inverter variants (`sdpPha`, `hdpLwa`, …). The `*ia` aliases (`sdpia`, `sspia`, …) match the corresponding `*a` APIs in this library. Factors refresh when `smallestScreenWidthDp`, `screenWidthDp`, `screenHeightDp`, or `densityDpi` changes. Optional warm-up: `DimenSdp.warmupSdpsFactors(context)`.
 
 **Facilitators — Quick Conditional Overrides:**
 ```kotlin
@@ -206,12 +218,13 @@ Use dimension resources directly — all values from `-300` to `600` are pre-gen
 ```kotlin
 // Core — Pixel values
 val paddingPx = DimenSdp.sdp(context, 16)     // Smallest Width
-val paddingArPx = DimenSdp.sdpa(context, 16)  // Same + aspect ratio (appdimens-dynamic sdpa parity)
+val paddingArPx = DimenSdp.sdpa(context, 16)  // Smallest Width + aspect ratio
 val heightPx  = DimenSdp.hdp(context, 32)     // Height
 val widthPx   = DimenSdp.wdp(context, 100)    // Width
 
 // Scalable Sp - Pixel values
 val fontSizePx = DimenSsp.ssp(context, 16)    // With font scaling
+val fontArPx   = DimenSsp.sspa(context, 16)   // With font scaling + aspect ratio
 val fixedSpPx  = DimenSsp.sem(context, 16)    // Without font scaling
 
 // Kotlin Extensions for Sp
@@ -253,11 +266,12 @@ val dpFromCm = DimenPhysicalUnits.toDpFromCm(2.5f, resources)
 ```java
 // Core
 float paddingPx = DimenSdp.sdp(context, 16);
-float paddingArPx = DimenSdp.sdpa(context, 16); // Aspect-ratio-aware sw variant
+float paddingArPx = DimenSdp.sdpa(context, 16);
 int resId = DimenSdp.sdpRes(context, 16);
 
 // Scalable Sp
 float fontSizePx = DimenSsp.ssp(context, 16);
+float fontArPx = DimenSsp.sspa(context, 16);
 int fontResId = DimenSsp.sspRes(context, 16);
 
 // Inverter shortcuts
@@ -298,21 +312,20 @@ DimenPhysicalUnits.toDpFromInch(1f, resources)
 
 ---
 
-## ✨ What's New in Version 3.x
+## ✨ What's New in Version 3.1.6
 
 | Feature | Description |
 |---------|-------------|
-| **Aspect-ratio APIs (`*a`)** | `.sdpa`, `.hdpa`, `.wdpa`, `.sspa` (and code `DimenSdp.sdpa` / `hdpa` / `wdpa`) apply the same aspect-ratio multiplier as **appdimens-dynamic** on top of the scaled `@dimen` value. See the **Aspect-ratio aware** paragraph under Compose usage and **section 2** in the sample Compose activity. |
-| **Sample app: AR comparison** | The `:app` module demonstrates **baseline vs aspect-ratio** scaling in UI (Compose) and via **Logcat** (Kotlin activity). |
-| **Code-Level API** | Full `DimenSdp` object for Java & Kotlin — resolve dimensions outside of XML and Compose |
-| **Inverter Shortcuts** | `.sdpPh`, `.sdpLw`, `.sdpLh`, `.sdpPw`, `.hdpLw`, `.hdpPw`, `.wdpLh`, `.wdpPh` — orientation-aware switching |
-| **Facilitators** | `sdpRotate`, `sdpMode`, `sdpQualifier`, `sdpScreen` (+ hdp/wdp variants) — quick conditional overrides |
-| **DimenScaled Builder** | Priority-based chain with `UiModeType`, `DpQualifier`, `Orientation`, and `Inverter` support |
-| **Foldable Detection** | `FoldingFeature` integration via Jetpack WindowManager — detects Fold/Flip open/half-open states |
+| **Aspect-ratio APIs (`*a`)** | Compose and code: `.sdpa` / `.hdpa` / `.wdpa` / `.sspa` (and `DimenSdp` / `DimenSsp` equivalents) apply aspect-ratio adjustment on top of the scaled `@dimen` value |
+| **Physical units (code)** | `DimenPhysicalUnits` converts mm / cm / inch to Dp, Px, and Sp correctly |
+| **Sample app** | Compose and Kotlin samples compare baseline vs aspect-ratio scaling |
+| **Code-Level API** | Full `DimenSdp` / `DimenSsp` for Java & Kotlin outside XML and Compose |
+| **Inverter Shortcuts** | `.sdpPh`, `.sdpLw`, `.hdpLw`, `.wdpLh`, and related orientation-aware switches |
+| **Facilitators** | `sdpRotate`, `sdpMode`, `sdpQualifier`, `sdpScreen` (+ hdp/wdp/ssp variants) |
+| **DimenScaled Builder** | Priority-based chains with `UiModeType`, `DpQualifier`, `Orientation`, and `Inverter` |
+| **Foldable Detection** | `FoldingFeature` via Jetpack WindowManager |
 | **UiModeType** | `NORMAL`, `TELEVISION`, `CAR`, `WATCH`, `FOLD_OPEN`, `FOLD_HALF`, `FLIP_OPEN`, `FLIP_HALF` |
-| **Physical Units** | `DimenPhysicalUnits` — convert mm, cm, inches to Dp/Px |
-| **Sp & TextUnit** | Full support for Scalable Sp in Compose (`TextUnit`) and Code — respects or ignores font scale |
-| **File Structure** | Modular files: `DimenSdp` (core), `DimenExtensions` (facilitators), `DimenScaled` (builder) |
+| **Sp & TextUnit** | Scalable Sp in Compose and code, with or without system font scale |
 
 ---
 
@@ -373,19 +386,14 @@ Each value is **pre-calculated with a refined mathematical formula** that produc
 
 ## ⚡ Performance
 
-### XML: Zero Cost
-All `@dimen/_16sdp` resources are **resolved statically at build time** by the Android resource system. There is literally no runtime overhead — it's the same mechanism Android uses for all `dimens.xml` values.
+### XML
+`@dimen/_16sdp` (and hdp/wdp) values are selected by the Android resource system. Layout inflation cost matches any other `@dimen` reference.
 
-### Compose: Near-Zero Cost
-The `.sdp`, `.hdp`, `.wdp` extensions use:
-- `LocalConfiguration.current` — already observed by the Compose runtime
-- `LocalContext.current.resources.getIdentifier()` — a single native lookup
-- `dimensionResource()` — standard Compose resource resolution
+### Compose
+`.sdp` / `.hdp` / `.wdp` / `.ssp` resolve through `dimensionResource()` with cached resource IDs. Default paths avoid observing unrelated configuration fields; inverter and aspect-ratio variants observe only the metrics they need. Returning equal `Dp` / `TextUnit` values avoids downstream recomposition when nothing dimension-related changed.
 
-No extra state, no custom `remember{}` overhead, no unnecessary recompositions. The dimension is resolved in the same pass as any standard Compose resource read.
-
-### Code: Native Resolution
-`DimenSdp.sdp(context, value)` performs a single `context.resources.getIdentifier()` + `getDimension()` call — the exact same path Android uses internally for any resource lookup.
+### Code
+`DimenSdp.sdp(context, value)` and `DimenSsp.ssp(context, value)` resolve via cached `getIdentifier` plus `getDimension`. Aspect-ratio factors are memoized per `(smallestScreenWidthDp, screenWidthDp, screenHeightDp, densityDpi)`.
 
 ---
 

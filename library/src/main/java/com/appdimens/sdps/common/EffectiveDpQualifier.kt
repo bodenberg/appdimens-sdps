@@ -1,7 +1,6 @@
 /**
- * Maps (Configuration, qualifier, inverter) to the effective SDP/wdp/hdp resource axis.
- *
- * Mirrors the inverter branching in [com.appdimens.sdps.code.DimenSdp.getResourceId].
+ * Maps screen orientation (or [Configuration]) plus [Inverter] to the effective
+ * SDP / HDP / WDP resource axis.
  */
 package com.appdimens.sdps.common
 
@@ -11,9 +10,17 @@ internal fun effectiveDpQualifier(
     configuration: Configuration,
     dpQualifier: DpQualifier,
     inverter: Inverter,
+): DpQualifier = effectiveDpQualifier(configuration.orientation, dpQualifier, inverter)
+
+internal fun effectiveDpQualifier(
+    orientation: Int,
+    dpQualifier: DpQualifier,
+    inverter: Inverter,
 ): DpQualifier {
-    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-    val isPortrait = configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+    if (inverter == Inverter.DEFAULT) return dpQualifier
+
+    val isLandscape = orientation == Configuration.ORIENTATION_LANDSCAPE
+    val isPortrait = orientation == Configuration.ORIENTATION_PORTRAIT
     var actual = dpQualifier
     when (inverter) {
         Inverter.PH_TO_LW ->

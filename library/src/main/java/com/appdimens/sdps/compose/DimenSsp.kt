@@ -24,19 +24,13 @@
  */
 package com.appdimens.sdps.compose
 
-import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import com.appdimens.sdps.common.DpQualifier
-import com.appdimens.sdps.common.effectiveDpQualifier
 import com.appdimens.sdps.common.Inverter
-import com.appdimens.sdps.core.AppDimensSdpsFactors
-import kotlin.math.abs
 
 // EN Composable extensions for quick dynamic text scaling (Sp) using the DP XML resources.
 // PT Extensões Composable para escalonamento dinâmico rápido de texto (Sp) usando os recursos XML de DP.
@@ -699,31 +693,22 @@ val Int.wemPhPx: Float get() = LocalDensity.current.run { wemPh.toPx() }
 
 /**
  * EN
- * Converts an Int (the base Sp value) into a dynamically scaled TextUnit (Sp).
- * This function reuses the existing DP XML resources (`_Nsdp`, `_Nhdp`, `_Nwdp`) as the
- * dimension values, then converts them to Sp. This means the scaling system is the same as
- * the DP system — the raw dp value from the resource is used directly as an sp number.
- *
- * 1. Constructs the resource name based on the value and the qualifier (e.g., `_16sdp`).
- * 2. Loads the dimension value in dp from that resource.
- * 3. Converts it to Sp, optionally stripping the system font scale.
+ * Converts an Int into a dynamically scaled [TextUnit] (Sp).
+ * Reuses the DP XML resources (`_Nsdp`, `_Nhdp`, `_Nwdp`); the resource dp number is used as the sp amount.
+ * When [fontScale] is false, system font scale is ignored.
+ * When [applyAspectRatio] is true, applies the library aspect-ratio adjustment.
  *
  * PT
- * Converte um Int (o valor Sp base) em um TextUnit (Sp) escalado dinamicamente.
- * Esta função reutiliza os recursos XML de DP existentes (`_Nsdp`, `_Nhdp`, `_Nwdp`) como
- * valores de dimensão, convertendo-os para Sp. O sistema de escalonamento é o mesmo do DP —
- * o valor dp bruto do recurso é usado diretamente como número sp.
+ * Converte um Int em um [TextUnit] (Sp) dinamicamente escalado.
+ * Reutiliza os recursos XML de DP (`_Nsdp`, `_Nhdp`, `_Nwdp`); o valor dp do recurso vira o valor sp.
+ * Com [fontScale] false, ignora a escala de fonte do sistema.
+ * Com [applyAspectRatio], aplica o ajuste de aspect ratio da biblioteca.
  *
- * 1. Constrói o nome do recurso baseado no valor e no qualificador (ex: `_16sdp`).
- * 2. Carrega o valor de dimensão em dp daquele recurso.
- * 3. Converte para Sp, opcionalmente removendo a escala de fonte do sistema.
- *
- * @param qualifier The screen qualifier used to determine the resource name (sdp, hdp, wdp).
- * @param fontScale Whether to respect the user's font scale setting.
- * @param inverter Inverter to swap qualifier when orientation changes.
- * @return The TextUnit (Sp) value loaded from the resource, or the base sp value as fallback.
+ * @param qualifier Screen axis used to select the resource (sdp, hdp, wdp).
+ * @param fontScale Whether to respect the user font scale.
+ * @param inverter Optional orientation-based axis switch.
+ * @param applyAspectRatio Whether to apply the aspect-ratio adjustment (`*a` APIs).
  */
-@SuppressLint("LocalContextResourcesRead", "DiscouragedApi")
 @Composable
 fun Int.toDynamicScaledSp(
     qualifier: DpQualifier,
@@ -735,52 +720,20 @@ fun Int.toDynamicScaledSp(
         "Value must be between 1 and 600 to use the dynamic scaling dimension logic. Current value: $this"
     }
 
-    val configuration = LocalConfiguration.current
-    val context = LocalContext.current
-    val actualQualifier = effectiveDpQualifier(configuration, qualifier, inverter)
+    val actualQualifier = rememberEffectiveQualifier(qualifier, inverter)
+    val dimenResourceId = rememberDimenResourceId(actualQualifier, this)
 
-    // EN Reuses the existing DP XML resource naming convention: _Nsdp, _Nhdp, _Nwdp.
-    // PT Reutiliza a convenção de nomenclatura dos recursos XML de DP: _Nsdp, _Nhdp, _Nwdp.
-    val suffix =
-        when (actualQualifier) {
-            DpQualifier.HEIGHT -> "hdp"
-            DpQualifier.WIDTH -> "wdp"
-            else -> "sdp"
-        }
+    var dpValue =
+        if (dimenResourceId != 0) dimensionResource(id = dimenResourceId).value
+        else this.toFloat()
 
-    val resourceName = "_${abs(this)}$suffix"
-    val dimenResourceId = findResourceIdByNameSsp(resourceName)
-
-    // EN If the resource is found, loads the dp value and treats it as sp.
-    // PT Se o recurso for encontrado, carrega o valor dp e o trata como sp.
-    return if (dimenResourceId != 0 && dimenResourceId != -1) {
-        var dpValue = dimensionResource(id = dimenResourceId).value
-        if (applyAspectRatio) {
-            AppDimensSdpsFactors.ensureUpToDate(context)
-            dpValue *= AppDimensSdpsFactors.adjustmentForQualifier(actualQualifier)
-        }
-        if (fontScale) dpValue.sp
-        else (dpValue / LocalDensity.current.fontScale).sp
-    } else {
-        // EN Fallback: returns the base sp value (no scaling).
-        // PT Fallback: retorna o valor sp base (sem escalonamento).
-        if (fontScale) this.sp
-        else (this.toFloat() / LocalDensity.current.fontScale).sp
+    if (applyAspectRatio) {
+        dpValue *= rememberAspectRatioAdjustment(actualQualifier)
     }
-}
 
-/**
- * EN
- * Finds the dimension resource ID (`dimen`) by name.
- * Private to this file to avoid conflicts with the DP equivalent in DimenSdp.kt.
- *
- * PT
- * Encontra o ID de recurso de dimensão (`dimen`) pelo nome.
- * Privado neste arquivo para evitar conflitos com o equivalente DP em DimenSdp.kt.
- */
-@SuppressLint("LocalContextResourcesRead", "DiscouragedApi")
-@Composable
-private fun findResourceIdByNameSsp(resourceName: String): Int {
-    val context = androidx.compose.ui.platform.LocalContext.current
-    return context.resources.getIdentifier(resourceName, "dimen", context.packageName)
+    return if (fontScale) {
+        dpValue.sp
+    } else {
+        (dpValue / LocalDensity.current.fontScale).sp
+    }
 }

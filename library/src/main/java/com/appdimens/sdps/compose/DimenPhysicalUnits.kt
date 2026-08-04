@@ -27,7 +27,6 @@ package com.appdimens.sdps.compose
 import android.content.res.Resources
 import android.util.TypedValue
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -234,10 +233,7 @@ object DimenPhysicalUnits {
      */
     @get:Composable
     val Float.mm: Float
-        get() {
-            val resources = LocalResources.current
-            return with(LocalDensity.current) { toMm(this@mm, resources) }
-        }
+        get() = toMm(this, LocalResources.current)
 
     /**
      * EN Int extension to convert MM to PX.
@@ -246,10 +242,7 @@ object DimenPhysicalUnits {
      */
     @get:Composable
     val Int.mm: Float
-        get() {
-            val resources = LocalResources.current
-            return with(LocalDensity.current) { toMm(this@mm.toFloat(), resources) }
-        }
+        get() = toMm(this.toFloat(), LocalResources.current)
 
     /**
      * EN Float extension to convert CM to PX.
@@ -258,10 +251,7 @@ object DimenPhysicalUnits {
      */
     @get:Composable
     val Float.cm: Float
-        get() {
-            val resources = LocalResources.current
-            return with(LocalDensity.current) { toCm(this@cm, resources) }
-        }
+        get() = toCm(this, LocalResources.current)
 
     /**
      * EN Int extension to convert CM to PX.
@@ -270,10 +260,7 @@ object DimenPhysicalUnits {
      */
     @get:Composable
     val Int.cm: Float
-        get() {
-            val resources = LocalResources.current
-            return with(LocalDensity.current) { toCm(this@cm.toFloat(), resources) }
-        }
+        get() = toCm(this.toFloat(), LocalResources.current)
 
     /**
      * EN Float extension to convert Inch to PX.
@@ -282,10 +269,7 @@ object DimenPhysicalUnits {
      */
     @get:Composable
     val Float.inch: Float
-        get() {
-            val resources = LocalResources.current
-            return with(LocalDensity.current) { toInch(this@inch, resources) }
-        }
+        get() = toInch(this, LocalResources.current)
 
     /**
      * EN Int extension to convert Inch to PX.
@@ -294,10 +278,7 @@ object DimenPhysicalUnits {
      */
     @get:Composable
     val Int.inch: Float
-        get() {
-            val resources = LocalResources.current
-            return with(LocalDensity.current) { toInch(this@inch.toFloat(), resources) }
-        }
+        get() = toInch(this.toFloat(), LocalResources.current)
 
     /**
      * EN Measurement Utilities.
@@ -314,8 +295,12 @@ object DimenPhysicalUnits {
         UnitType.INCH -> toInch(diameter, resources)
         UnitType.CM -> toCm(diameter, resources)
         UnitType.MM -> toMm(diameter, resources)
-        UnitType.SP -> diameter.sp.value
-        UnitType.DP -> diameter.dp.value
+        UnitType.SP -> TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_SP, diameter, resources.displayMetrics
+        )
+        UnitType.DP -> TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP, diameter, resources.displayMetrics
+        )
         else -> diameter
     } / 2.0f
 
@@ -325,10 +310,8 @@ object DimenPhysicalUnits {
      * PT Extensão de Float para calcular o Raio em Pixels (PX).
      */
     @Composable
-    fun Float.radius(type: UnitType): Float {
-        val resources = LocalResources.current
-        return with(LocalDensity.current) { radius(this@radius, type, resources) }
-    }
+    fun Float.radius(type: UnitType): Float =
+        radius(this, type, LocalResources.current)
 
     /**
      * EN Int extension to calculate the Radius in Pixels (PX).
@@ -336,10 +319,8 @@ object DimenPhysicalUnits {
      * PT Extensão de Int para calcular o Raio em Pixels (PX).
      */
     @Composable
-    fun Int.radius(type: UnitType): Float {
-        val resources = LocalResources.current
-        return with(LocalDensity.current) { radius(this@radius.toFloat(), type, resources) }
-    }
+    fun Int.radius(type: UnitType): Float =
+        radius(this.toFloat(), type, LocalResources.current)
 
     /**
      * EN Adjusts a diameter value to Circumference if requested.

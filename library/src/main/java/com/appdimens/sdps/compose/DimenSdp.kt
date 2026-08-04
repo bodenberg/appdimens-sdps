@@ -24,20 +24,14 @@
  */
 package com.appdimens.sdps.compose
 
-import android.annotation.SuppressLint
 import android.content.res.Configuration
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.appdimens.sdps.common.DpQualifier
-import com.appdimens.sdps.common.effectiveDpQualifier
 import com.appdimens.sdps.common.Inverter
-import com.appdimens.sdps.core.AppDimensSdpsFactors
-import kotlin.math.abs
 
 /**
  * EN
@@ -463,48 +457,20 @@ val Int.wdpPxPhia: Float get() = wdpPxPha
 
 /**
  * EN
- * Finds the dimension resource ID (`dimen`) by the constructed name.
- * The SuppressLint annotation is used because getIdentifier is discouraged,
- * but it is necessary for this type of dynamic logic based on naming convention.
- *
- * PT
- * Encontra o ID de recurso de dimensão (`dimen`) pelo nome construído.
- * A anotação SuppressLint é usada porque getIdentifier é desencorajada,
- * mas é necessária para este tipo de lógica dinâmica baseada em convenção de nomenclatura.
- *
- * @param resourceName The expected name of the resource, e.g., `_s16dp`.
- * @return The resource ID or 0 (or -1) if not found.
- */
-@SuppressLint("LocalContextResourcesRead", "DiscouragedApi")
-@Composable
-private fun findResourceIdByName(resourceName: String): Int {
-    val context = LocalContext.current
-    return context.resources.getIdentifier(
-        resourceName,
-        "dimen", // EN The resource type is 'dimen'. / PT O tipo de recurso é 'dimen'.
-        context.packageName
-    )
-}
-
-/**
- * EN
  * Converts an Int (the base Dp value) into a dynamically scaled Dp.
- * The logic tries to find a corresponding dimension resource in the 'res/values/' folder.
- * 1. Constructs the resource name based on the value (this) and the qualifier (qualifier).
- * 2. Tries to load the resource via dimensionResource.
- * 3. If the resource is found (e.g., in `values-sw600dp/dimens.xml`), that value is used.
- * 4. If the resource is not found, the original value is used as a Dp (the default Compose Int.dp).
+ * Loads the matching `@dimen` resource (`_Nsdp` / `_Nhdp` / `_Nwdp`).
+ * If the resource is missing, returns the unscaled Compose `Int.dp` value.
+ * When [applyAspectRatio] is true, multiplies by the library aspect-ratio adjustment.
  *
  * PT
- * Converte um Int (o valor base de Dp) em um Dp dinamicamente escalado.
- * A lógica tenta encontrar um recurso de dimensão correspondente na pasta 'res/values/'.
- * 1. Constrói o nome do recurso baseado no valor (this) e no qualificador (qualifier).
- * 2. Tenta carregar o recurso via dimensionResource.
- * 3. Se o recurso for encontrado (e.g., em `values-sw600dp/dimens.xml`), esse valor é usado.
- * 4. Se o recurso não for encontrado, o valor original é usado como Dp (o Int.dp padrão do Compose).
+ * Converte um Int (valor Dp base) em um Dp dinamicamente escalado.
+ * Carrega o recurso `@dimen` correspondente (`_Nsdp` / `_Nhdp` / `_Nwdp`).
+ * Se o recurso não existir, retorna o `Int.dp` padrão do Compose.
+ * Com [applyAspectRatio], aplica o ajuste de aspect ratio da biblioteca.
  *
- * @param qualifier The screen qualifier used to construct the resource name (s, h, w).
- * @return The Dp value loaded from the resource or the base Dp value.
+ * @param qualifier Screen axis used to select the resource name (s, h, w).
+ * @param inverter Optional orientation-based axis switch.
+ * @param applyAspectRatio Whether to apply the aspect-ratio adjustment (`*a` APIs).
  */
 @Composable
 fun Int.toDynamicScaledDp(
@@ -512,47 +478,18 @@ fun Int.toDynamicScaledDp(
     inverter: Inverter = Inverter.DEFAULT,
     applyAspectRatio: Boolean = false,
 ): Dp {
-    // EN Validation requirement (limits usage to avoid creating thousands of dimens files).
-    // PT Requisito de validação (limita o uso para evitar a criação de milhares de arquivos dimens).
-    require(this in -300..600) { "Value must be between -300 and 600 to use the dynamic scaling dimension logic. Current value:: $this" }
-
-    val configuration = LocalConfiguration.current
-    val context = LocalContext.current
-    val actualQualifier = effectiveDpQualifier(configuration, qualifier, inverter)
-
-    // EN Determines the qualifier prefix: s (Smallest Width), h (Height), w (Width).
-    // PT Determina o prefixo do qualificador: s (Smallest Width), h (Height), w (Width).
-    val attrName =
-        when (actualQualifier) {
-            DpQualifier.HEIGHT -> "h"
-            DpQualifier.WIDTH -> "w"
-            else -> "s"
-        }
-
-    // EN Handles negative values, using the "minus" prefix in the naming convention.
-    // PT Lida com valores negativos, usando o prefixo "minus" na convenção de nome.
-    val prefix = if (this < 0) "minus" else ""
-    // EN Constructs the resource name, e.g., "_s16dp", "_minuss16dp", "_w100dp".
-    // PT Constrói o nome do recurso, e.g., "_s16dp", "_minuss16dp", "_w100dp".
-    val resourceName = "_${prefix}${abs(this)}${attrName}dp"
-
-    val dimenResourceId = findResourceIdByName(resourceName)
-
-    // EN If the resource ID is valid (not 0 or -1), loads the dimension.
-    // PT Se o ID do recurso for válido (diferente de 0 ou -1), carrega a dimensão.
-    return if (dimenResourceId != 0 && dimenResourceId != -1) {
-        if (!applyAspectRatio) {
-            dimensionResource(id = dimenResourceId)
-        } else {
-            AppDimensSdpsFactors.ensureUpToDate(context)
-            val adjustment = AppDimensSdpsFactors.adjustmentForQualifier(actualQualifier)
-            LocalDensity.current.run {
-                val px = dimensionResource(dimenResourceId).toPx() * adjustment
-                px.toDp()
-            }
-        }
-    } else {
-        // EN Otherwise, returns the default Compose Dp value. / PT Caso contrário, retorna o valor de Dp padrão do Compose.
-        this.dp
+    require(this in -300..600) {
+        "Value must be between -300 and 600 to use the dynamic scaling dimension logic. Current value: $this"
     }
+
+    val actualQualifier = rememberEffectiveQualifier(qualifier, inverter)
+    val dimenResourceId = rememberDimenResourceId(actualQualifier, this)
+
+    if (dimenResourceId == 0) return this.dp
+
+    val baseDp = dimensionResource(id = dimenResourceId)
+    if (!applyAspectRatio) return baseDp
+
+    val adjustment = rememberAspectRatioAdjustment(actualQualifier)
+    return if (adjustment == 1f) baseDp else Dp(baseDp.value * adjustment)
 }

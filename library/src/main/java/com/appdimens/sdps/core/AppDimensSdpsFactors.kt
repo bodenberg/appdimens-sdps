@@ -1,11 +1,11 @@
 /**
- * Aspect-ratio adjustment factors for XML-pre-scaled SDP resources.
+ * Aspect-ratio adjustment factors for XML-backed SDP / HDP / WDP resources.
  *
- * Recomputes at most once per change to (smallestScreenWidthDp, screenWidthDp, screenHeightDp, densityDpi).
- * Hot path callers multiply resolved pixels by [adjustmentForQualifier] after [ensureUpToDate].
+ * Factors are recomputed when `(smallestScreenWidthDp, screenWidthDp, screenHeightDp, densityDpi)` changes.
+ * Callers multiply resolved pixels by [adjustmentForQualifier] after [ensureUpToDate].
  *
- * Mirrors the default aspect-ratio multiplier path in appdimens-dynamic DimenCache, applied as
- * arAdjustment_q = arMultiplier_q * DESIGN_BASE_DP / B_q where B_q is inferred from @_1sdp / @_1wdp / @_1hdp.
+ * Compatible with the default aspect-ratio path in appdimens-dynamic, using
+ * `@_1sdp` / `@_1wdp` / `@_1hdp` to infer the active resource bucket.
  */
 package com.appdimens.sdps.core
 
@@ -58,7 +58,6 @@ object AppDimensSdpsFactors {
         ensureUpToDate(context)
     }
 
-    /** EN Instrumentation/tests: clears memoization. PT Instrumentação/tests: limpa memoização. */
     @VisibleForTesting
     internal fun resetAdjustmentCacheForTestsOnly() {
         synchronized(updateLock) {
