@@ -2,9 +2,12 @@ package com.appdimens.sdps
 
 import android.content.Context
 import android.content.res.Configuration
+import android.util.TypedValue
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.appdimens.sdps.code.DimenPhysicalUnits
 import com.appdimens.sdps.code.DimenSdp
+import com.appdimens.sdps.code.DimenSsp
 import com.appdimens.sdps.core.AppDimensSdpsFactors
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -93,5 +96,35 @@ class AppDimensSdpsAspectRatioInstrumentedTest {
         val pxBase = DimenSdp.sdp(ctx, 32)
         val pxAr = DimenSdp.sdpa(ctx, 32)
         assertTrue(kotlin.math.abs(pxBase - pxAr) > 0.5f)
+    }
+
+    @Test
+    fun sspa_appliesSameAxisAdjustmentAs_sdpa_onSpPixels() {
+        val dpi = InstrumentationRegistry.getInstrumentation().targetContext.resources.configuration.densityDpi
+        val ctx = overlayContext(480, 480, 960, dpi)
+        AppDimensSdpsFactors.ensureUpToDate(ctx)
+        val sspBase = DimenSsp.ssp(ctx, 16)
+        val sspAr = DimenSsp.sspa(ctx, 16)
+        val expected = sspBase * AppDimensSdpsFactors.arAdjustmentSw
+        assertEquals(expected, sspAr, epsilonDpPx)
+        assertTrue(kotlin.math.abs(sspBase - sspAr) > 0.1f)
+    }
+
+    @Test
+    fun physicalUnits_toPxFromMm_doesNotDoubleApplyDensity() {
+        val ctx = InstrumentationRegistry.getInstrumentation().targetContext
+        val metrics = ctx.resources.displayMetrics
+        val mm = 25.4f // 1 inch
+        val px = DimenPhysicalUnits.toPxFromMm(mm, ctx.resources)
+        val expected = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, mm, metrics)
+        assertEquals(expected, px, 0.01f)
+
+        val dp = DimenPhysicalUnits.toDpFromMm(mm, ctx.resources)
+        assertEquals(px / metrics.density, dp, 0.01f)
+
+        // EN toPx must NOT equal toDp * density * density (old bug).
+        // PT toPx NÃO deve ser toDp * density² (bug antigo).
+        val wronglyDoubleScaled = dp * metrics.density * metrics.density
+        assertTrue(kotlin.math.abs(px - wronglyDoubleScaled) > 1f)
     }
 }

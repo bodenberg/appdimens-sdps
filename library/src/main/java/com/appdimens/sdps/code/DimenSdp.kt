@@ -52,19 +52,6 @@ object DimenSdp {
 
     /**
      * EN
-     * Gets the dimension in pixels from an SDP value.
-     *
-     * PT
-     * Obtém a dimensão em pixels a partir de um valor SDP.
-     *
-     * @param context The application context.
-     * @param dpQualifier DpQualifier.
-     * @param value The SDP value (-300 to 600).
-     * @param inverter The inverter type to dynamically adapt scaling (default is Inverter.DEFAULT).
-     * @return The dimension in pixels, or 0f if not found.
-     */
-    /**
-     * EN
      * Gets the dimension in pixels from an SDP value, optionally applying the same aspect-ratio
      * multiplier model as appdimens-dynamic on top of the XML-pre-scaled resource (single extra multiply).
      *
@@ -73,6 +60,7 @@ object DimenSdp {
      * de aspect ratio do appdimens-dynamic sobre o recurso já pré-escalado em XML (uma multiplicação extra).
      *
      * @param applyAspectRatio When true, multiply resolved pixels by the precomputed per-axis adjustment.
+     * @return The dimension in pixels. If the XML resource is missing, falls back to unscaled `value * density`.
      */
     @JvmStatic
     @JvmOverloads
@@ -87,9 +75,12 @@ object DimenSdp {
         val configuration = context.resources.configuration
         val actualQualifier = effectiveDpQualifier(configuration, dpQualifier, inverter)
         val resourceId = getResourceId(context, dpQualifier, value, inverter)
+        val density = context.resources.displayMetrics.density
+        // EN Missing resource → unscaled Dp→Px (parity with Compose `toDynamicScaledDp` fallback).
+        // PT Recurso ausente → Dp→Px sem escala XML (paridade com o fallback Compose).
         val basePx =
             if (resourceId != 0) context.resources.getDimension(resourceId)
-            else 0f
+            else value * density
         if (!applyAspectRatio || basePx == 0f) return basePx
         AppDimensSdpsFactors.ensureUpToDate(context)
         return basePx * AppDimensSdpsFactors.adjustmentForQualifier(actualQualifier)

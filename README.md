@@ -10,7 +10,7 @@
 
 ```kotlin
 dependencies {
-    implementation("io.github.bodenberg:appdimens-sdps:3.1.5")
+    implementation("io.github.bodenberg:appdimens-sdps:3.1.6")
 }
 ```
 
@@ -84,7 +84,7 @@ val heightToWidth = 50.hdpLw
 val widthToHeight = 50.wdpLh
 ```
 
-**Aspect-ratio aware (`sdpa`, `sspa`):** Applies the **same default aspect-ratio multiplier** as [`appdimens-dynamic`](https://github.com/bodenberg/appdimens) on top of the XML-resolved `@dimen` value — effectively **one extra multiply** (`finalPx = getDimension(px) × arAdjustment`). Examples: **`16.sdpa`**, **`32.hdpa`**, **`16.sspa`**. The `*ia` names (`sspia`, `sdpia`) exist for API parity with dynamic (multi-window “ignore scaling” paths there); with SDPS XML they **match** the corresponding `*a` APIs. Adjustment factors invalidate when **`(smallestScreenWidthDp, screenWidthDp, screenHeightDp, densityDpi)`** changes. Optional prefetch: **`DimenSdp.warmupSdpsFactors(context)`**. Numeric parity with **appdimens-dynamic** holds when Android selects the **same resource bucket** for `_1sdp` / `_1wdp` / `_1hdp` used in the maths.
+**Aspect-ratio aware (`sdpa`, `sspa`):** Applies the **same default aspect-ratio multiplier** as [`appdimens-dynamic`](https://github.com/bodenberg/appdimens) on top of the XML-resolved `@dimen` value — effectively **one extra multiply** (`finalPx = getDimension(px) × arAdjustment`). Examples: **`16.sdpa`**, **`32.hdpa`**, **`16.sspa`** (Compose) and **`DimenSdp.sdpa(ctx, 16)`**, **`DimenSsp.sspa(ctx, 16)`** (code). The `*ia` names (`sspia`, `sdpia`) exist for API parity with dynamic (multi-window “ignore scaling” paths there); with SDPS XML they **match** the corresponding `*a` APIs. Adjustment factors invalidate when **`(smallestScreenWidthDp, screenWidthDp, screenHeightDp, densityDpi)`** changes. Optional prefetch: **`DimenSdp.warmupSdpsFactors(context)`**. Numeric parity with **appdimens-dynamic** holds when Android selects the **same resource bucket** for `_1sdp` / `_1wdp` / `_1hdp` used in the maths.
 
 **Facilitators — Quick Conditional Overrides:**
 ```kotlin

@@ -101,6 +101,37 @@ fun Int.wemLh(context: Context): Float = DimenSsp.wemLh(context, this)
 /** EN wsp without font scale, portrait -> Height. PT wsp sem escala de fonte, retrato -> Altura. @see DimenSsp.wemPh */
 fun Int.wemPh(context: Context): Float = DimenSsp.wemPh(context, this)
 
+// EN Aspect-ratio-aware Sp (*a / *ia) — parity with Compose sspa / DimenSdp.sdpa.
+// PT Sp com aspect ratio (*a / *ia) — paridade com Compose sspa / DimenSdp.sdpa.
+
+/** @see DimenSsp.sspa */
+fun Int.sspa(context: Context): Float = DimenSsp.sspa(context, this.coerceIn(1, 600))
+/** @see DimenSsp.sspia */
+fun Int.sspia(context: Context): Float = DimenSsp.sspia(context, this.coerceIn(1, 600))
+
+fun Int.sspPha(context: Context): Float = DimenSsp.sspPha(context, this.coerceIn(1, 600))
+fun Int.sspPhia(context: Context): Float = sspPha(context)
+fun Int.sspLha(context: Context): Float = DimenSsp.sspLha(context, this.coerceIn(1, 600))
+fun Int.sspLhia(context: Context): Float = sspLha(context)
+fun Int.sspPwa(context: Context): Float = DimenSsp.sspPwa(context, this.coerceIn(1, 600))
+fun Int.sspPwia(context: Context): Float = sspPwa(context)
+fun Int.sspLwa(context: Context): Float = DimenSsp.sspLwa(context, this.coerceIn(1, 600))
+fun Int.sspLwia(context: Context): Float = sspLwa(context)
+
+fun Int.hspa(context: Context): Float = DimenSsp.hspa(context, this.coerceIn(1, 600))
+fun Int.hspia(context: Context): Float = hspa(context)
+fun Int.hspLwa(context: Context): Float = DimenSsp.hspLwa(context, this.coerceIn(1, 600))
+fun Int.hspLwia(context: Context): Float = hspLwa(context)
+fun Int.hspPwa(context: Context): Float = DimenSsp.hspPwa(context, this.coerceIn(1, 600))
+fun Int.hspPwia(context: Context): Float = hspPwa(context)
+
+fun Int.wspa(context: Context): Float = DimenSsp.wspa(context, this.coerceIn(1, 600))
+fun Int.wspia(context: Context): Float = wspa(context)
+fun Int.wspLha(context: Context): Float = DimenSsp.wspLha(context, this.coerceIn(1, 600))
+fun Int.wspLhia(context: Context): Float = wspLha(context)
+fun Int.wspPha(context: Context): Float = DimenSsp.wspPha(context, this.coerceIn(1, 600))
+fun Int.wspPhia(context: Context): Float = wspPha(context)
+
 // EN Resource ID variants
 // PT Variantes que retornam o ID de recurso
 

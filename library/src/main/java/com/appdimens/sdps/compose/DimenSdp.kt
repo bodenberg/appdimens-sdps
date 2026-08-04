@@ -472,7 +472,7 @@ val Int.wdpPxPhia: Float get() = wdpPxPha
  * A anotação SuppressLint é usada porque getIdentifier é desencorajada,
  * mas é necessária para este tipo de lógica dinâmica baseada em convenção de nomenclatura.
  *
- * @param resourceName The expected name of the resource, e.g., `_s16dp`.
+ * @param resourceName The expected name of the resource, e.g., `_16sdp`.
  * @return The resource ID or 0 (or -1) if not found.
  */
 @SuppressLint("LocalContextResourcesRead", "DiscouragedApi")
@@ -514,7 +514,7 @@ fun Int.toDynamicScaledDp(
 ): Dp {
     // EN Validation requirement (limits usage to avoid creating thousands of dimens files).
     // PT Requisito de validação (limita o uso para evitar a criação de milhares de arquivos dimens).
-    require(this in -300..600) { "Value must be between -300 and 600 to use the dynamic scaling dimension logic. Current value:: $this" }
+    require(this in -300..600) { "Value must be between -300 and 600 to use the dynamic scaling dimension logic. Current value: $this" }
 
     val configuration = LocalConfiguration.current
     val context = LocalContext.current
@@ -532,8 +532,8 @@ fun Int.toDynamicScaledDp(
     // EN Handles negative values, using the "minus" prefix in the naming convention.
     // PT Lida com valores negativos, usando o prefixo "minus" na convenção de nome.
     val prefix = if (this < 0) "minus" else ""
-    // EN Constructs the resource name, e.g., "_s16dp", "_minuss16dp", "_w100dp".
-    // PT Constrói o nome do recurso, e.g., "_s16dp", "_minuss16dp", "_w100dp".
+    // EN Constructs the resource name, e.g., "_16sdp", "_minus16sdp", "_100wdp".
+    // PT Constrói o nome do recurso, e.g., "_16sdp", "_minus16sdp", "_100wdp".
     val resourceName = "_${prefix}${abs(this)}${attrName}dp"
 
     val dimenResourceId = findResourceIdByName(resourceName)

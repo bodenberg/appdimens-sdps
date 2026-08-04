@@ -314,8 +314,12 @@ object DimenPhysicalUnits {
         UnitType.INCH -> toInch(diameter, resources)
         UnitType.CM -> toCm(diameter, resources)
         UnitType.MM -> toMm(diameter, resources)
-        UnitType.SP -> diameter.sp.value
-        UnitType.DP -> diameter.dp.value
+        UnitType.SP -> TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_SP, diameter, resources.displayMetrics
+        )
+        UnitType.DP -> TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP, diameter, resources.displayMetrics
+        )
         else -> diameter
     } / 2.0f
 
