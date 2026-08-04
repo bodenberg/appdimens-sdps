@@ -9,6 +9,7 @@ import com.appdimens.sdps.code.DimenPhysicalUnits
 import com.appdimens.sdps.code.DimenSdp
 import com.appdimens.sdps.code.DimenSsp
 import com.appdimens.sdps.core.AppDimensSdpsFactors
+import com.appdimens.sdps.core.DimenResourceIdCache
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -24,6 +25,7 @@ class AppDimensSdpsAspectRatioInstrumentedTest {
     @Before
     fun resetFactorsCache() {
         AppDimensSdpsFactors.resetAdjustmentCacheForTestsOnly()
+        DimenResourceIdCache.resetForTestsOnly()
     }
 
     private fun overlayContext(
@@ -126,5 +128,25 @@ class AppDimensSdpsAspectRatioInstrumentedTest {
         // PT toPx NÃO deve ser toDp * density² (bug antigo).
         val wronglyDoubleScaled = dp * metrics.density * metrics.density
         assertTrue(kotlin.math.abs(px - wronglyDoubleScaled) > 1f)
+    }
+
+    @Test
+    fun resourceIdCache_reusesIdentifierAcrossRepeatedSdpLookups() {
+        val ctx = InstrumentationRegistry.getInstrumentation().targetContext
+        DimenResourceIdCache.resetForTestsOnly()
+        assertEquals(0, DimenResourceIdCache.cachedSizeForTestsOnly())
+
+        val first = DimenSdp.sdp(ctx, 16)
+        val sizeAfterFirst = DimenResourceIdCache.cachedSizeForTestsOnly()
+        assertTrue(sizeAfterFirst >= 1)
+
+        val second = DimenSdp.sdp(ctx, 16)
+        assertEquals(first, second, epsilonDpPx)
+        assertEquals(sizeAfterFirst, DimenResourceIdCache.cachedSizeForTestsOnly())
+
+        // EN Same XML names are shared with SSP — cache hit, no growth for ssp(16).
+        // PT SSP reutiliza os mesmos nomes XML — hit de cache, sem crescimento para ssp(16).
+        DimenSsp.ssp(ctx, 16)
+        assertEquals(sizeAfterFirst, DimenResourceIdCache.cachedSizeForTestsOnly())
     }
 }

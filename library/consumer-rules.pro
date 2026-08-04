@@ -15,8 +15,9 @@
 -keep class com.appdimens.sdps.code.DimenPhysicalUnits { *; }
 -keep class com.appdimens.sdps.compose.DimenPhysicalUnits { *; }
 
-# --- Aspect-ratio factor cache (reachable from *a APIs; keep for reflective / JNI edges) ---
+# --- Aspect-ratio factor cache + dimen ID cache (reachable from *a / resolve paths) ---
 -keep class com.appdimens.sdps.core.AppDimensSdpsFactors { *; }
+-keep class com.appdimens.sdps.core.DimenResourceIdCache { *; }
 
 # --- DimenScaled / ScaledSp builders (code + Compose packages) ---
 -keep class com.appdimens.sdps.code.DimenScaled { *; }

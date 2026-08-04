@@ -37,6 +37,7 @@ import com.appdimens.sdps.common.DpQualifier
 import com.appdimens.sdps.common.effectiveDpQualifier
 import com.appdimens.sdps.common.Inverter
 import com.appdimens.sdps.core.AppDimensSdpsFactors
+import com.appdimens.sdps.core.DimenResourceIdCache
 import kotlin.math.abs
 
 /**
@@ -479,10 +480,10 @@ val Int.wdpPxPhia: Float get() = wdpPxPha
 @Composable
 private fun findResourceIdByName(resourceName: String): Int {
     val context = LocalContext.current
-    return context.resources.getIdentifier(
+    return DimenResourceIdCache.getOrResolve(
+        context.resources,
+        context.packageName,
         resourceName,
-        "dimen", // EN The resource type is 'dimen'. / PT O tipo de recurso é 'dimen'.
-        context.packageName
     )
 }
 

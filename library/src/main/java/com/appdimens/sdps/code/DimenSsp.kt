@@ -34,6 +34,7 @@ import com.appdimens.sdps.common.Orientation
 import com.appdimens.sdps.common.UiModeType
 import com.appdimens.sdps.common.effectiveDpQualifier
 import com.appdimens.sdps.core.AppDimensSdpsFactors
+import com.appdimens.sdps.core.DimenResourceIdCache
 import kotlin.math.abs
 
 /**
@@ -50,7 +51,6 @@ import kotlin.math.abs
 object DimenSsp {
     private const val MIN_VALUE = 1
     private const val MAX_VALUE = 600
-    private const val DIMEN_TYPE = "dimen"
 
     /**
      * EN
@@ -87,7 +87,7 @@ object DimenSsp {
         }
         val configuration = context.resources.configuration
         val actualQualifier = effectiveDpQualifier(configuration, dpQualifier, inverter)
-        val resourceId = getResourceId(context, dpQualifier, value, inverter)
+        val resourceId = resolveResourceId(context, actualQualifier, value)
         val metrics = context.resources.displayMetrics
 
         // EN Missing resource → unscaled Sp (parity with Compose `toDynamicScaledSp` fallback).
@@ -127,7 +127,6 @@ object DimenSsp {
      */
     @JvmStatic
     @JvmOverloads
-    @SuppressLint("DiscouragedApi")
     fun getResourceId(
         context: Context,
         dpQualifier: DpQualifier,
@@ -135,20 +134,25 @@ object DimenSsp {
         inverter: Inverter = Inverter.DEFAULT
     ): Int {
         if (value == 0) return 0
-
         val configuration = context.resources.configuration
         val actualQualifier = effectiveDpQualifier(configuration, dpQualifier, inverter)
+        return resolveResourceId(context, actualQualifier, value)
+    }
 
+    /** EN Builds `_Nsdp` / `_Nhdp` / `_Nwdp` and resolves via [DimenResourceIdCache]. PT Monta o nome e resolve via cache. */
+    private fun resolveResourceId(context: Context, actualQualifier: DpQualifier, value: Int): Int {
         val safeValue = value.coerceIn(MIN_VALUE, MAX_VALUE)
-        // EN Reuses DP resource naming convention: _Nsdp, _Nhdp, _Nwdp.
-        // PT Reutiliza convenção de nomenclatura DP: _Nsdp, _Nhdp, _Nwdp.
         val suffix = when (actualQualifier) {
             DpQualifier.SMALL_WIDTH -> "sdp"
             DpQualifier.HEIGHT -> "hdp"
             DpQualifier.WIDTH -> "wdp"
         }
         val dimenName = "_${abs(safeValue)}$suffix"
-        return context.resources.getIdentifier(dimenName, DIMEN_TYPE, context.packageName)
+        return DimenResourceIdCache.getOrResolve(
+            context.resources,
+            context.packageName,
+            dimenName,
+        )
     }
 
     // EN Quick-resolution methods.

@@ -34,6 +34,7 @@ import com.appdimens.sdps.common.Inverter
 import com.appdimens.sdps.common.Orientation
 import com.appdimens.sdps.common.UiModeType
 import com.appdimens.sdps.core.AppDimensSdpsFactors
+import com.appdimens.sdps.core.DimenResourceIdCache
 
 /**
  * EN
@@ -47,8 +48,6 @@ object DimenSdp {
         -300 // EN Minimum allowed SDP value. / PT Valor mínimo permitido para SDP.
     private const val MAX_VALUE =
         600 // EN Maximum allowed SDP value. / PT Valor máximo permitido para SDP.
-    private const val DIMEN_TYPE =
-        "dimen" // EN The resource type for dimensions. / PT O tipo de recurso para dimensões.
 
     /**
      * EN
@@ -74,7 +73,9 @@ object DimenSdp {
         if (value == 0) return 0f
         val configuration = context.resources.configuration
         val actualQualifier = effectiveDpQualifier(configuration, dpQualifier, inverter)
-        val resourceId = getResourceId(context, dpQualifier, value, inverter)
+        // EN Resolve once with the already-computed qualifier (avoid double inverter + getIdentifier).
+        // PT Resolve uma vez com o qualificador já calculado (evita inverter + getIdentifier duplicados).
+        val resourceId = resolveResourceId(context, actualQualifier, value)
         val density = context.resources.displayMetrics.density
         // EN Missing resource → unscaled Dp→Px (parity with Compose `toDynamicScaledDp` fallback).
         // PT Recurso ausente → Dp→Px sem escala XML (paridade com o fallback Compose).
@@ -105,13 +106,15 @@ object DimenSdp {
      */
     @JvmStatic
     @JvmOverloads
-    @SuppressLint("DiscouragedApi")
     fun getResourceId(context: Context, dpQualifier: DpQualifier, value: Int, inverter: Inverter = Inverter.DEFAULT): Int {
         if (value == 0) return 0
-
         val configuration = context.resources.configuration
         val actualQualifier = effectiveDpQualifier(configuration, dpQualifier, inverter)
+        return resolveResourceId(context, actualQualifier, value)
+    }
 
+    /** EN Builds `_Nsdp` / `_Nhdp` / `_Nwdp` and resolves via [DimenResourceIdCache]. PT Monta o nome e resolve via cache. */
+    private fun resolveResourceId(context: Context, actualQualifier: DpQualifier, value: Int): Int {
         val safeValue = value.coerceIn(MIN_VALUE, MAX_VALUE)
         val sdpSuffix = when (actualQualifier) {
             DpQualifier.SMALL_WIDTH -> "sdp"
@@ -119,8 +122,11 @@ object DimenSdp {
             DpQualifier.WIDTH -> "wdp"
         }
         val dimenName = buildResourceName(safeValue, sdpSuffix)
-
-        return context.resources.getIdentifier(dimenName, DIMEN_TYPE, context.packageName)
+        return DimenResourceIdCache.getOrResolve(
+            context.resources,
+            context.packageName,
+            dimenName,
+        )
     }
 
     // EN Extensions style functions similar to the compose equivalents for quick resolution.

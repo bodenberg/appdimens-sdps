@@ -36,6 +36,7 @@ import com.appdimens.sdps.common.DpQualifier
 import com.appdimens.sdps.common.effectiveDpQualifier
 import com.appdimens.sdps.common.Inverter
 import com.appdimens.sdps.core.AppDimensSdpsFactors
+import com.appdimens.sdps.core.DimenResourceIdCache
 import kotlin.math.abs
 
 // EN Composable extensions for quick dynamic text scaling (Sp) using the DP XML resources.
@@ -782,5 +783,9 @@ fun Int.toDynamicScaledSp(
 @Composable
 private fun findResourceIdByNameSsp(resourceName: String): Int {
     val context = androidx.compose.ui.platform.LocalContext.current
-    return context.resources.getIdentifier(resourceName, "dimen", context.packageName)
+    return DimenResourceIdCache.getOrResolve(
+        context.resources,
+        context.packageName,
+        resourceName,
+    )
 }
