@@ -131,7 +131,7 @@ tasks.withType<DokkaGenerateTask>().configureEach {
 
 android {
     namespace = "com.appdimens.sdps"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         minSdk = 24
