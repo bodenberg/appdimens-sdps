@@ -73,12 +73,8 @@ object DimenSdp {
         if (value == 0) return 0f
         val configuration = context.resources.configuration
         val actualQualifier = effectiveDpQualifier(configuration, dpQualifier, inverter)
-        // EN Resolve once with the already-computed qualifier (avoid double inverter + getIdentifier).
-        // PT Resolve uma vez com o qualificador já calculado (evita inverter + getIdentifier duplicados).
         val resourceId = resolveResourceId(context, actualQualifier, value)
         val density = context.resources.displayMetrics.density
-        // EN Missing resource → unscaled Dp→Px (parity with Compose `toDynamicScaledDp` fallback).
-        // PT Recurso ausente → Dp→Px sem escala XML (paridade com o fallback Compose).
         val basePx =
             if (resourceId != 0) context.resources.getDimension(resourceId)
             else value * density
@@ -87,7 +83,10 @@ object DimenSdp {
         return basePx * AppDimensSdpsFactors.adjustmentForQualifier(actualQualifier)
     }
 
-    /** EN Pre-computes aspect-ratio factors once for the current (sw,w,h,dpi); optional cold-start. PT Pré-calcula fatores AR para (sw,w,h,dpi); opcional no cold-start. */
+    /**
+     * EN Precomputes aspect-ratio adjustment factors for the current screen metrics.
+     * PT Pré-calcula os fatores de ajuste de aspect ratio para as métricas atuais da tela.
+     */
     @JvmStatic
     fun warmupSdpsFactors(context: Context): Unit = AppDimensSdpsFactors.warmup(context)
 
@@ -113,7 +112,6 @@ object DimenSdp {
         return resolveResourceId(context, actualQualifier, value)
     }
 
-    /** EN Builds `_Nsdp` / `_Nhdp` / `_Nwdp` and resolves via [DimenResourceIdCache]. PT Monta o nome e resolve via cache. */
     private fun resolveResourceId(context: Context, actualQualifier: DpQualifier, value: Int): Int {
         val safeValue = value.coerceIn(MIN_VALUE, MAX_VALUE)
         val sdpSuffix = when (actualQualifier) {

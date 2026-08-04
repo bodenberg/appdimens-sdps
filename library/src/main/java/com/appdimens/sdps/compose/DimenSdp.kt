@@ -458,24 +458,19 @@ val Int.wdpPxPhia: Float get() = wdpPxPha
 /**
  * EN
  * Converts an Int (the base Dp value) into a dynamically scaled Dp.
- * The logic tries to find a corresponding dimension resource in the 'res/values/' folder.
- * 1. Constructs the resource name based on the value (this) and the qualifier (qualifier).
- * 2. Tries to load the resource via dimensionResource.
- * 3. If the resource is found (e.g., in `values-sw600dp/dimens.xml`), that value is used.
- * 4. If the resource is not found, the original value is used as a Dp (the default Compose Int.dp).
- *
- * Hot path notes:
- * - DEFAULT inverter does not read [LocalConfiguration] (avoids recomposition on unrelated config).
- * - Aspect-ratio multiplies the Dp value directly (no [LocalDensity] round-trip).
- * - Resource IDs are remembered; XML buckets still update via [dimensionResource].
+ * Loads the matching `@dimen` resource (`_Nsdp` / `_Nhdp` / `_Nwdp`).
+ * If the resource is missing, returns the unscaled Compose `Int.dp` value.
+ * When [applyAspectRatio] is true, multiplies by the library aspect-ratio adjustment.
  *
  * PT
- * Converte um Int (o valor base de Dp) em um Dp dinamicamente escalado.
- * Caminho quente: inverter DEFAULT não lê LocalConfiguration; aspect-ratio sem LocalDensity;
- * IDs memoizados; valores XML atualizam via dimensionResource.
+ * Converte um Int (valor Dp base) em um Dp dinamicamente escalado.
+ * Carrega o recurso `@dimen` correspondente (`_Nsdp` / `_Nhdp` / `_Nwdp`).
+ * Se o recurso não existir, retorna o `Int.dp` padrão do Compose.
+ * Com [applyAspectRatio], aplica o ajuste de aspect ratio da biblioteca.
  *
- * @param qualifier The screen qualifier used to construct the resource name (s, h, w).
- * @return The Dp value loaded from the resource or the base Dp value.
+ * @param qualifier Screen axis used to select the resource name (s, h, w).
+ * @param inverter Optional orientation-based axis switch.
+ * @param applyAspectRatio Whether to apply the aspect-ratio adjustment (`*a` APIs).
  */
 @Composable
 fun Int.toDynamicScaledDp(
@@ -496,7 +491,5 @@ fun Int.toDynamicScaledDp(
     if (!applyAspectRatio) return baseDp
 
     val adjustment = rememberAspectRatioAdjustment(actualQualifier)
-    // EN Equivalent to toPx()*adj/toDp() without subscribing to LocalDensity.
-    // PT Equivalente a toPx()*adj/toDp() sem assinar LocalDensity.
     return if (adjustment == 1f) baseDp else Dp(baseDp.value * adjustment)
 }

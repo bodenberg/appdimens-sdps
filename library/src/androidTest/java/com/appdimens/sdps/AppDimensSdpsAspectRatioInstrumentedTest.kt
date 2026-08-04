@@ -20,7 +20,7 @@ import kotlin.math.abs
 @RunWith(AndroidJUnit4::class)
 class AppDimensSdpsAspectRatioInstrumentedTest {
 
-    private val epsilonDpPx = 0.06f // EN margin for float/layout rounding PT margem por float/arredondamento
+    private val epsilonDpPx = 0.06f
 
     @Before
     fun resetFactorsCache() {
@@ -124,8 +124,6 @@ class AppDimensSdpsAspectRatioInstrumentedTest {
         val dp = DimenPhysicalUnits.toDpFromMm(mm, ctx.resources)
         assertEquals(px / metrics.density, dp, 0.01f)
 
-        // EN toPx must NOT equal toDp * density * density (old bug).
-        // PT toPx NÃO deve ser toDp * density² (bug antigo).
         val wronglyDoubleScaled = dp * metrics.density * metrics.density
         assertTrue(kotlin.math.abs(px - wronglyDoubleScaled) > 1f)
     }
@@ -144,8 +142,6 @@ class AppDimensSdpsAspectRatioInstrumentedTest {
         assertEquals(first, second, epsilonDpPx)
         assertEquals(sizeAfterFirst, DimenResourceIdCache.cachedSizeForTestsOnly())
 
-        // EN Same XML names are shared with SSP — cache hit, no growth for ssp(16).
-        // PT SSP reutiliza os mesmos nomes XML — hit de cache, sem crescimento para ssp(16).
         DimenSsp.ssp(ctx, 16)
         assertEquals(sizeAfterFirst, DimenResourceIdCache.cachedSizeForTestsOnly())
     }

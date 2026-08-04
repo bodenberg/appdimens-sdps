@@ -1,11 +1,3 @@
-/**
- * Shared Compose resolve helpers: minimize CompositionLocal reads and remember stable work.
- *
- * - DEFAULT inverter + no aspect-ratio: no [androidx.compose.ui.platform.LocalConfiguration] read
- *   ( [androidx.compose.ui.res.dimensionResource] already tracks resource configuration ).
- * - Inverters: subscribe only to `LocalConfiguration.orientation`.
- * - Aspect-ratio: subscribe only to sw/w/h/dpi fields used by [com.appdimens.sdps.core.AppDimensSdpsFactors].
- */
 package com.appdimens.sdps.compose
 
 import android.content.Context
@@ -43,7 +35,6 @@ internal fun rememberDimenResourceId(
     }
 }
 
-/** Builds `_Nsdp` / `_Nhdp` / `_Nwdp` / `_minusNsdp` and resolves via [DimenResourceIdCache]. */
 internal fun resolveDimenResourceId(
     context: Context,
     actualQualifier: DpQualifier,
@@ -65,10 +56,6 @@ internal fun resolveDimenResourceId(
     )
 }
 
-/**
- * Reads only AR-relevant configuration fields so remember keys ignore locale/uiMode noise
- * in the remembered adjustment (still requires a LocalConfiguration read to invalidate on size/dpi).
- */
 @Composable
 internal fun rememberAspectRatioAdjustment(actualQualifier: DpQualifier): Float {
     val context = LocalContext.current

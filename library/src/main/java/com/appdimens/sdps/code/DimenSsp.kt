@@ -90,8 +90,6 @@ object DimenSsp {
         val resourceId = resolveResourceId(context, actualQualifier, value)
         val metrics = context.resources.displayMetrics
 
-        // EN Missing resource → unscaled Sp (parity with Compose `toDynamicScaledSp` fallback).
-        // PT Recurso ausente → Sp sem escala XML (paridade com o fallback Compose).
         val dpValue = if (resourceId != 0) {
             context.resources.getDimension(resourceId) / metrics.density
         } else {
@@ -101,8 +99,6 @@ object DimenSsp {
         val baseSpPx = if (fontScale) {
             TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, dpValue, metrics)
         } else {
-            // EN Bypasses font scale using density directly.
-            // PT Ignora a escala de fonte usando a densidade diretamente.
             dpValue * metrics.density
         }
         if (!applyAspectRatio) return baseSpPx
@@ -139,7 +135,6 @@ object DimenSsp {
         return resolveResourceId(context, actualQualifier, value)
     }
 
-    /** EN Builds `_Nsdp` / `_Nhdp` / `_Nwdp` and resolves via [DimenResourceIdCache]. PT Monta o nome e resolve via cache. */
     private fun resolveResourceId(context: Context, actualQualifier: DpQualifier, value: Int): Int {
         val safeValue = value.coerceIn(MIN_VALUE, MAX_VALUE)
         val suffix = when (actualQualifier) {
@@ -304,15 +299,15 @@ object DimenSsp {
     fun wemPh(context: Context, value: Int): Float =
         getDimensionInSpPx(context, DpQualifier.WIDTH, value, Inverter.LW_TO_PH, fontScale = false)
 
-    // EN Aspect-ratio-aware Sp (*a / *ia) — parity with Compose sspa / DimenSdp.sdpa.
-    // PT Sp com aspect ratio (*a / *ia) — paridade com Compose sspa / DimenSdp.sdpa.
+    // EN Aspect-ratio aware Sp (`*a` / `*ia`).
+    // PT Sp com aspect ratio (`*a` / `*ia`).
 
-    /** EN Same as [ssp] with aspect-ratio adjustment. PT Igual a [ssp] com ajuste de aspect ratio. */
+    /** EN [ssp] with aspect-ratio adjustment. PT [ssp] com ajuste de aspect ratio. */
     @JvmStatic
     fun sspa(context: Context, value: Int): Float =
         getDimensionInSpPx(context, DpQualifier.SMALL_WIDTH, value, applyAspectRatio = true)
 
-    /** EN API parity alias; identical to [sspa]. PT Alias de API; igual a [sspa]. */
+    /** EN Alias of [sspa]. PT Alias de [sspa]. */
     @JvmStatic
     fun sspia(context: Context, value: Int): Float = sspa(context, value)
 

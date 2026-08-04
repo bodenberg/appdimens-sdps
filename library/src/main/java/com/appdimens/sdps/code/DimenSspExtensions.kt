@@ -101,8 +101,8 @@ fun Int.wemLh(context: Context): Float = DimenSsp.wemLh(context, this)
 /** EN wsp without font scale, portrait -> Height. PT wsp sem escala de fonte, retrato -> Altura. @see DimenSsp.wemPh */
 fun Int.wemPh(context: Context): Float = DimenSsp.wemPh(context, this)
 
-// EN Aspect-ratio-aware Sp (*a / *ia) — parity with Compose sspa / DimenSdp.sdpa.
-// PT Sp com aspect ratio (*a / *ia) — paridade com Compose sspa / DimenSdp.sdpa.
+// EN Aspect-ratio aware Sp (`*a` / `*ia`).
+// PT Sp com aspect ratio (`*a` / `*ia`).
 
 /** @see DimenSsp.sspa */
 fun Int.sspa(context: Context): Float = DimenSsp.sspa(context, this.coerceIn(1, 600))

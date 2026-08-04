@@ -1,9 +1,8 @@
 /**
- * Shared cache for [android.content.res.Resources.getIdentifier] lookups.
+ * Process-wide cache for [Resources.getIdentifier] lookups of SDP/HDP/WDP dimen names.
  *
- * Resource IDs for a given `(packageName, dimenName)` are stable for the process lifetime;
- * configuration only changes the *value* returned by [android.content.res.Resources.getDimension],
- * not the ID. Caching avoids the expensive name→id scan on every `.sdp` / `.ssp` / Compose resolve.
+ * Resource IDs are stable for the process lifetime. Configuration changes affect the value
+ * returned by [Resources.getDimension], not the ID.
  */
 package com.appdimens.sdps.core
 
@@ -15,7 +14,6 @@ import java.util.concurrent.ConcurrentHashMap
 object DimenResourceIdCache {
     private const val DIMEN_TYPE = "dimen"
 
-    /** Key: `"$packageName\\0$dimenName"` → resource id (0 = missing). */
     private val idByPackageAndName = ConcurrentHashMap<String, Int>(256)
 
     @SuppressLint("DiscouragedApi")
@@ -23,8 +21,6 @@ object DimenResourceIdCache {
         val key = buildKey(packageName, dimenName)
         idByPackageAndName[key]?.let { return it }
         val id = resources.getIdentifier(dimenName, DIMEN_TYPE, packageName)
-        // EN Cache misses (0) too — avoids repeated failed scans for out-of-range / typos.
-        // PT Também cacheia misses (0) — evita scans repetidos para valores ausentes.
         val raced = idByPackageAndName.putIfAbsent(key, id)
         return raced ?: id
     }

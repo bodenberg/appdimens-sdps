@@ -66,9 +66,8 @@ fun Int.wdpLh(context: Context): Float = DimenSdp.wdpLh(context, this)
 fun Int.wdpPh(context: Context): Float = DimenSdp.wdpPh(context, this)
 
 // -------------------------------------------------------------------------
-// Aspect-ratio-aware (*a / *ia) — parity with appdimens-dynamic sdpa family.
-// *ia ignores multi-window in dynamic; here identical to *a (XML-backed).
-// -------------------------------------------------------------------------
+// EN Aspect-ratio aware (`*a` / `*ia`).
+// PT Com aspect ratio (`*a` / `*ia`).
 
 private fun Number.toSdpIndex(): Int =
     kotlin.math.round(this.toDouble()).toInt().coerceIn(-300, 600)

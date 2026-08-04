@@ -1,7 +1,6 @@
 /**
- * Maps (orientation / Configuration, qualifier, inverter) to the effective SDP/wdp/hdp resource axis.
- *
- * Mirrors the inverter branching in [com.appdimens.sdps.code.DimenSdp.getResourceId].
+ * Maps screen orientation (or [Configuration]) plus [Inverter] to the effective
+ * SDP / HDP / WDP resource axis.
  */
 package com.appdimens.sdps.common
 
@@ -13,11 +12,6 @@ internal fun effectiveDpQualifier(
     inverter: Inverter,
 ): DpQualifier = effectiveDpQualifier(configuration.orientation, dpQualifier, inverter)
 
-/**
- * Orientation-only overload so Compose can subscribe to
- * [androidx.compose.ui.platform.LocalConfiguration]`.orientation` without depending on
- * unrelated configuration fields in remember keys.
- */
 internal fun effectiveDpQualifier(
     orientation: Int,
     dpQualifier: DpQualifier,

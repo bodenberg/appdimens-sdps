@@ -693,24 +693,21 @@ val Int.wemPhPx: Float get() = LocalDensity.current.run { wemPh.toPx() }
 
 /**
  * EN
- * Converts an Int (the base Sp value) into a dynamically scaled TextUnit (Sp).
- * This function reuses the existing DP XML resources (`_Nsdp`, `_Nhdp`, `_Nwdp`) as the
- * dimension values, then converts them to Sp. This means the scaling system is the same as
- * the DP system — the raw dp value from the resource is used directly as an sp number.
- *
- * Hot path notes:
- * - DEFAULT inverter does not read [LocalConfiguration].
- * - [LocalDensity] is read only when [fontScale] is false (strip system font scale).
- * - Aspect-ratio uses remembered sw/w/h/dpi adjustment (no density round-trip).
+ * Converts an Int into a dynamically scaled [TextUnit] (Sp).
+ * Reuses the DP XML resources (`_Nsdp`, `_Nhdp`, `_Nwdp`); the resource dp number is used as the sp amount.
+ * When [fontScale] is false, system font scale is ignored.
+ * When [applyAspectRatio] is true, applies the library aspect-ratio adjustment.
  *
  * PT
- * Converte um Int (o valor Sp base) em um TextUnit (Sp) escalado dinamicamente.
- * Caminho quente: DEFAULT sem LocalConfiguration; LocalDensity só se fontScale=false.
+ * Converte um Int em um [TextUnit] (Sp) dinamicamente escalado.
+ * Reutiliza os recursos XML de DP (`_Nsdp`, `_Nhdp`, `_Nwdp`); o valor dp do recurso vira o valor sp.
+ * Com [fontScale] false, ignora a escala de fonte do sistema.
+ * Com [applyAspectRatio], aplica o ajuste de aspect ratio da biblioteca.
  *
- * @param qualifier The screen qualifier used to determine the resource name (sdp, hdp, wdp).
- * @param fontScale Whether to respect the user's font scale setting.
- * @param inverter Inverter to swap qualifier when orientation changes.
- * @return The TextUnit (Sp) value loaded from the resource, or the base sp value as fallback.
+ * @param qualifier Screen axis used to select the resource (sdp, hdp, wdp).
+ * @param fontScale Whether to respect the user font scale.
+ * @param inverter Optional orientation-based axis switch.
+ * @param applyAspectRatio Whether to apply the aspect-ratio adjustment (`*a` APIs).
  */
 @Composable
 fun Int.toDynamicScaledSp(
@@ -737,8 +734,6 @@ fun Int.toDynamicScaledSp(
     return if (fontScale) {
         dpValue.sp
     } else {
-        // EN Bypass font scale: only this branch subscribes to LocalDensity.
-        // PT Ignora escala de fonte: só este ramo assina LocalDensity.
         (dpValue / LocalDensity.current.fontScale).sp
     }
 }
