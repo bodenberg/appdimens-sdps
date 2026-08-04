@@ -1,5 +1,5 @@
 /**
- * Maps (Configuration, qualifier, inverter) to the effective SDP/wdp/hdp resource axis.
+ * Maps (orientation / Configuration, qualifier, inverter) to the effective SDP/wdp/hdp resource axis.
  *
  * Mirrors the inverter branching in [com.appdimens.sdps.code.DimenSdp.getResourceId].
  */
@@ -11,9 +11,22 @@ internal fun effectiveDpQualifier(
     configuration: Configuration,
     dpQualifier: DpQualifier,
     inverter: Inverter,
+): DpQualifier = effectiveDpQualifier(configuration.orientation, dpQualifier, inverter)
+
+/**
+ * Orientation-only overload so Compose can subscribe to
+ * [androidx.compose.ui.platform.LocalConfiguration]`.orientation` without depending on
+ * unrelated configuration fields in remember keys.
+ */
+internal fun effectiveDpQualifier(
+    orientation: Int,
+    dpQualifier: DpQualifier,
+    inverter: Inverter,
 ): DpQualifier {
-    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-    val isPortrait = configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+    if (inverter == Inverter.DEFAULT) return dpQualifier
+
+    val isLandscape = orientation == Configuration.ORIENTATION_LANDSCAPE
+    val isPortrait = orientation == Configuration.ORIENTATION_PORTRAIT
     var actual = dpQualifier
     when (inverter) {
         Inverter.PH_TO_LW ->
