@@ -7,6 +7,7 @@
  */
 package com.example.app.compose
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -15,11 +16,14 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -79,6 +83,7 @@ class ExampleActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SdpDemoScreen() {
+    val context = LocalContext.current
     MaterialTheme(colorScheme = lightColorScheme()) {
         Surface(
             modifier = Modifier
@@ -110,6 +115,27 @@ fun SdpDemoScreen() {
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center
                 )
+
+                // ── BENCHMARK BUTTON ────────────────────────────────────────
+                // EN Opens the performance benchmark dashboard (micro/calc/macro
+                //    + single-1dp latency). PT Abre o dashboard de benchmark de
+                //    performance (micro/calc/macro + latência de 1dp único).
+                Button(
+                    onClick = {
+                        context.startActivity(Intent(context, BenchmarkActivity::class.java))
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(52.dp),
+                    shape = RoundedCornerShape(14.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary
+                    )
+                ) {
+                    Icon(Icons.Default.Speed, contentDescription = null)
+                    Spacer(Modifier.width(8.dp))
+                    Text("⚡ Benchmark — Medir velocidade", fontWeight = FontWeight.Bold)
+                }
 
                 // ── 1. CORE EXTENSIONS (sdp / hdp / wdp) ───────────────────
                 SectionTitle("1. Core Extensions")

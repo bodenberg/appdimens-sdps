@@ -1,36 +1,29 @@
+# ============================================================================
 # AppDimens SDP / HDP / WDP — consumer ProGuard / R8 rules
-# Merged into apps that depend on this library when minifyEnabled is true.
-# Covers R8 default and full mode (android.enableR8.fullMode=true).
+# Merged into every app that depends on this library when minifyEnabled is
+# true (R8 default AND full mode).
+#
+# Strategy: keep only the public API contract. Everything else (private and
+# internal members, unused classes) is fully shrinkable/optimizable by the
+# consuming app's R8 full mode -> maximum performance with full compatibility.
+# ============================================================================
 
-# --- Enums in the public API (Java Enum.valueOf / values + constants) ---
--keepclassmembers enum com.appdimens.sdps.common.** {
-    <fields>;
+# --- Public API surface -------------------------------------------------------
+# All public types of the library keep their public/protected members
+# (constructors, @JvmStatic accessors, extension properties, composables,
+# data-class getters, object INSTANCE fields, ...). R8 may still remove
+# private/internal code and optimize method bodies.
+-keep class com.appdimens.sdps.** { public protected *; }
+
+# --- Enums (Java interop) -----------------------------------------------------
+# Enum.valueOf / values / constant fields must survive for Java callers.
+-keepclassmembers enum com.appdimens.sdps.** {
     public static **[] values();
     public static ** valueOf(java.lang.String);
 }
 
-# --- Kotlin objects exposed to Java via @JvmStatic ---
--keep class com.appdimens.sdps.code.DimenSdp { *; }
--keep class com.appdimens.sdps.code.DimenSsp { *; }
--keep class com.appdimens.sdps.code.DimenPhysicalUnits { *; }
--keep class com.appdimens.sdps.compose.DimenPhysicalUnits { *; }
-
-# --- Aspect-ratio factor cache + dimen ID cache (reachable from *a / resolve paths) ---
--keep class com.appdimens.sdps.core.AppDimensSdpsFactors { *; }
--keep class com.appdimens.sdps.core.DimenResourceIdCache { *; }
-
-# --- DimenScaled / ScaledSp builders (code + Compose packages) ---
--keep class com.appdimens.sdps.code.DimenScaled { *; }
--keep class com.appdimens.sdps.compose.DimenScaled { *; }
--keep class com.appdimens.sdps.code.ScaledSp { *; }
--keep class com.appdimens.sdps.compose.ScaledSp { *; }
-
-# --- Data classes used by the builder API ---
--keep class com.appdimens.sdps.common.DpQualifierEntry { *; }
--keep class com.appdimens.sdps.code.CustomDpEntry { *; }
--keep class com.appdimens.sdps.compose.CustomDpEntry { *; }
--keep class com.appdimens.sdps.code.CustomSpEntry { *; }
--keep class com.appdimens.sdps.compose.CustomSpEntry { *; }
-
-# Dynamic dimen lookup uses Resources.getIdentifier; resource shrinking is handled via
-# res/raw/keep.xml (tools:keep) packaged in this AAR.
+# --- Dynamic dimen lookup -----------------------------------------------------
+# Dimen resources are resolved by name at runtime (Resources.getIdentifier);
+# resource shrinking is handled by res/raw/keep.xml (tools:keep) packaged in
+# this AAR, which preserves @dimen/_*sdp, @dimen/_*hdp and @dimen/_*wdp in
+# consuming apps with shrinkResources enabled.
