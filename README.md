@@ -10,7 +10,7 @@
 
 ```kotlin
 dependencies {
-    implementation("io.github.bodenberg:appdimens-sdps:3.1.6")
+    implementation("io.github.bodenberg:appdimens-sdps:3.1.7")
 }
 ```
 
@@ -312,7 +312,7 @@ DimenPhysicalUnits.toDpFromInch(1f, resources)
 
 ---
 
-## ✨ What's New in Version 3.1.6
+## ✨ What's New in Version 3.1.7
 
 | Feature | Description |
 |---------|-------------|
