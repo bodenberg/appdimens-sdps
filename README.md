@@ -6,6 +6,22 @@
 
 ---
 
+## 💡 Which AppDimens Library Should You Use?
+
+AppDimens SDP, HDP, WDP is a **pure Android** library (XML + Jetpack Compose + Kotlin/Java code). Depending on your project's stack, the other AppDimens libraries may be a better fit:
+
+| Your project | Recommended library |
+| ------------ | ------------------- |
+| **Jetpack Compose** (Android-only) | [**AppDimens Dynamic**](https://github.com/bodenberg/appdimens-dynamic) |
+| **Kotlin Multiplatform** (KMP / Compose Multiplatform) | [**AppDimens KMP**](https://github.com/bodenberg/appdimens-kmp) |
+| **Android XML / Views / Code / Compose** (this library) | [**AppDimens SDP, HDP, WDP**](https://github.com/bodenberg/appdimens-sdps) |
+
+- **Compose-only projects** → prefer [**appdimens-dynamic**](https://github.com/bodenberg/appdimens-dynamic), built specifically for Jetpack Compose.
+- **KMP projects** → prefer [**appdimens-kmp**](https://github.com/bodenberg/appdimens-kmp) for multiplatform support (Android, iOS, Desktop, …).
+- **XML layouts or Kotlin/Java code** → this library covers XML, Compose, and code in a single dependency.
+
+---
+
 ## 🛠️ Installation
 
 ```kotlin

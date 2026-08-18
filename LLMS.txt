@@ -1,0 +1,77 @@
+# AppDimens SDP, HDP, WDP
+
+> AppDimens is the most complete responsive dimension library for Android. It provides thousands of pre-calculated `@dimen` resources ready to use — plus dynamic Compose extensions, code-level APIs, conditional builders, orientation-aware inverters, and physical unit converters — all in a single, zero-configuration dependency.
+
+## AppDimens SDP, HDP, WDP
+
+- [README.md](README.md): Full documentation — installation, usage examples for XML, Jetpack Compose, Kotlin and Java, scaling model, performance notes, and comparison with alternatives.
+- [CONTRIBUTING.md](CONTRIBUTING.md): Contribution guidelines.
+- [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md): Code of conduct.
+- [SECURITY.md](SECURITY.md): Security policy.
+- [LICENSE](LICENSE): Apache License 2.0.
+- [IMAGES/](IMAGES/): Banner and screenshot assets.
+
+## Key Facts
+
+- Maven coordinates: `io.github.bodenberg:appdimens-sdps:3.1.7`
+- Published to Maven Central and JitPack (`https://jitpack.io`)
+- Requirements: Min SDK 24, Compile SDK 37, Kotlin & Java, JVM 17
+- Android-only library (AndroidX + Jetpack Compose; **not** Kotlin Multiplatform)
+- Works in XML layouts, Jetpack Compose, and programmatic Kotlin/Java code
+- Zero configuration — no setup or initialization required
+- R8 / ProGuard / `shrinkResources` friendly (ships `consumer-rules.pro` and `res/raw/keep.xml`)
+- Recommended to export as AAB so Google Play strips unused `@dimen` resources
+
+## What It Does
+
+- **SDP (Smallest Width)** — `.sdp` → `@dimen/_16sdp` based on `smallestScreenWidthDp`
+- **HDP (Height)** — `.hdp` → `@dimen/_16hdp` based on `screenHeightDp`
+- **WDP (Width)** — `.wdp` → `@dimen/_16wdp` based on `screenWidthDp`
+- **SSP (Scalable Sp)** — `.ssp` → scalable text with font scale; `.sem` without font scale
+- **Aspect-ratio aware (`*a`)** — `.sdpa` / `.hdpa` / `.wdpa` / `.sspa` apply an aspect-ratio adjustment on top of the XML-resolved value
+- **Inverters** — orientation-aware switches: `.sdpPh`, `.sdpLw`, `.hdpLw`, `.wdpLh`, plus `*a` and `*ia` aliases
+- **Facilitators** — quick conditional overrides: `sdpRotate`, `sdpMode`, `sdpQualifier`, `sdpScreen` (+ hdp/wdp/ssp and Plain variants)
+- **DimenScaled builder** — priority-based conditional chains with `UiModeType`, `DpQualifier`, `Orientation`, and `Inverter`
+- **Physical units** — `DimenPhysicalUnits` converts mm / cm / inch to Dp, Px, and Sp (`10.mm`, `2.5f.cm`, `1.inch` in Compose)
+- **Device awareness** — `UiModeType`: `NORMAL`, `TELEVISION`, `CAR`, `WATCH`, `FOLD_OPEN`, `FOLD_HALF`, `FLIP_OPEN`, `FLIP_HALF` (via `Configuration.uiMode` + Jetpack WindowManager `FoldingFeature`)
+
+## Core API Surface
+
+### Compose (`com.appdimens.sdps.compose`)
+
+- Dp extensions: `.sdp`, `.hdp`, `.wdp`, `.sdpa`, `.hdpa`, `.wdpa` (+ inverter and facilitator variants)
+- TextUnit extensions: `.ssp`, `.hsp`, `.wsp`, `.sem`, `.sspa` (+ inverter and facilitator variants)
+- `scaledDp` / `scaledSp` builders (via `DimenScaled` / `DimenSspScaled`)
+- Physical unit extensions: `.mm`, `.cm`, `.inch`
+- `DimenSdp`, `DimenSsp`, `DimenPhysicalUnits` (Compose-aware variants)
+- `DimenSdp.warmupSdpsFactors(context)` for optional aspect-ratio factor warm-up
+
+### Code (Kotlin / Java — `com.appdimens.sdps.code`)
+
+- `DimenSdp` — `sdp()`, `sdpa()`, `hdp()`, `wdp()`, `sdpRes()`, inverter shortcuts (`hdpLw`, …), facilitators (`sdpRotate`, `sdpMode`, `sdpQualifier`, `sdpScreen`), `scaled(Int)` builder
+- `DimenSsp` — `ssp()`, `sspa()`, `sem()`, `sspRes()`, facilitators and `scaled(Int)` builder
+- `DimenScaled` / `DimenSspScaled` — priority-based conditional builders, Java-friendly (`@JvmStatic` + `@JvmOverloads`)
+- `DimenPhysicalUnits` — `toDpFromMm()`, `toDpFromCm()`, `toDpFromInch()`
+- Kotlin extensions: `16.ssp(context)`, `16.hsp(context)`, `16.scaledSp().screen(...).ssp(context)`
+
+### XML
+
+- Pre-generated `@dimen` resources for every qualifier (`values`, `values-sw330dp` … `values-sw800dp`, `values-h600dp`, `values-h800dp`, `values-w600dp`, …), range **-300 to 600**
+- Naming: `_16sdp`, `_100wdp`, `_50hdp`, `_minus8sdp`
+- 350+ qualifier directories
+
+### Enums (`com.appdimens.sdps.common`)
+
+- `UiModeType`, `DpQualifier`, `DpQualifierEntry`, `EffectiveDpQualifier`, `Orientation`, `Inverter` (`PH_TO_LW`, `PW_TO_LH`, `LH_TO_PW`, `LW_TO_PH`, `SW_TO_LH`, `SW_TO_LW`, `SW_TO_PH`, `SW_TO_PW`), `UnitType`
+
+## Related Libraries (Other Stacks)
+
+- **Jetpack Compose (Android-only)** → use [AppDimens Dynamic](https://github.com/bodenberg/appdimens-dynamic)
+- **Kotlin Multiplatform / Compose Multiplatform** → use [AppDimens KMP](https://github.com/bodenberg/appdimens-kmp)
+- **Android XML / Views / Code / Compose** → this library (AppDimens SDP, HDP, WDP)
+
+## Other
+
+- GitHub repository: https://github.com/bodenberg/appdimens-sdps
+- Author: Jean Bodenberg (bodenberg)
+- License: Apache License 2.0
