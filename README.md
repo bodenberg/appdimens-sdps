@@ -1,4 +1,5 @@
 # AppDimens SDP, HDP, WDP
+<img referrerpolicy="no-referrer-when-downgrade" src="https://static.scarf.sh/a.png?x-pxid=7346c012-9a2e-4576-b2ed-ee4813779b50" />
 
 ![AppDimens Banner](IMAGES/banner_top.png)
 
