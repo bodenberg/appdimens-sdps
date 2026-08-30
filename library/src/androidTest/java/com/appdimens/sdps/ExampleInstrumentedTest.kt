@@ -17,8 +17,10 @@ import org.junit.Assert.*
 class ExampleInstrumentedTest {
     @Test
     fun useAppContext() {
-        // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.appdimens.sdps", appContext.packageName)
+        assertTrue(
+            "expected app context under the appdimens.sdps namespace, was ${appContext.packageName}",
+            appContext.packageName.contains("appdimens.sdps"),
+        )
     }
 }

@@ -13,7 +13,7 @@
 
 ## Key Facts
 
-- Maven coordinates: `io.github.bodenberg:appdimens-sdps:3.1.7`
+- Maven coordinates: `io.github.bodenberg:appdimens-sdps:3.2.0`
 - Published to Maven Central and JitPack (`https://jitpack.io`)
 - Requirements: Min SDK 24, Compile SDK 37, Kotlin & Java, JVM 17
 - Android-only library (AndroidX + Jetpack Compose; **not** Kotlin Multiplatform)

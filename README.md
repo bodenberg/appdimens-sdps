@@ -27,7 +27,7 @@ AppDimens SDP, HDP, WDP is a **pure Android** library (XML + Jetpack Compose + K
 
 ```kotlin
 dependencies {
-    implementation("io.github.bodenberg:appdimens-sdps:3.1.7")
+    implementation("io.github.bodenberg:appdimens-sdps:3.2.0")
 }
 ```
 
@@ -326,6 +326,14 @@ DimenPhysicalUnits.toDpFromInch(1f, resources)
   <img src="IMAGES/screenshot.png" alt="Layout example" width="25%" />
 </p>
 <br/>
+
+---
+
+## ✨ What's New in Version 3.2.0
+
+| Feature | Description |
+|---------|-------------|
+| **Compose version compatibility** | Compose is now `compileOnly` — the library no longer pins a Compose version, so it works with any Compose BOM the app chooses and removes `class/function not found` errors |
 
 ---
 
